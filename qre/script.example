@@ -1,0 +1,23 @@
+<qre> 
+	<actiondata> 
+		<info key="one" value="1" type="userinput"/> 
+	</actiondata> 
+	<userdata> 
+		<info key="two" value="2" /> 
+	</userdata> 
+	
+	<starturl> URL </starturl> 
+	
+	<sequence> 
+		<constantlink number="1"> URL </constantlink> 
+		<link number="2"> xpath/here </link> 
+		<highlight id="saeas" number="3"> xpath/here </highlight> 
+		<form number="4"> 
+			<xpath> xpath/here </xpath> 
+			<url> base.url </url> 
+			<method type="POST"/> 
+			<param name="q" type="textbox"> value </param> 
+		</form> 
+	</sequence> 
+
+</qre> 
