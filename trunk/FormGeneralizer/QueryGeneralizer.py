@@ -6,6 +6,7 @@ __authors__ = ['"Chris Shields" <gatorcas@ufl.edu>']
 
 import pdb
 import sys
+from ActionType import ActionType
 import Loader
 from Qrm import Qrm
 import lxml
@@ -13,12 +14,14 @@ import lxml.html
 sys.path.append('../badica')
 from ExtractionPath import ExtractionPath
 from Badica import Badica
-from Highlight import Highlight
+import Highlight
+import Form
+import Link
 from Page import Page
 from ScriptBuilder import ScriptBuilder
 
 #This method accepts two queries which have been determined to be similar 
-def GeneralizeQueries(queryid, qrmid):
+def GeneralizeQueries(qrmid, queryid):
 
 #Build Tree
     #Select all pRefs for each query sorted by timestamp
@@ -31,20 +34,20 @@ def GeneralizeQueries(queryid, qrmid):
     else:
         qrm1 = Loader.GetQRMFromQuery(queryid)
 
+    qrm2 = Loader.GetQRMFromQuery(queryid)
+
     if qrm1 == None or qrm2 == None:
         print("Query data not found")
-        return    
-    
-    qrm2 = Loader.GetQRMFromQuery(queryid)
+        return      
     
 #Check queries for appropriateness of generalization
     if qrm1.pageLength() != qrm2.pageLength():
        print("Entities containing differing page lengths cannot be generalized")    
        return
    
-    #if !qrm1.matchInputOutputClasses(qrm2):
-    #   print("Both entities must have matching SSQ input/output classes")
-    #   return
+    if qrm1.matchSsqClasses(qrm2) == False:
+       print("Both entities must have matching SSQ input/output classes")
+       return
 
     #Need to ensure the usages of the SSQ inputs and highlights is the same between both entities
      
@@ -63,8 +66,14 @@ def GeneralizeQueries(queryid, qrmid):
 
 #Script generation
 
+    scriptGenerator = ScriptBuilder()
+	
     #Generate the actually text of the script, this is to be stored in the 'code' field in the qrm table
-    #code = ScriptBuilder.create(genQrm,qrm1,qrm2)
+    code = scriptGenerator.create(genQrm)
+
+    print('\n******************* QRE SCRIPT\n')
+    from lxml import etree
+    print(etree.tostring(code))
 
     #insert code with new qrm into database 
     #Loader.insertQrm(genQrm, code)
@@ -81,7 +90,7 @@ def normalize(q):
         p = q.pageList[y]
         
         #If page has highlights save it
-        if len(p.outputs) > 0:
+        if p.actionType == ActionType.Highlight:
             savedPages.insert(0,p)
         else:
         
@@ -112,7 +121,7 @@ def linkBetweenPages(p1, p2):
     if p1.destinationUrl.find(url) >= 0:
         return True
 
-    if p1.isFormSubmit:
+    if p1.actionType == ActionType.Form:
         return True
 
     return False;
@@ -188,8 +197,14 @@ def generalizeQRMS(q1, q2):
     
     for i in range(0, qS.pageLength()):
 
-        gp = generalizePages(qS.pageList[i],qL.pageList[i])
-  
+        gp = generalizeActions(qS.pageList[i],qL.pageList[i])
+	
+	#set the page url  
+	gp.url = qS.pageList[i].url
+
+	#set the desintation url 
+	gp.destinationUrl = qS.pageList[i].destinationUrl
+
         #Check if generalizing failed - Stop generalizing if so
         #Temporary approach
         if gp == None:
@@ -200,7 +215,7 @@ def generalizeQRMS(q1, q2):
         
     return qS
 
-def generalizePages(p1, p2):
+def generalizeActions(p1, p2):
 
     NO_SIMILARITY = 0
 
@@ -213,20 +228,28 @@ def generalizePages(p1, p2):
     p2Epath = ExtractionPath()
     
     #Check for validity of comparison
-    if len(p1.links) != len(p2.links) | len(p1.outputs) != len(p2.outputs):
+    if p1.actionType != p2.actionType:    
         return None
     
     print("Generalizing page: "+ p1.url +" content*************************\n")
 
     #Generalize form xpaths
-    if p1.xpath != "":
+    if p1.actionType == ActionType.Form:
         
         p1Epath.xpath_to_epath(p1.pagesrc,p1.xpath)
         
         p2Epath.xpath_to_epath(p2.pagesrc,p2.xpath)
         
         p3Epath = g.Learn([p1Epath, p2Epath])
-        
+
+	#what about form inputs?
+
+	method = getFormMethod(p1)
+
+	p3 = Form.New(p1.url, p1.destinationUrl, "", "", "",method, p1.formInputs)
+
+	#we use the input list from the first page, because they should be the same
+  
         p3.xpath = p3Epath.epath_to_xpath()
     
         #Check the validity of the result
@@ -235,86 +258,91 @@ def generalizePages(p1, p2):
             print("Processed form xpath")
         else:
             print("Generalized form xpath is not valid, using non-generalized xpath\n")
-    else:
-        print("No form xpaths to generalize\n")
+
+
+    elif p1.actionType == ActionType.Link:    
+
+	print('Processing link click action')
+
+       	p1Epath.xpath_to_epath(p1.pagesrc,p1.links[i])
+        
+       	p2Epath.xpath_to_epath(p2.pagesrc,p2.links[i])
+        
+       	p3Epath = g.Learn([p1Epath,p2Epath])
+        
+       	newxpath = p3Epath.epath_to_xpath()
+
+	p3 = Link.New(p1.url, p1.destinationUrl, "", "", "")
+
+       	#Check the validity of the result
+       	if compareExtractions(newxpath,p1.links[i],p1.pagesrc) != NO_SIMILARITY:
+       	    p3.xpath = newxpath
+       	else:
+	    print("Generalized link xpath is not valid, using non-generalized xpath\n")
+            p3.xpath = p1.links[i]
+
+        print("Done with link\n")
+
+    elif p1.actionType == ActionType.Highlight:
+	
+	print('Processing highlight action')
+	p1Epath = ExtractionPath()
+	p2Epath = ExtractionPath()
     
-      
-    #Generalize links
-    
-    for i in range(0, len(p1.links)):
-
-        p1Epath.xpath_to_epath(p1.pagesrc,p1.links[i])
+       	#Get extraction paths to the start and end points
+       	p1Epath.xpath_to_epath(p1.pagesrc,p1.meetpoint)
         
-        p2Epath.xpath_to_epath(p2.pagesrc,p2.links[i])
-        
-        p3Epath = g.Learn([p1Epath,p2Epath])
-        
-        newxpath = p3Epath.epath_to_xpath()
-
-        #Check the validity of the result
-        if compareExtractions(newxpath,p1.links[i],p1.pagesrc) != NO_SIMILARITY:
-             p3.links.append(newxpath)
-        else:
-            print("Generalized link xpath is not valid, using non-generalized xpath\n")
-            p3.links.append(p1.links[i])
-
-    if len(p1.links) == 0:
-        print("No links to generalize\n")
-    else:
-        print("Processed html links\n")
-
-    p1Epath = ExtractionPath()
-    p2Epath = ExtractionPath()
-    
-    #Generalize outputs
-    for i in range(0, len(p1.outputs)):
-        
-        h1 = p1.outputs[i]
-        
-        h2 = p2.outputs[i]
-        
-        #Get extraction paths to the start and end points
-        p1Epath.xpath_to_epath(p1.pagesrc,h1.meetpoint)
-        
-        p2Epath.xpath_to_epath(p2.pagesrc,h2.meetpoint)
+        p2Epath.xpath_to_epath(p2.pagesrc,p2.meetpoint)
         
         #Generalize the start and end points
         p3Epath = g.Learn([p1Epath,p2Epath])
         
         genXpath = p3Epath.epath_to_xpath()
 
-        print("xpath 1 before: "+h1.meetpoint+"\n")
-        print("xpath 2 before: "+h2.meetpoint+"\n")
-        print("xpath after : "+genXpath+"\n")
+        print("xpath 1 before: "+p1.meetpoint+"\n")
+        print("xpath 2 before: "+p2.meetpoint+"\n")
+        print("xpath after: "+genXpath+"\n")
 
         #Currently, start and end xpaths are not used. 
-        h3 = Highlight(genXpath,None,None,0,0)        
+        genh = Highlight.New(genXpath,None,None,0,0,p1.url,None,None)        
 
         #Check the validity of the result
-        if compareExtractions(h3.meetpoint,h1.meetpoint,p1.pagesrc) != NO_SIMILARITY:
-            p3.outputs.append(h3)
+        if compareExtractions(genh.meetpoint,p1.meetpoint,p1.pagesrc) != NO_SIMILARITY:
+            p3 = genh
         else:
             print("Generalized highlight xpath is not valid, using non-generalized xpath\n")
-            p3.outputs.append(h1)
+            p3 = p1
     
-    if len(p1.outputs) == 0:
-        print("No outputs to generalize\n")
-    else:
-        print("Processed page outputs\n")
+        print("Processed highlight action\n")
     
     print("Generalization Complete\n")
     
     return p3
 
+def getFormMethod(page):
+
+    root = lxml.html.fromstring(page.pagesrc)
+
+    formNode = root.xpath(page.xpath)
+
+    method = formNode[0].get('method')
+
+    if method == None:
+	return 'GET'
+
+    return method
+	
+
 if __name__ == '__main__':
     
     if len(sys.argv) == 3:
         GeneralizeQueries(sys.argv[1],sys.argv[2])
-    else: #len(sys.argv) == 2:
-        GeneralizeQueries(sys.argv[1],None)
-    """else:
-        print('USAGE: python QueryGeneralizer.py queryID qrmid')
-        """
+    elif len(sys.argv) == 2:
+	GeneralizeQueries(None, sys.argv[1])	
+    else:
+        print('To generalize a query\nUSAGE: python QueryGeneralizer.py qrmid queryid\n')
+	print('To generalize a query with itself\nUSAGE: python QueryGeneralizer.py queryid\n')
+
     pass    
     
 
