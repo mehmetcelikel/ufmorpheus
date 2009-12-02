@@ -1,0 +1,55 @@
+<!-- Template QRE Script --> 
+<!-- This file contains relax ng compact schema for a qre script
+	and also an example script --> 
+ 
+element qre {
+	element actiondata {
+		element info {
+			attribute  key { text },
+			attribute value { text },
+			attributet type { string "highlight" | string "userinput" | string "constant" }
+		} *
+	}
+	element userdata {
+		element info {
+			attribute key { text },
+			attribute value { text }
+		} *
+	}
+	
+	element starturl { text } 
+	
+	element sequence {
+		(
+			element constantlink {
+				attribute number { xsd:integer },
+				text
+			}
+			|
+			element link {
+				attribute number { xsd:integer },
+				text
+			}
+			|
+			element highlight {
+				attribute number { xsd:integer },
+				attribute id { text },
+				text
+			}
+			|
+			element form {
+				attribute number { xsd:integer },
+				element xpath { text },
+				element url { text },
+				element method {
+					attribute type { string "get" | string "post" }
+				},
+				element param {
+					attribute name { text },
+					attribute type { text },
+					text
+				} +
+			}
+		) *
+	}
+}
