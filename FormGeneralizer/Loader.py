@@ -9,11 +9,17 @@ import sys
 import pdb
 import lxml
 import lxml.html
+import Highlight
 sys.path.append('../badica')
 from ExtractionPath import ExtractionPath
 from Qrm import Qrm
 from Page import Page
-from Highlight import Highlight
+import Highlight
+from SsqElement import SsqElement
+from Form import Form
+from Link import Link
+from ActionType import ActionType
+
 def GetQRMFromDb(qrmid):
 	
 	#Perform retrieval of QRM data
@@ -26,30 +32,28 @@ def GetPageInputs(pid):
     
         NAME = 3
   
-        TYPE = 4
+	HILITE = 4
 
-        query = "SELECT * FROM input WHERE pagerefid = "+pid
-
-        inputrows = executeQuery(query)
+	SSQINPUT = 5	
 
         inputList = list()
 
-        #TODO: Implement determination of constant, default or highlight
+	query = "SELECT * FROM input WHERE pid="+str(pid)
+
+	forminputs = executeQuery(query)
+
+	for r in forminputs:
 	
-	#get all highlights for comparison of strings
-	highlights = getHighlights(qrm)
+		type = ""
 
-	#get query input texts 
-	querys = getQueryText(q1,q2)	
-		
-	#iterate over all inputs and check highlights and query for matches, 
-	#if a highlight matches then assign an id and record the highlight in question
-	#if a part of the quer matches, then record that
-	#if nothing is found, then record the value as-is and assume its a default
-        for r in rows:
-      	      
-
-	      inputList.append([r[NAME],r[TYPE],r[val]])
+		if r[HILITE] != none:	
+			type="Highlight"	
+		elif r[SSQINPUT] != none:
+			type="Constant"
+		else:
+			type="Default"
+	
+		inputList.append(Input.New(r[NAME], type, r[HILITE], r[SSQINPUT]))
 
         return inputList
 
@@ -81,7 +85,7 @@ def InsertQrm(qrm, code):
 #This function calls the retrieveRecords function and parses them into the proper format
 #that can be used by the other generalization code
 def GetQRMFromQuery (queryID):
-	
+
 	rowArray = retrieveRecordsFromQuery(queryID)
 	
 	return getqrm(rowArray, queryID, False)
@@ -116,39 +120,58 @@ def getqrm(rowArray, qid, isQRMID):
 	#Iterate over whole sequence of user interaction
 	for i in range(0, length-1):
 
-		currentItem = qrm.condensedList[i]
+		currentItem = qrm.pageList[i]
 
                 id = currentItem.url+str(currentItem.timestamp)
 
 		urlHash[id] = i
 
-		#Check if subsequent pages are really the same page
-		#if i < length - 1 and currentItem.url == qrm.condensedList[i+1].url:
-		#	qrm.condensedList = combine(currentItem, qrm.condensedList, i+1, urlHash[id])
-                #        length = len(qrm.condensedList)
-
 		#This is the time that the previous page was seen in the list, assuming the user saw a page
 		#and then went to other pages, then clicked "back" until he returned to the same page.
-		timestampOfPreviousPage = qrm.condensedList[urlHash[id]].timestamp
+		timestampOfPreviousPage = qrm.pageList[urlHash[id]].timestamp
 	
 		#Check if the page has been visited before and if there are no outputs intervening
 		if urlHash[id] != None and lastOutputTimestamp < timestampOfPreviousPage and lastOutputTimestamp != -1:
 			
 			index = urlHash[id]
 
-			qrm.condensedList = exciseRange(index, i-1, qrm.condensedList)
+			qrm.pageList = exciseRange(index, i-1, qrm.pageList)
 			
 		#Update the last output found
-		if len(currentItem.outputs) > 0:
+		if currentItem.actionType == ActionType.Highlight:
 				
 			lastOutputTimestamp = currentItem.timestamp
 		
 	qrm.id = qid
 
 	qrm.isQRMID = isQRMID
+	
+	#if this is a true qrm, then get its input/output classes
+	if qrm.isQRMID:
+		ssqClasses = executeQuery("SELECT io,classid,contextid FROM qrmHas WHERE qrmHas.qrmid = "+str(qid))
+	else:
+		classQuery = "SELECT io, individual.classid,contextid FROM queryhas, individual, phrase, phrasebelongstocontext WHERE queryhas.queryid="+str(qid)
+		classQuery += " AND individual.individualid=queryhas.individualid AND individual.phraseid = phrase.phraseid"
+		classQuery += " AND phrase.phraseid = phrasebelongstocontext.phraseid"
 
-	#need to get phrases from db for query that will be stored in the data has for this qrm
-	return q
+		ssqClasses = executeQuery(classQuery)
+
+	qrm.ssqClasses = extractSsqElements(ssqClasses)
+		
+	return qrm
+
+#get the class data into ssqelement objects and return a list of them
+def extractSsqElements(classes):
+
+	IO = 0
+	CLASS = 1
+	CONTEXT = 2
+	elems = list()
+	
+	for classRow in classes:	
+		elems.append( SsqElement( classRow[IO], classRow[CLASS], classRow[CONTEXT] ) )
+			
+	return elems
 
 def exciseRange(i,j,a):
 	
@@ -177,23 +200,6 @@ def getCondensedQrm(pps, outs, ans):
 
 	qrm = Qrm()
 	
-	query = ""
-	"""
-	#get query phrase words - Gets the Phrase and the Context for the given query
-	if isQRMID:
-		query = "select class.name,contextname from class, context, qrmhas where qrmhas.qrmid = "+qid
-	        query += " and qrmhas.classid = class.classid and qrmhas.contextid = context.contextid"
-	        query += " ORDER BY contextname"
-	else:
-		query = "select phrasestring,contextname from phrase, individual, queryhas, phrasebelongstocontext,context where queryhas.queryid = "+qid
-		query += " and queryhas.individualid = individual.individualid and individual.phraseid = phrase.phraseid 
-		query += " and phrasebelongstocontext.phraseid = phrase.phraseid and phrasebelongstocontext.contextid = context.contextid
-		query += " ORDER BY contextname"
-
-	#run query
-	phrases = executeQuery(query)
-	"""
-	
 	#Keep condensing until everything, including the answers has been condensed
 	while len(ans) > 0:
 
@@ -201,93 +207,90 @@ def getCondensedQrm(pps, outs, ans):
 			
 			pageRow = pps.pop(0)
 			
-			p = getPage(pageRow,False)
+			p = getPageOrLink(pageRow)
 			
 			condensedList.append(p)
 			
 		else:
 			outputRow = outs.pop(0)
 							
-			p = getPage(outputRow,True)
+			h = getHighlight(outputRow)
 			
-			#Store the highlight in the dataHash so that we may retrieve it later when determining reusage of highlighted data
-			#qrm.dataHash[p.outputs[0].timestamp] = p.outputs[0]
-
 			#If the current highlight is an answer then set the flag in the page
 			if outputRow[HILITE_HLID] == ans[0][ANSWER_HLID]:
 				
-				p.isAnswer = True
+				h.isAnswer = True
 				
 				#Remove the answer 
 				ans.pop(0)
 		
-			condensedList.append(p)
+			condensedList.append(h)
 
 	qrm.pageList = condensedList
 
 	return qrm
 
-#Forms a page object out of the 
-def getPage(row,isout):
-
-	pUrl = 1
-	hUrl = 6
-	xpath = 7
-	ppagesrc = 6
-	hpagesrc = 8
-	htimestamp = 7
-	ptimestamp = 8
-	dest = 9
+#forms a highlight object from the db row
+def getHighlight(row):
 	beginoffset = 1
 	endoffset = 2
 	meetpoint = 11
 	startxpath = 4
 	endxpath = 5
+	hpagesrc = 8
+	htimestamp = 7
+	hUrl = 6
+
+        h = Highlight.New(lower(row[meetpoint]),lower(row[startxpath]),lower(row[endxpath]),row[beginoffset],row[endoffset], row[hUrl], row[hpagesrc], row[htimestamp])
+
+	return h
+
+#Forms a page object out of the 
+def getPageOrLink(row):
+
+	pid = 0
+	pUrl = 1
+	xpath = 7
+	ppagesrc = 6
+	ptimestamp = 8
+	dest = 9
 	
 	#If its a highlight you need start xpath and end xpath
 	#also offsets
-	p = Page()
 		
-	if isout == True:
-		h = Highlight(lower(row[meetpoint]),lower(row[startxpath]),lower(row[endxpath]),row[beginoffset],row[endoffset])
+	lowerRowXpath = lower(row[xpath])
 		
-		p.outputs.append(h)
-		
-		p.url = row[hUrl]
-		
-		p.pagesrc = row[hpagesrc]
-		
-		p.timestamp = row[htimestamp]	
-		
+	if row[ppagesrc] != None:
+		node = lxml.html.document_fromstring(row[ppagesrc])
 	else:
-		lowerRowXpath = lower(row[xpath])
-		
-		if row[ppagesrc] != None:
-			node = lxml.html.document_fromstring(row[ppagesrc])
-		else:
-			node = lxml.html.parse(row[url])
+		node = lxml.html.parse(row[url])
 
-		extractedNodes = node.xpath(lowerRowXpath)
+	extractedNodes = node.xpath(lowerRowXpath)
 
-		if len(extractedNodes) == 0:
-			return None
+	if len(extractedNodes) == 0:
+		return None
+
+	temp = Page()
 		
-		if extractedNodes[0].tag == "form":
-			p.xpath = lowerRowXpath
-			p.isFormSubmit = True
-		else:
-			p.links.append(lowerRowXpath)
-			p.isFormSubmit = False
-		
-		p.url = row[pUrl]
-		
-		p.destinationUrl = row[dest]
-		
-		p.pagesrc = row[ppagesrc]
-		
-		p.timestamp = row[ptimestamp]	
+	if extractedNodes[0].tag == "form":
+		f = Form()
+		f.xpath = lowerRowXpath
+		temp = f
+		f.formInputs = GetPageInputs(row[pid])
+	else:
+		l = Link()
+		l.xpath = lowerRowXpath
+		temp = l
+
+	temp.url = row[pUrl]
 	
-	return p
+	temp.destinationUrl = row[dest]
+	
+	temp.pagesrc = row[ppagesrc]
+	
+	temp.timestamp = row[ptimestamp]	
+	
+	return temp
 
 #Converts the argument to lower case
 def lower(x):
@@ -376,31 +379,31 @@ def getDefaultValue(src,id):
 
 def retrieveRecordsFromQRM(qrmid):
 	
-	return get("qrmid = "+qrmid)
+	return get("qrmid",qrmid)
 	
 def retrieveRecordsFromQuery(qid):
 	
-	return get("queryid = "+str(qid))
+	return get("queryid",str(qid))
 
-def get(cond):
+def get(field, value):
 	
 	#Gets the set of PageReferences joined with their inputs and outputs (highlights)
 	query = "SELECT * FROM page,pagereference WHERE";
 	query = query + " page.pageid = pagereference.pageid"
-	query = query + " AND pagereference."+cond
+	query = query + " AND pagereference."+field+"="+value
 	query = query + " ORDER BY pagereference.timestamp"
 	
 	pageReferencesRows = executeQuery(query) 
 
 	query = "SELECT * FROM highlight WHERE"
-	query = query + " highlight."+cond
+	query = query + " highlight."+field+"="+value
 	query = query + " ORDER BY timestamp"
 	
 	outputHighlights = executeQuery(query)
 	
 	query = "SELECT * FROM answer,highlight WHERE"
 	query = query + " highlight.answerid = answer.answerid"
-	query = query + " AND highlight."+cond
+	query = query + " AND highlight."+field+"="+value
 	
 	answers = executeQuery(query)
 	
