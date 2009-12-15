@@ -1,0 +1,521 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="getAllAnswersQuery" xml:space="preserve">
+    <value>SELECT  a.answerid,
+              a.answerstring,
+              a.queryid,
+              a.realmid
+FROM    Answer A
+ORDER BY a.answerid</value>
+  </data>
+  <data name="getAllContextClassesQuery" xml:space="preserve">
+    <value>SELECT classid,name FROM class</value>
+  </data>
+  <data name="getAllQueriesQuery" xml:space="preserve">
+    <value>SELECT  q.queryid,
+              q.querystring,
+              q.realmid
+FROM    Query q
+ORDER BY q.queryid</value>
+  </data>
+  <data name="getAllRealmsQuery" xml:space="preserve">
+    <value>SELECT  r.realm,
+              r.realmid
+FROM    Realm r
+ORDER BY r.realm</value>
+  </data>
+  <data name="getAllSearchesQuery" xml:space="preserve">
+    <value>SELECT     s.searchID,
+           s.searchEngine,
+           s.searchString,
+           p.entryOrder,
+           w.url
+FROM       Search s
+INNER JOIN PathEntry p
+ON         p.searchID = s.searchID
+INNER JOIN Website w
+ON         p.websiteID = w.websiteID
+ORDER BY   s.searchId,
+           p.entryOrder</value>
+  </data>
+  <data name="getContextQuery" xml:space="preserve">
+    <value>SELECT  contextname,
+              contextid
+FROM    context
+ORDER BY contextid</value>
+  </data>
+  <data name="getFilteredWebsitesQuery" xml:space="preserve">
+    <value>SELECT    DISTINCT  w.url
+FROM       Website w
+INNER JOIN PathEntry p
+ON         p.websiteId = w.websiteID
+INNER JOIN Search s
+ON         p.searchID = s.searchID
+INNER JOIN SearchKeyword ks
+ON         ks.searchID = s.searchID
+INNER JOIN Keyword k
+ON         k.keywordID = ks.keywordID
+</value>
+  </data>
+  <data name="getKeywordCountQuery" xml:space="preserve">
+    <value>SELECT COUNT(*) AS keywordCount
+FROM   Keyword
+WHERE  keywordString = :keywordString</value>
+  </data>
+  <data name="getKeywordIdQuery" xml:space="preserve">
+    <value>SELECT keywordId
+FROM   Keyword
+WHERE  keywordString = :keywordString</value>
+  </data>
+  <data name="getLastAnswerIdQuery" xml:space="preserve">
+    <value>SELECT CURRVAL('answer_answerid_seq') AS lastVal
+             FROM Answer</value>
+  </data>
+  <data name="getLastHighlightIdQuery" xml:space="preserve">
+    <value>SELECT max(highlightid) AS lastVal
+             FROM highlight</value>
+  </data>
+  <data name="getLastIndividualIdQuery" xml:space="preserve">
+    <value>SELECT CURRVAL('contextinstance_contextinstid_seq') AS lastVal
+             FROM Individual</value>
+  </data>
+  <data name="getLastInputIdQuery" xml:space="preserve">
+    <value>SELECT max(inputid) AS lastID
+             FROM input</value>
+  </data>
+  <data name="getLastPageIdQuery" xml:space="preserve">
+    <value>SELECT max(pageid) as lastVal
+             FROM Page</value>
+  </data>
+  <data name="getLastPageReferenceIdQuery" xml:space="preserve">
+    <value>SELECT max(pagerefid) as lastVal
+             FROM PageReference</value>
+  </data>
+  <data name="getLastPhraseIdQuery" xml:space="preserve">
+    <value>SELECT  max(phraseid) as lastVal
+             FROM Phrase</value>
+  </data>
+  <data name="getLastQueryIdQuery" xml:space="preserve">
+    <value>SELECT CURRVAL('query_queryid_seq') AS lastVal
+             FROM query</value>
+  </data>
+  <data name="getLastRealmIdQuery" xml:space="preserve">
+    <value>SELECT CURRVAL('realm_realmid_seq') AS lastVal
+             FROM realm</value>
+  </data>
+  <data name="getLastSearchIdQuery" xml:space="preserve">
+    <value>SELECT CURRVAL('search_searchid_seq') AS lastVal
+             FROM Search</value>
+  </data>
+  <data name="getWebsiteCountQuery" xml:space="preserve">
+    <value>SELECT  COUNT(*) AS websiteCount
+FROM    Website
+WHERE  url = :url</value>
+  </data>
+  <data name="getWebsiteIdQuery" xml:space="preserve">
+    <value>SELECT websiteId
+FROM   Website
+WHERE  url = :url</value>
+  </data>
+  <data name="insertAnswerHasQuery" xml:space="preserve">
+    <value>INSERT INTO QueryHas
+                      (
+                          answerid,
+                          individualid,
+                          io
+                      )
+VALUES         (
+                          :answerid,
+                          :individualid,
+                          :io
+                      )</value>
+  </data>
+  <data name="insertAnswerQuery" xml:space="preserve">
+    <value>INSERT INTO Answer
+                      (
+                          answerstring,
+                          queryid,
+                          realmid                      
+)
+VALUES         (
+                         :answerstring,
+                         :queryid,
+                         :realmid
+                     )</value>
+  </data>
+  <data name="insertContextClassQuery" xml:space="preserve">
+    <value>INSERT INTO class
+                      (
+                          classid,
+                          contextid,
+                          name
+                      )
+VALUES         (
+                          :classid,
+                          :contextid,
+                          :name
+                      )</value>
+  </data>
+  <data name="insertContextQuery" xml:space="preserve">
+    <value>INSERT INTO Context
+                     (
+                     contextname
+                     )
+VALUES
+                     (
+                     :contextname
+                     )
+                  
+
+
+</value>
+  </data>
+  <data name="insertHasModifierQuery" xml:space="preserve">
+    <value>INSERT INTO HasModifier(
+              individualid
+)VALUES(
+             :individualid
+)
+</value>
+  </data>
+  <data name="insertHighlightQuery" xml:space="preserve">
+    <value>INSERT INTO Highlight
+                     (
+                     highlightid,
+                     answerID,
+                     classid,
+                     beginoffset,
+                     endoffset,
+                     queryid,
+                     startxpath,
+                     endxpath,
+                     timestamp,
+                     url,
+                     pagesource,
+                     meetpoint
+                     )
+VALUES
+                    (
+                    :highlightid,
+                    :answerID,
+                     :classid,
+                     :beginoffset,
+                     :endoffset,
+                     :queryid,
+                     :startxpath,
+                     :endxpath,
+                     :timestamp,
+                     :url,
+                     :pagesource,
+                     :meetpoint
+                     )
+    </value>
+  </data>
+  <data name="insertIndividualQuery" xml:space="preserve">
+    <value>INSERT INTO Individual
+                      (
+                          phraseid,
+                          classid
+                      )
+VALUES         (
+                          :phraseid,
+                          :classid
+                      )</value>
+  </data>
+  <data name="insertInputQuery" xml:space="preserve">
+    <value>INSERT INTO Input
+           (
+              inputid,
+               name,
+               pageRefId,
+               classId,
+               individualid,
+              highlightid
+            )
+VALUES  (
+               :inputid,
+               :name,
+               :pageRefId,
+               :classId,
+               :individualid,
+               :highlightid
+             )           </value>
+  </data>
+  <data name="insertKeywordQuery" xml:space="preserve">
+    <value>INSERT INTO Keyword
+                      (
+                          keywordString
+                      )
+VALUES         (
+                         :keywordString
+                     )</value>
+  </data>
+  <data name="insertModifierQuery" xml:space="preserve">
+    <value>INSERT INTO Modifier
+               (
+               modifierstring,
+               rank
+)VALUES(
+               :modifierstring,
+               :rank
+)</value>
+  </data>
+  <data name="insertPageQuery" xml:space="preserve">
+    <value>INSERT INTO Page
+                      (
+                          baseurl,
+                          pageid
+                      )
+VALUES         (
+                          :baseurl,
+                          :pageid
+                      )</value>
+  </data>
+  <data name="insertPageReferenceQuery" xml:space="preserve">
+    <value>INSERT INTO PageReference
+                      (
+                          querystring,
+                          pageid,
+                          queryid,
+                          pagerefid,
+                          timestamp,
+                          pagesrc,
+                          formxpath,
+                          destinationUrl
+                      )
+VALUES         (
+                          :querystring,
+                          :pageid,
+                          :queryid,
+                          :pagerefid,
+                          :timestamp,
+                          :pagesrc,
+                          :formxpath,
+                          :destinationUrl
+                      )</value>
+  </data>
+  <data name="insertPathEntryQuery" xml:space="preserve">
+    <value>INSERT INTO PathEntry
+                      (
+                          searchId,
+                          websiteId,
+                           entryOrder
+                      )
+VALUES          (
+                          :searchId,
+                          :websiteId,
+                          :entryOrder
+                      )</value>
+  </data>
+  <data name="insertPhraseBelongsToContextQuery" xml:space="preserve">
+    <value>INSERT INTO phrasebelongstocontext
+                      (
+                          contextid,
+                          phraseid
+                      )
+VALUES         (
+                          :contextid,
+                          :phraseid
+                      )</value>
+  </data>
+  <data name="insertPhraseQuery" xml:space="preserve">
+    <value>INSERT INTO Phrase
+                      (
+                          phrasestring,
+                          phraseid
+                      )
+VALUES         (
+                          :phrasestring,
+                          :phraseid
+                      )</value>
+  </data>
+  <data name="insertQueryHasQuery" xml:space="preserve">
+    <value>INSERT INTO QueryHas
+                      (
+                          queryid,
+                          individualid,
+                          io
+                      )
+VALUES         (
+                          :queryid,
+                          :individualid,
+                          :io
+                      )</value>
+  </data>
+  <data name="insertQueryQuery" xml:space="preserve">
+    <value>INSERT INTO Query
+                      (
+                          querystring,
+                          realmid,
+                          userID
+                      )
+VALUES         (
+                         :querystring,
+                         :realmid,
+                         :userID
+                     )</value>
+  </data>
+  <data name="insertRealmQuery" xml:space="preserve">
+    <value>INSERT INTO Realm
+                      (
+                          realm
+                      )
+VALUES         (
+                          :realm
+                      )
+</value>
+  </data>
+  <data name="insertSearchKeywordQuery" xml:space="preserve">
+    <value>INSERT INTO SearchKeyword
+            (
+                 SearchId,
+                 keywordId
+            )
+VALUES      (
+                 :searchId,
+                 :keywordId
+            )</value>
+  </data>
+  <data name="insertSearchQuery" xml:space="preserve">
+    <value>INSERT INTO Search
+                      (
+                          searchEngine,
+                          searchString
+                      )
+VALUES         (
+                          :searchEngine,
+                          :searchString
+                     )</value>
+  </data>
+  <data name="insertWebsiteQuery" xml:space="preserve">
+    <value>INSERT INTO Website
+                      (
+                          url
+                      )
+VALUES         (
+                         :url
+                     )</value>
+  </data>
+  <data name="updatePageReferenceQuerystring" xml:space="preserve">
+    <value>UPDATE PageReference
+SET querystring = :querystring
+WHERE pagerefid = :pagerefid</value>
+  </data>
+</root>
