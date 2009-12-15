@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DobsonSetup", "DobsonSetup\DobsonSetup.vdproj", "{FDD26BF9-75FA-4C0C-99E5-72F4A4F68F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DobsonGUI", "DobsonGUI\DobsonGUI.csproj", "{EFDD30B0-8F38-4509-9079-291EF75A8FE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DobsonLibrary", "DobsonLibrary\DobsonLibrary.csproj", "{70F9E6C4-7BE5-484C-8147-99EC342A65AC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDD26BF9-75FA-4C0C-99E5-72F4A4F68F71}.Debug|Any CPU.ActiveCfg = Debug
+		{FDD26BF9-75FA-4C0C-99E5-72F4A4F68F71}.Release|Any CPU.ActiveCfg = Release
+		{FDD26BF9-75FA-4C0C-99E5-72F4A4F68F71}.Release|Any CPU.Build.0 = Release
+		{EFDD30B0-8F38-4509-9079-291EF75A8FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFDD30B0-8F38-4509-9079-291EF75A8FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFDD30B0-8F38-4509-9079-291EF75A8FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFDD30B0-8F38-4509-9079-291EF75A8FE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F9E6C4-7BE5-484C-8147-99EC342A65AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F9E6C4-7BE5-484C-8147-99EC342A65AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F9E6C4-7BE5-484C-8147-99EC342A65AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F9E6C4-7BE5-484C-8147-99EC342A65AC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
