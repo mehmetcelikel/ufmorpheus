@@ -88,8 +88,6 @@ namespace DobsonGUI
 
             folderPath = XMLPath();
 
-
-
             if (folderPath == null)
 
                 return;
@@ -111,10 +109,9 @@ namespace DobsonGUI
 
                     setContextsAndClassesFromDatabase();
 
-                    writeOutPopupData(folderPath);
-
                     startButton.Enabled = true;
 
+                    connectionBL.CloseConnection();
                 }
 
                 else
@@ -259,7 +256,7 @@ namespace DobsonGUI
 
             if (connectionBL.testConnection())
             {
-
+                
                 setCompletedStatus("You have a valid Database connection");
 
                 return true;
@@ -976,23 +973,30 @@ namespace DobsonGUI
                 else 
                     classId = contextClass.classId;
 
+                if (!pref.formxpath.StartsWith("/HTML/BODY"))
+                    pref.formxpath = "/html/body" + pref.formxpath;
+
                 //Get the input value from the pagesource
-                HtmlAgilityPack.HtmlNode selectedNode = document.DocumentNode.SelectSingleNode(pref.formxpath.ToLower()).
-                    ParentNode.SelectSingleNode("//input[@name='"+inputName+"']");
+                HtmlAgilityPack.HtmlNode parentNode = document.DocumentNode.SelectSingleNode(pref.formxpath.ToLower());
 
                 SsqElement elem = null;
 
                 string txt = "";
-
-                if (selectedNode != null)
+                
+                if (parentNode != null)
                 {
-                    //find matching ssq input if there is one
-                    if (selectedNode.Attributes["value"] != null)
-                        txt = selectedNode.Attributes["value"].Value.ToUpper();
-                    else if(selectedNode.Attributes["title"] != null)
-                        txt = selectedNode.Attributes["title"].Value.ToUpper();
+                    HtmlAgilityPack.HtmlNode selectedNode = parentNode.ParentNode.SelectSingleNode("//input[@name='" + inputName + "']");
 
-                    elem = queryElementManager.FindSsqInput(classId, txt);
+                    if (selectedNode != null)
+                    {
+                        //find matching ssq input if there is one
+                        if (selectedNode.Attributes["value"] != null)
+                            txt = selectedNode.Attributes["value"].Value.ToUpper();
+                        else if (selectedNode.Attributes["title"] != null)
+                            txt = selectedNode.Attributes["title"].Value.ToUpper();
+
+                        elem = queryElementManager.FindSsqInput(classId, txt);
+                    }
                 }
 
                 int individ = -1;
@@ -1111,17 +1115,11 @@ namespace DobsonGUI
 
             }
 
-
-
         }
-
-
 
         private void startButton_Click(object sender, EventArgs e)
         {
-
-
-
+            
             if (startButton.Text == "START")
             {
 
@@ -1134,14 +1132,17 @@ namespace DobsonGUI
 
                 else
                 {
+                    DatabaseConnectionBL bl = new DatabaseConnectionBL();
+                    bl.OpenConnection();
 
-                    clearXMLData();
+                    //write out the classes for the scraper
+                    writeOutPopupData(folderPath);
+                    //DEBUG
+                    //clearXMLData();
 
                     startButton.Text = "STOP";
 
                     setWorkingStatus("Gathering Data");
-
-
 
                     firefox = System.Diagnostics.Process.Start("firefox.exe", "www.google.com");
 
@@ -1330,7 +1331,8 @@ namespace DobsonGUI
             {
 
                 //insert a new context
-                bl.insertContext(e.ElementContext);
+                if(e.ElementContext.contextID == -1)
+                    bl.insertContext(e.ElementContext);
 
                 Phrase phrase = new Phrase(e.Individual, e.ElementContext.contextID, e.ClassId);
 
@@ -1374,6 +1376,9 @@ namespace DobsonGUI
 
                     contextClasses[formattedKey] = c;
                 }
+
+                if (e.ElementContext.contextID == -1)
+                    bl.insertContext(e.ElementContext);
 
                 Phrase phrase = new Phrase(e.Individual, e.ElementContext.contextID, c.classId);
 
@@ -1492,8 +1497,7 @@ namespace DobsonGUI
             if (queryTextBox.Text.Length > 0 && queryTextBox.SelectionStart < queryTextBox.Text.Length && 
                 queryTextBox.Text[queryTextBox.SelectionStart] != ' ')
             {
-                cleanText();
-
+               
                 int start = 0;
 
                 int index = queryTextBox.SelectionStart -1;
@@ -1511,10 +1515,12 @@ namespace DobsonGUI
                 start = index + 1;
 
                 index = queryTextBox.SelectionStart;
+
+                int end = queryTextBox.SelectionStart + queryTextBox.SelectionLength-1;
               
                 for(; index < queryTextBox.Text.Length; index++)
                 {
-                    if (queryTextBox.Text[index] == ' ')
+                    if (index >= end && (queryTextBox.Text[index] == ' ' || Char.IsPunctuation(queryTextBox.Text[index])))
                         break;
                 }
 
@@ -1539,8 +1545,9 @@ namespace DobsonGUI
 
             if (contextClass == null)
             {
-                MessageBox.Show("You have typed in a class, Dobson doesn't save custom classes yet");
-                return;
+                contextClass = new ContextClass(-1, -1, classMenuDropDown.Text);
+
+                contextClasses[classMenuDropDown.Text] = contextClass;
             }
 
             string context = contextMenuDropDown.Text.Trim();
@@ -1587,7 +1594,7 @@ namespace DobsonGUI
 
             if (contextClass != null)
                 tempId = contextClass.classId;
-
+            
             SsqElement elem = new SsqElement(this.currentTextSelection, tempId,-1, c);
 
             if (containsAlready(elem, tempOutputList))

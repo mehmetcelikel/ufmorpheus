@@ -24,5 +24,15 @@ namespace DobsonLibrary.DataAccess
             return base.testConnection();
         }
 
+
+        internal void CloseConnection()
+        {
+            NpgsqlConnectionFactory.Close();
+        }
+
+        internal void OpenConnection()
+        {
+            NpgsqlConnectionFactory.Open();
+        }
     }
 }
