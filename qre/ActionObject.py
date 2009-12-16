@@ -4,6 +4,10 @@
 
 __authors__ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
+import lxml
+from lxml import etree
+import re
+import urllib, urllib2
 
 class ActionObject:
 	"""Base Class of all actions"""
@@ -19,7 +23,15 @@ class URLAction(ActionObject):
 
 	def do(self, state):
 		"""Does URLAction and returns the state"""
-		pass
+		url = xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
+		request = urllib2.Request(url)
+		response = urllib2.urlopen(request)
+		# state.cookie = CookieJar() -- initialized in state
+		state.cookie.extract_cookies(response,request)
+		cookie_handler = urllib2.HTTPCookieProcessor( state.cookie )
+		redirect_handler= HTTPRedirectHandler()
+		opener = urllib2.build_opener(redirect_handler,cookie_handler)
+		state.page = opener.open(request)
 
 
 class LinkAction(ActionObject):
