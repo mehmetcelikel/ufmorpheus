@@ -5,8 +5,7 @@
 __authors__ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
 import itertools
-import urllib
-import urllib2
+import cookielib, urllib, urllib2
 
 
 class ActionState:
@@ -18,7 +17,7 @@ class ActionState:
 	def __init__(self, _action_list, _kv_hash, _kt_hash, _action_hash ):
 		self.page = None # The current response page and dom source
 		self.user_agent = None # Header for user agent and browser info
-		self.cookie = None # Cookie object
+		self.cookie = CookieJar()# Cookie object
 		self.values = None # Values for form evaluation
 		
 		self.kv_hash = _kv_hash.copy() # Make a copy of the hash table
