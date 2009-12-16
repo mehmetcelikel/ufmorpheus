@@ -35,5 +35,22 @@ namespace DobsonLibrary.Business
             }
         }
 
+
+        public void CloseConnection()
+        {
+            using (DatabaseConnectionDA da = new DatabaseConnectionDA())
+            {
+                da.CloseConnection();
+            }
+            
+        }
+
+        public void OpenConnection()
+        {
+            using (DatabaseConnectionDA da = new DatabaseConnectionDA())
+            {
+                da.OpenConnection();
+            }
+        }
     }
 }
