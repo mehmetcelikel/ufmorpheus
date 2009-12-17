@@ -12,8 +12,12 @@ import urllib, urllib2
 class ActionObject:
 	"""Base Class of all actions"""
 
-	def do(self, state):
-		pass
+	def do(self, state): abstract
+
+def abstract():
+    import inspect
+    caller = inspect.getouterframes(inspect.currentframe())[1][3]
+    raise NotImplementedError(caller + ' must be implemented in subclass')
 
 
 class URLAction(ActionObject):
