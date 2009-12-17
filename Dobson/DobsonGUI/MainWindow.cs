@@ -1137,8 +1137,8 @@ namespace DobsonGUI
 
                     //write out the classes for the scraper
                     writeOutPopupData(folderPath);
-                    //DEBUG
-                    //clearXMLData();
+                    
+                    clearXMLData();
 
                     startButton.Text = "STOP";
 
@@ -1211,6 +1211,8 @@ namespace DobsonGUI
                         setContextsAndClassesFromDatabase();
 
                         queryElementManager.Clear();
+
+                        unresolvedInputs.Clear();
 
                     }
 
@@ -1320,6 +1322,16 @@ namespace DobsonGUI
 
             }
 
+            //if there are still some unresolved inputs then these are simply constant values
+            //but they still must be inserted into the db
+            InputBL bl = new InputBL();
+            foreach (Int32 hashkey in unresolvedInputs.Keys)
+            {
+                Hashtable ihash = (Hashtable)unresolvedInputs[hashkey];
+
+                foreach(string k in ihash.Keys)
+                    bl.insertInput((Input)ihash[k]);
+            }
         }
 
         public void saveContextInfo(Query thisQuery)
