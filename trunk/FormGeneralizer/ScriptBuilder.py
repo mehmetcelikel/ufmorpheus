@@ -34,6 +34,11 @@ class ScriptBuilder():
 		#keep track of order of operations		
 		sequenceNumber = 0
 
+		actionHash = dict()
+
+		#write out ssq data
+		#TODO: need to determine if appropriate info is in qrm or not
+	
 		#for the current qrm, we need  the data section
 		for action in qrm.pageList:
 			
@@ -50,7 +55,7 @@ class ScriptBuilder():
 			elif action.actionType == ActionType.Link:
 				writeLinkAction(sequence, action, sequenceNumber)
 			elif action.actionType == ActionType.Highlight:
-				writeHighlightAction(sequence, action, sequenceNumber)
+				writeHighlightAction(sequence, action, sequenceNumber, actionHash)
 
 			#save previous action for use in next iteration
 			previousAction = action
@@ -94,7 +99,6 @@ def writeFormAction(xmlNode, action, sequenceNumber):
 	form = etree.SubElement(xmlNode, 'form')
 	form.set("number",str(sequenceNumber))
 		
-
 	#handle the xpath for this form
 	xpath = etree.SubElement(form, 'xpath')
 	xpath.text = action.xpath
@@ -106,7 +110,7 @@ def writeFormAction(xmlNode, action, sequenceNumber):
 	#handle form method
 	method = etree.SubElement(form, 'method')
 	method.set("type",action.method)
-	pdb.set_trace()
+
 	#parameters
 	for i in action.formInputs:
 		param = etree.SubElement(form, 'param')
@@ -128,7 +132,7 @@ def writeLinkAction(xmlNode, action, sequenceNumber):
  	xmlNode.set("number",str(sequenceNumber))
 	pass
 
-def writeHighlightAction(xmlNode, action, sequenceNumber):
+def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 
 	#need to handle actiondata 
 
@@ -136,6 +140,10 @@ def writeHighlightAction(xmlNode, action, sequenceNumber):
 	hilite.text = action.meetpoint
 	hilite.set("id", str(action.highlightid))
 	xmlNode.set("number",str(sequenceNumber))
+
+	#add data to actionHash
+	actionHash["hi"+action.highlightid] = action.meetpoint		
+
 	pass
 
 
