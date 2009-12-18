@@ -802,8 +802,6 @@ namespace DobsonGUI
 
             Page thisPage = new Page();
 
-
-
             PageReference pref = new PageReference();
 
             PageBL pagebiz = new PageBL();
@@ -973,8 +971,10 @@ namespace DobsonGUI
                 else 
                     classId = contextClass.classId;
 
+                //DEBUG only 
                 if (!pref.formxpath.StartsWith("/HTML/BODY"))
                     pref.formxpath = "/html/body" + pref.formxpath;
+                    //pref.formxpath = "/" + pref.formxpath;
 
                 //Get the input value from the pagesource
                 HtmlAgilityPack.HtmlNode parentNode = document.DocumentNode.SelectSingleNode(pref.formxpath.ToLower());
@@ -1313,6 +1313,8 @@ namespace DobsonGUI
 
             string[] files = Directory.GetFiles(folderPath);
 
+            files = sortByFileNumber(files);
+
             //Run through each file and handle the page references, highlights, etc. 
 
             foreach (string file in files)
@@ -1332,6 +1334,44 @@ namespace DobsonGUI
                 foreach(string k in ihash.Keys)
                     bl.insertInput((Input)ihash[k]);
             }
+        }
+
+        private string[] sortByFileNumber(string[] files)
+        {
+            for (int i = 0; i < files.Length - 1; i++)
+            {
+                for (int j = 1; j < files.Length; j++)
+                {
+                    //if the ith file has a greater ordinal than the jth file, then swap
+                    if (compareOrdinal(files[i], files[j]) > 0)
+                    {
+                        string t = files[j];
+                        files[j] = files[i];
+                        files[i] = t;
+                    }
+                }
+            }
+
+            return files;
+        }
+        private int compareOrdinal(string s, string r)
+        {
+            int si = s.IndexOf("-");
+            int ri = r.IndexOf("-");
+
+            int sSlashIndex = s.LastIndexOf("\\")+1;
+            int rSlashIndex = r.LastIndexOf("\\")+1;
+
+            Int32 snum = Int32.Parse(s.Substring(sSlashIndex, si-sSlashIndex));
+            Int32 rnum = Int32.Parse(r.Substring(rSlashIndex, ri-rSlashIndex));
+
+            if (snum > rnum)
+                return 1;
+            else if (snum == rnum)
+                return 0;
+            else
+                return -1;
+
         }
 
         public void saveContextInfo(Query thisQuery)
