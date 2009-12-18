@@ -199,7 +199,7 @@ def getCondensedQrm(pps, outs, ans):
 	outsTime = 7
 
 	qrm = Qrm()
-	
+
 	#Keep condensing until everything, including the answers has been condensed
 	while len(ans) > 0:
 
@@ -259,13 +259,19 @@ def getPageOrLink(row):
 	#also offsets
 		
 	lowerRowXpath = lower(row[xpath])
-		
+
+	#Debug: This is a hack, it is temporary until christan changes the scraper to handle the missing '/html/body' part
+	if lowerRowXpath.startswith("/html/body") == False:
+		lowerRowXpath = "/" + lowerRowXpath
+
 	if row[ppagesrc] != None:
 		node = lxml.html.document_fromstring(row[ppagesrc])
 	else:
 		node = lxml.html.parse(row[url])
 
 	extractedNodes = node.xpath(lowerRowXpath)
+
+	pdb.set_trace()
 
 	if len(extractedNodes) == 0:
 		return None
