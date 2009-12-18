@@ -1604,11 +1604,9 @@ namespace DobsonGUI
 
             string context = contextMenuDropDown.Text.Trim();
 
-            Context c = null;
+            Context c = findContext(contextMenuDropDown.SelectedIndex,context);
 
-            if (contextMenuDropDown.SelectedIndex != -1)
-                c = (Context)allContexts[contextMenuDropDown.SelectedIndex];
-            else
+            if (c == null)
                 c = new Context(-1, context);
 
             SsqElement elem = new SsqElement(this.currentTextSelection, contextClass.classId,-1, c);
@@ -1632,9 +1630,15 @@ namespace DobsonGUI
 
             Context c = null;
 
-            if (outContextMenuDropDown.SelectedIndex != -1)
-                c = (Context)allContexts[outContextMenuDropDown.SelectedIndex];
-            else
+            if(outContextMenuDropDown.Text == "Context")
+            {
+                MessageBox.Show("Please select a context");
+                return;
+            }
+
+            c = findContext(outContextMenuDropDown.SelectedIndex,context);                        
+
+            if(c == null)
                 c = new Context(-1, context);
 
             //need to format valueText before searching the hashtable because all its keys follow a pattern
@@ -1661,6 +1665,22 @@ namespace DobsonGUI
 
             updateSubjectList();
         }
+
+        private Context findContext(int i, string context)
+        {
+            if (i == -1)
+            {
+                foreach (Context con in allContexts)
+                    if (con.contextName.Equals(context, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return con;
+                    }
+                return null;
+            }
+            
+            return (Context)allContexts[i];
+        }
+
         private void updateSubjectList()
         {
             subjectMenuDropDown.Items.Clear();
@@ -1745,6 +1765,18 @@ namespace DobsonGUI
 
             if (char.IsPunctuation(queryTextBox.Text[lastChar]))
                 queryTextBox.Text = queryTextBox.Text.Substring(0, lastChar);
+        }
+
+        private void inputListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (inputListBox.SelectedIndex >= 0)
+                outputListBox.SelectedIndex = -1;
+        }
+
+        private void outputListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (outputListBox.SelectedIndex >= 0)
+                inputListBox.SelectedIndex = -1;
         }
        
     }

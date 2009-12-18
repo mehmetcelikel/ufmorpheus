@@ -225,6 +225,7 @@
             this.outputListBox.Name = "outputListBox";
             this.outputListBox.Size = new System.Drawing.Size(260, 108);
             this.outputListBox.TabIndex = 9;
+            this.outputListBox.SelectedIndexChanged += new System.EventHandler(this.outputListBox_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -243,6 +244,7 @@
             this.inputListBox.Name = "inputListBox";
             this.inputListBox.Size = new System.Drawing.Size(269, 108);
             this.inputListBox.TabIndex = 8;
+            this.inputListBox.SelectedIndexChanged += new System.EventHandler(this.inputListBox_SelectedIndexChanged);
             // 
             // selectionMenu
             // 
@@ -251,7 +253,7 @@
             this.outItem,
             this.modifierItem});
             this.selectionMenu.Name = "selectionMenu";
-            this.selectionMenu.Size = new System.Drawing.Size(153, 92);
+            this.selectionMenu.Size = new System.Drawing.Size(122, 70);
             // 
             // inItem
             // 
@@ -261,7 +263,7 @@
             this.inputDoneToolStripMenuItem,
             this.inCancelToolStripMenuItem});
             this.inItem.Name = "inItem";
-            this.inItem.Size = new System.Drawing.Size(152, 22);
+            this.inItem.Size = new System.Drawing.Size(121, 22);
             this.inItem.Text = "In";
             // 
             // contextMenuDropDown
@@ -297,7 +299,7 @@
             this.outputDoneToolStripMenuItem,
             this.outCancelToolStripMenuItem});
             this.outItem.Name = "outItem";
-            this.outItem.Size = new System.Drawing.Size(152, 22);
+            this.outItem.Size = new System.Drawing.Size(121, 22);
             this.outItem.Text = "Out";
             // 
             // outContextMenuDropDown
@@ -327,7 +329,7 @@
             this.modifierDoneToolStripMenuItem,
             this.modifierCancelToolStripMenuItem});
             this.modifierItem.Name = "modifierItem";
-            this.modifierItem.Size = new System.Drawing.Size(152, 22);
+            this.modifierItem.Size = new System.Drawing.Size(121, 22);
             this.modifierItem.Text = "Modifer";
             // 
             // subjectMenuDropDown
