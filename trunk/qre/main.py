@@ -10,9 +10,10 @@ from lxml import etree
 import psycopg2
 import sys
 
-connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
+__connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",\
 										 'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
+__code_query = "SELECT code FROM qrm WHERE qrm.id = %(id)s"
 
 def main(argv):
 """Run the Executor script
@@ -30,22 +31,22 @@ def main(argv):
 	Initialize state with the created data structures
 	Call state.run()
 """
-	id = sys.argv[-1]	
+	id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
 
 	try:
-		connection = psycopg2.connect(connect_string % __connect_params)
+		connection = psycopg2.connect(__connect_string % __connect_params)
 	except:
 		print ("Connection to database failed")
 		return None
 	
-	q = "SELECT code FROM qrm WHERE qrm.id = {id}" % {'id':id}
+	q = __code_query % {'id':id}
 	
 	cursor = connection.cursor()
 	cursor.execute(q)
 	result = cursor.fetchall()
 	code = result[0][0]
 	
-	assert(len(code) > 0)
+	assert(len(code) > 0) # ensure text was returned
 	
 	root = etree.fromstring(code)
 
