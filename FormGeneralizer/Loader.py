@@ -10,6 +10,7 @@ import pdb
 import lxml
 import lxml.html
 import Highlight
+import Input
 sys.path.append('../badica')
 from ExtractionPath import ExtractionPath
 from Qrm import Qrm
@@ -28,7 +29,7 @@ def GetQRMFromDb(qrmid):
 	return getqrm(rowArray, qrmid, True)
 
 #loads list of inputs for the given pagereference id
-def GetPageInputs(pid):
+def getPageInputs(pid):
     
         NAME = 3
   
@@ -38,7 +39,7 @@ def GetPageInputs(pid):
 
         inputList = list()
 
-	query = "SELECT * FROM input WHERE pid="+str(pid)
+	query = "SELECT * FROM input WHERE pagerefid="+str(pid)
 
 	forminputs = executeQuery(query)
 
@@ -46,13 +47,13 @@ def GetPageInputs(pid):
 	
 		type = ""
 
-		if r[HILITE] != none:	
+		if r[HILITE] != None:	
 			type="Highlight"	
-		elif r[SSQINPUT] != none:
+		elif r[SSQINPUT] != None:
 			type="Constant"
 		else:
 			type="Default"
-	
+
 		inputList.append(Input.New(r[NAME], type, r[HILITE], r[SSQINPUT]))
 
         return inputList
@@ -248,21 +249,14 @@ def getHighlight(row):
 #Forms a page object out of the 
 def getPageOrLink(row):
 
-	pid = 0
+	prefid = 2
 	pUrl = 1
 	xpath = 7
 	ppagesrc = 6
 	ptimestamp = 8
 	dest = 9
-	
-	#If its a highlight you need start xpath and end xpath
-	#also offsets
-		
-	lowerRowXpath = lower(row[xpath])
 
-	#Debug: This is a hack, it is temporary until christan changes the scraper to handle the missing '/html/body' part
-	if lowerRowXpath.startswith("/html/body") == False:
-		lowerRowXpath = "/" + lowerRowXpath
+	lowerRowXpath = lower(row[xpath])
 
 	if row[ppagesrc] != None:
 		node = lxml.html.document_fromstring(row[ppagesrc])
@@ -271,18 +265,22 @@ def getPageOrLink(row):
 
 	extractedNodes = node.xpath(lowerRowXpath)
 
-	pdb.set_trace()
+	inputList = getPageInputs(row[prefid])
+
+	isForm = False
 
 	if len(extractedNodes) == 0:
-		return None
+		extractedNodes = parsePageForForm(inputList,row[ppagesrc])	
+		if extractedNodes != None:
+			isForm = True
 
 	temp = Page()
 		
-	if extractedNodes[0].tag == "form":
+	if isForm:
 		f = Form()
 		f.xpath = lowerRowXpath
 		temp = f
-		f.formInputs = GetPageInputs(row[pid])
+		f.formInputs = inputList
 	else:
 		l = Link()
 		l.xpath = lowerRowXpath
@@ -297,6 +295,76 @@ def getPageOrLink(row):
 	temp.timestamp = row[ptimestamp]	
 	
 	return temp
+
+#parse the page and extract a form
+def parsePageForForm(inputList, pagesrc):
+
+	findices = findAll(pagesrc, "form")
+
+	substring = None
+
+	index = -1
+
+	for i in findices:
+
+		if findElement( pagesrc, i, "<","", False, True) != -1:
+			break
+
+		index += 1
+
+	if index != -1:	
+		substring = pagesrc[findices[index] : findices[index+1]]
+
+	return substring		
+
+
+#searches the given string and returns a list of indices of matches
+def findAll(str, pattern):
+	
+	matches = list()
+
+	index = str.index(pattern)
+	
+	while index != -1 :
+		matches.append(index)
+		index = str.find(pattern, index+len(pattern), len(str))
+		
+	return 	matches
+
+#scans in src looking for the given element, if immediate=true then it must be the next thing,
+#otherwise it just scans until it finds it 
+def findElement(src, startIndex, elem, boundaryElem, forwardScan, immediate):
+
+	numbers = list()
+
+	if forwardScan:
+		startIndex+=1
+		numbers = range(startIndex, len(src)-1, 1)
+	else:
+		startIndex-=1
+		numbers = range(startIndex, 0,-1)
+
+	sub = ""
+
+	for i in numbers:
+
+		if src[i] == " ":
+			if sub != None and immediate == True:
+				return -1		
+
+			sub = ""
+			continue
+		elif src[i] == boundaryElem:
+			return -1
+		else:
+			sub += src[i];
+
+		if sub == elem:
+			return i
+		elif immediate == True and len(sub) >= len(elem):
+			break
+
+	return -1
 
 #Converts the argument to lower case
 def lower(x):
@@ -422,6 +490,7 @@ def executeQuery(q):
 	user = "morpheus3"
 	pwd = "crimson03.sql"
 	db = "Morpheus3DB"
+	result = ""
 	
 	try:
 		#create a connection using the psycopg2 library
@@ -429,7 +498,7 @@ def executeQuery(q):
 	except:
 		print("Connection to database failed.")
 		return None
-	
+
 	#obtain the cursor for use in executing our query
 	cursor = connection.cursor()
 	
@@ -438,7 +507,7 @@ def executeQuery(q):
 	
 	#Retrieve result set
 	result = cursor.fetchall()
-	
+		
 	return result
 		
 if __name__ == "main":

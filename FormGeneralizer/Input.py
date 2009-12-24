@@ -20,7 +20,7 @@ def New(name, type, highlightid, individualid):
 	input.type = type
 	input.highlightid = highlightid
 	input.individualid = individualid
-	pass
+	return input
 		
 if __name__ == "main":
 	pass
