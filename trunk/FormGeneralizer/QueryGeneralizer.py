@@ -235,7 +235,9 @@ def generalizeActions(p1, p2):
 
     #Generalize form xpaths
     if p1.actionType == ActionType.Form:
-        
+
+	pdb.set_trace()    
+    
         p1Epath.xpath_to_epath(p1.pagesrc,p1.xpath)
         
         p2Epath.xpath_to_epath(p2.pagesrc,p2.xpath)

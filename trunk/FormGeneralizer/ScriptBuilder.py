@@ -146,7 +146,6 @@ def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 
 	pass
 
-
 def linkBetweenPages(p1, p2):
 
 	if p1 == None or p2 == None: 
