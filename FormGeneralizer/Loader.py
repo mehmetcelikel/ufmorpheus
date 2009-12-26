@@ -270,9 +270,7 @@ def getPageOrLink(row):
 	isForm = False
 
 	if len(extractedNodes) == 0:
-		extractedNodes = parsePageForForm(inputList,row[ppagesrc])	
-		if extractedNodes != None:
-			isForm = True
+		isForm = parsePageForForm(inputList,row[ppagesrc])	
 
 	temp = Page()
 		
@@ -305,18 +303,45 @@ def parsePageForForm(inputList, pagesrc):
 
 	index = -1
 
+	#for each possible form found in the, compare all the inputs 
 	for i in findices:
 
 		if findElement( pagesrc, i, "<","", False, True) != -1:
-			break
 
+			#now that we've found one valid form, we need to search for another
+			foundClose = False
+			endIndex = index-1
+			while foundClose == False:
+				endIndex += 1
+				if findElement(pagesrc, findices[endIndex], "</", "", False, True) != -1:
+					foundClose = True
+
+			substring = pagesrc[findices[index] : findices[endIndex]+4]
+			tag = lxml.html.fromstring(substring)
+			compareList = tag.xpath("//input")
+			
+			if compareLists(inputList, compareList) == True:
+				return True
+							
 		index += 1
 
-	if index != -1:	
-		substring = pagesrc[findices[index] : findices[index+1]]
+	return False
 
-	return substring		
+def compareLists(l1, l2):
+	
+	found = False
+        for i in inputList:
+        	for c in compareList:
+                	if c.name == i.name:
+                        	found = True
+                                break
 
+		if found == False:
+			return False
+
+		found = False
+	
+	return True
 
 #searches the given string and returns a list of indices of matches
 def findAll(str, pattern):
@@ -357,8 +382,12 @@ def findElement(src, startIndex, elem, boundaryElem, forwardScan, immediate):
 		elif src[i] == boundaryElem:
 			return -1
 		else:
-			sub += src[i];
+			if forwardScan:
+				sub += src[i]
+			else:
+				sub = src[i] + sub
 
+		pdb.set_trace()
 		if sub == elem:
 			return i
 		elif immediate == True and len(sub) >= len(elem):
