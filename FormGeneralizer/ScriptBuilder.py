@@ -134,15 +134,17 @@ def writeLinkAction(xmlNode, action, sequenceNumber):
 
 def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 
+	id = str(action.timestamp.__hash__())
+
 	#need to handle actiondata 
 
 	hilite = etree.SubElement(xmlNode, 'highlight')
 	hilite.text = action.meetpoint
-	hilite.set("id", str(action.highlightid))
+	hilite.set("id",id)
 	xmlNode.set("number",str(sequenceNumber))
 
 	#add data to actionHash
-	actionHash["hi"+action.highlightid] = action.meetpoint		
+	actionHash[id] = action.meetpoint		
 
 	pass
 

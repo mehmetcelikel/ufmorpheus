@@ -111,7 +111,10 @@ def getqrm(rowArray, qid, isQRMID):
 
 	#List of page refs, highlights, and answers combined
 	qrm = getCondensedQrm(pageRows, outputRows, answerRows)
-	
+
+	if qrm == None:
+		return None
+
 	length = len(qrm.pageList)
 	
 	lastOutputTimestamp = -1
@@ -210,6 +213,10 @@ def getCondensedQrm(pps, outs, ans):
 			
 			p = getPageOrLink(pageRow)
 			
+			if p == None: 
+				print('An error occurred in parsing page: ' +pageRow[1])
+				return None
+
 			condensedList.append(p)
 			
 		else:
@@ -261,7 +268,7 @@ def getPageOrLink(row):
 	if row[ppagesrc] != None:
 		node = lxml.html.document_fromstring(row[ppagesrc])
 	else:
-		node = lxml.html.parse(row[url])
+		node = lxml.html.parse(row[pUrl])
 
 	extractedNodes = node.xpath(lowerRowXpath)
 
@@ -270,7 +277,9 @@ def getPageOrLink(row):
 	isForm = False
 
 	if len(extractedNodes) == 0:
-		isForm = parsePageForForm(inputList,row[ppagesrc])	
+		isForm = parsePageForForm(inputList,row[pUrl])	
+		if isForm == None:
+			return None
 
 	temp = Page()
 		
@@ -295,44 +304,37 @@ def getPageOrLink(row):
 	return temp
 
 #parse the page and extract a form
-def parsePageForForm(inputList, pagesrc):
+def parsePageForForm(inputList, url):
+	pdb.set_trace()	
+	body = lxml.html.parse(url).getroot().body
 
-	findices = findAll(pagesrc, "form")
+	if len(body.forms) == 0:
+		return None
 
 	substring = None
 
-	index = -1
+	index = 0
 
 	#for each possible form found in the, compare all the inputs 
-	for i in findices:
+	for form in body.forms:
 
-		if findElement( pagesrc, i, "<","", False, True) != -1:
+		compareHash = form.inputs
 
-			#now that we've found one valid form, we need to search for another
-			foundClose = False
-			endIndex = index-1
-			while foundClose == False:
-				endIndex += 1
-				if findElement(pagesrc, findices[endIndex], "</", "", False, True) != -1:
-					foundClose = True
-
-			substring = pagesrc[findices[index] : findices[endIndex]+4]
-			tag = lxml.html.fromstring(substring)
-			compareList = tag.xpath("//input")
-			
-			if compareLists(inputList, compareList) == True:
-				return True
+		if compareLists(inputList, compareHash) == True:
+			return True
 							
-		index += 1
-
 	return False
 
-def compareLists(l1, l2):
+def compareLists(inputList, compareHash):
 	
 	found = False
+
+	if len(inputList) != len(compareHash.keys()):
+		return False
+
         for i in inputList:
-        	for c in compareList:
-                	if c.name == i.name:
+        	for k in compareHash.keys():
+                	if compareHash[k].name == i.name:
                         	found = True
                                 break
 
@@ -387,7 +389,6 @@ def findElement(src, startIndex, elem, boundaryElem, forwardScan, immediate):
 			else:
 				sub = src[i] + sub
 
-		pdb.set_trace()
 		if sub == elem:
 			return i
 		elif immediate == True and len(sub) >= len(elem):
