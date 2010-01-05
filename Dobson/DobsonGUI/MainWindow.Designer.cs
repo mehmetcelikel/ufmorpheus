@@ -253,7 +253,7 @@
             this.outItem,
             this.modifierItem});
             this.selectionMenu.Name = "selectionMenu";
-            this.selectionMenu.Size = new System.Drawing.Size(122, 70);
+            this.selectionMenu.Size = new System.Drawing.Size(153, 92);
             // 
             // inItem
             // 
@@ -263,17 +263,21 @@
             this.inputDoneToolStripMenuItem,
             this.inCancelToolStripMenuItem});
             this.inItem.Name = "inItem";
-            this.inItem.Size = new System.Drawing.Size(121, 22);
+            this.inItem.Size = new System.Drawing.Size(152, 22);
             this.inItem.Text = "In";
             // 
             // contextMenuDropDown
             // 
+            this.contextMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.contextMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.contextMenuDropDown.Name = "contextMenuDropDown";
             this.contextMenuDropDown.Size = new System.Drawing.Size(121, 21);
             this.contextMenuDropDown.Text = "Context";
             // 
             // classMenuDropDown
             // 
+            this.classMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.classMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.classMenuDropDown.Name = "classMenuDropDown";
             this.classMenuDropDown.Size = new System.Drawing.Size(121, 21);
             this.classMenuDropDown.Text = "Class";
@@ -299,11 +303,13 @@
             this.outputDoneToolStripMenuItem,
             this.outCancelToolStripMenuItem});
             this.outItem.Name = "outItem";
-            this.outItem.Size = new System.Drawing.Size(121, 22);
+            this.outItem.Size = new System.Drawing.Size(152, 22);
             this.outItem.Text = "Out";
             // 
             // outContextMenuDropDown
             // 
+            this.outContextMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.outContextMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.outContextMenuDropDown.Name = "outContextMenuDropDown";
             this.outContextMenuDropDown.Size = new System.Drawing.Size(121, 21);
             this.outContextMenuDropDown.Text = "Context";
@@ -329,11 +335,13 @@
             this.modifierDoneToolStripMenuItem,
             this.modifierCancelToolStripMenuItem});
             this.modifierItem.Name = "modifierItem";
-            this.modifierItem.Size = new System.Drawing.Size(121, 22);
+            this.modifierItem.Size = new System.Drawing.Size(152, 22);
             this.modifierItem.Text = "Modifer";
             // 
             // subjectMenuDropDown
             // 
+            this.subjectMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.subjectMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.subjectMenuDropDown.Name = "subjectMenuDropDown";
             this.subjectMenuDropDown.Size = new System.Drawing.Size(121, 21);
             this.subjectMenuDropDown.Text = "Subject";
