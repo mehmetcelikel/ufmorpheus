@@ -164,25 +164,37 @@ namespace DobsonGUI
 
             allContexts = contextBL.getAllContexts();
 
+            allContexts.Sort(CompareContexts);
+
             foreach (Context c in allContexts)
             {
                 contextMenuDropDown.Items.Add(c.contextName);
 
                 outContextMenuDropDown.Items.Add(c.contextName);
-            }   
+            }
 
             ContextClassBL ccbl = new ContextClassBL();
 
             List<ContextClass> classes = ccbl.getAllContextClasses();
 
+            classes.Sort(CompareContextClasses);
+            
             foreach (ContextClass c in classes)
             {
                 contextClasses.Add(c.name, c);
 
                 classMenuDropDown.Items.Add(c.name);
-
             }
 
+        }
+
+        private static int CompareContexts(Context x, Context y)
+        {
+            return x.contextName.CompareTo(y.contextName);
+        }
+        private static int CompareContextClasses(ContextClass x, ContextClass y)
+        {
+            return x.name.CompareTo(y.name);
         }
 
         //set the progress bar along the bottom of the window
@@ -1099,9 +1111,11 @@ namespace DobsonGUI
 
                 StreamWriter writer = new StreamWriter(path + @"..\mcrdb\contextclasslist.txt", false);
 
-                foreach (string k in contextClasses.Keys)
+                List<string> sortedList = sortStrings(contextClasses.Keys);
+
+                foreach (string s in sortedList)
                 {
-                   writer.WriteLine(k);
+                   writer.WriteLine(s);
                 }
 
                 writer.Close();
@@ -1115,6 +1129,28 @@ namespace DobsonGUI
 
             }
 
+        }
+
+        private static List<string> sortStrings(ICollection list)
+        {
+            List<string> sortedList = new List<string>(list.Count);
+
+            foreach (string k in list)
+            {
+                int cnt =0;
+                for (; cnt < sortedList.Count; cnt++)
+                {
+                    if (sortedList[cnt].CompareTo(k) > 0)
+                    {
+                        break;
+                    }
+                }
+
+                sortedList.Insert(cnt, k);
+
+            }
+
+            return sortedList;
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -1778,7 +1814,7 @@ namespace DobsonGUI
             if (outputListBox.SelectedIndex >= 0)
                 inputListBox.SelectedIndex = -1;
         }
-       
+      
     }
 
 }
