@@ -7,7 +7,7 @@ element qre {
 		element info {
 			attribute  key { text },
 			attribute value { text },
-			attributet type { string "highlight" | string "userinput" | string "constant" }
+			attributet type { string "highlight" | string "userinput" | string "constant" | string "prompt" }
 		} *
 	}
 	element userdata {
