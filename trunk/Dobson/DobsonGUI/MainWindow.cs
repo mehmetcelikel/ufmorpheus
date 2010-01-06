@@ -713,8 +713,20 @@ namespace DobsonGUI
         {
             int index = url.IndexOf("?");
 
+            //bool isgoogle = false;
+
+            //if (index == -1)
+            //{
+            //    index = url.IndexOf("/#");
+            //    isgoogle = true;
+            //}
+
             if (index != -1)
             {
+                ////the delimeter for google querystring is longer than the standard one so increment
+                //if (isgoogle)
+                //    index++;
+
                 PageReferenceBL prefbiz = new PageReferenceBL();
 
                 string qs = url.Substring(index, url.Length - index);
@@ -742,6 +754,9 @@ namespace DobsonGUI
                     //iterate through the pairs and attempt to match the names to outstanding inputs
                     foreach (string nvp in nameValuePairs)
                     {
+                        if (elems == null)
+                            continue;
+
                         //split the string around the equals so now we have the name and value
                         string[] subs = nvp.Split(new char[] { '=' });
 
@@ -840,6 +855,9 @@ namespace DobsonGUI
                         string url = HttpUtility.UrlDecode(iterator.Current.Value);
 
                         int index = url.IndexOf("?");
+
+                        if (index == -1)
+                            index = url.IndexOf("/#");
 
                         if (index >= 0)
                             thisPage.baseURL = url.Substring(0, index);
