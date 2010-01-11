@@ -102,7 +102,12 @@ function MCR_GenPageInfo() {
 	var inputs = new Array();
 	for (var i=0; i<inps.length; i++) {
 		/*What do undefined and '' mean? are they equivalent to text*/
-		if (inps[i].type == 'text' || inps[i].type == '' || inps[i].type == undefined) {
+		//if (inps[i].type == 'text' || inps[i].type == '' || inps[i].type == undefined) {
+		//	inputs.push(inps[i]);
+		//}
+		if( inps[i].type.toLowerCase() == 'text' || 
+				inps[i].type.toLowerCase() == 'hidden'
+				){
 			inputs.push(inps[i]);
 		}
 		/*
@@ -258,16 +263,12 @@ function SaveData() {
 		//var inputs = this.parentNode.getElementByTagName('input');
 		var inputs = this.elements;
 		for (var i = 0; i < inputs.length; ++i){
-			//alert("tagname: " + inputs[i].tagName);
-			//alert("name: " + inputs[i].getAttribute('name'));
-			labelarray.push( inputs[i].getAttribute('name') );
-			//inner_textarray.push(inputs[i].innerHTML);
-			//alert("input");
-			//alert(inputs[i]);
-			//alert(inputs[i].innerHTML);
-			//alert("value1: " + inputs[i].getAttribute('selected'));
-			//labelarray.push( inputs[i].getAttribute('value') );	
-			//alert("value2: " + inputs[i].value);
+	
+			if( inputs[i].type.toLowerCase() == 'text' && 
+				inputs[i].type.toLowerCase() == 'hidden'){
+				continue;
+			}
+					labelarray.push( inputs[i].getAttribute('name') );
 			
 			
 			// The inner text
