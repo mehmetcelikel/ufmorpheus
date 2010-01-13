@@ -6,33 +6,34 @@ __authors___ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
 import lxml
 from lxml import etree
+import psycopg2, sys
 
-import psycopg2
-import sys
+import ActionState,ActionObject,DataParser
+
+import pdb
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",\
 										 'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
-__code_query = "SELECT code FROM qrm WHERE qrm.id = %(id)s"
+__code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
 
-def main(argv):
-"""Run the Executor script
-	
-	Iterate once over the script xml
-		if node is userdate
-			Create the hash table using UserDataParser
-		else if node is action data
-			Create Hash table pair using ActionDataParser
-		else if is the starturl
-		 create action object for it and make it first element in the action_list
-		else it must be sequence
-			Interate through the children and populate the action object list
-	
-	Initialize state with the created data structures
-	Call state.run()
-"""
-	id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
+def main(id):
+	"""Run the Executor script
 
+		Iterate once over the script xml
+			if node is userdate
+				Create the hash table using UserDataParser
+			else if node is action data
+				Create Hash table pair using ActionDataParser
+			else if is the starturl
+			 create action object for it and make it first element in the action_list
+			else it must be sequence
+				Interate through the children and populate the action object list
+	
+		Initialize state with the created data structures
+		Call state.run() 
+	"""
+	#id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
 	try:
 		connection = psycopg2.connect(__connect_string % __connect_params)
 	except:
@@ -68,20 +69,24 @@ def main(argv):
 
 		elif child.tag == 'sequence':
 			for ao in child:
-				if ao.tag == 'constantlink'
+				if ao.tag == 'constantlink':
 					action_list.append(URLAction(ao))
 
-				elif ao.tag == 'link'
+				elif ao.tag == 'link':
 					action_list.append(LinkAction(ao))
 
-				elif ao.tag == 'highlight'
+				elif ao.tag == 'highlight':
 					action_list.append(HighlightAction(ao))
 
-				elif ao.tag == 'form'
+				elif ao.tag == 'form':
 					action_list.append(FormAction(ao))
 	
-	state = ActionState(action_list, kv_hash, kt_hash, user_hash)
+	state = ActionState.ActionState(action_list, kv_hash, kt_hash, user_hash)
 	state.run()
-
+	
 	return state
 
+
+if __name__ == '__main__':
+	print sys.argv[-1]
+	main(sys.argv[-1])
