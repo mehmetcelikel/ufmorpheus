@@ -731,7 +731,7 @@ namespace DobsonGUI
 
                 string qs = url.Substring(index, url.Length - index);
 
-                //The querystring on this page is actually for the previous page reference
+                //The querystring on fthis page is actually for the previous page reference
                 //so we need to update the database to reflect this
 
                 if (previousPageReferenceId != -1)
@@ -899,9 +899,12 @@ namespace DobsonGUI
 
                         inputs = iterator.Current.Value.Split(new string[] { "%2C" }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (inputs == null || inputs.Length % 2 != 0)
-                            throw new Exception("Page data for " + thisPage.baseURL + " has missing form information, you must re-scrape this page.");
+                        List<string> inputList = new List<string>();
 
+                        if (inputs == null)// || inputs.Length % 2 != 0)
+                            throw new Exception("Page data for " + thisPage.baseURL + " has missing input information. The scraper has left out one or more input names.");
+                        else if (inputs.Length % 2 != 0)
+                            //iterate by pairs and move all pairs into the input list
                         break;
 
 
