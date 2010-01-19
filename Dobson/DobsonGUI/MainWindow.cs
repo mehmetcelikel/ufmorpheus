@@ -897,21 +897,15 @@ namespace DobsonGUI
                     case "inputlist":
 
 
-                        inputs = iterator.Current.Value.Split(new string[] { "%2C" }, StringSplitOptions.RemoveEmptyEntries);
+                        inputs = iterator.Current.Value.Split(new string[] { "%2C" },StringSplitOptions.None);
 
-                        List<string> inputList = new List<string>();
-
-                        if (inputs == null)// || inputs.Length % 2 != 0)
+                        if (inputs == null)
                             throw new Exception("Page data for " + thisPage.baseURL + " has missing input information. The scraper has left out one or more input names.");
-                        else if (inputs.Length % 2 != 0)
-                            //iterate by pairs and move all pairs into the input list
+                        
+
                         break;
 
-
-
                     case "node":
-
-
 
                         pref.destinationUrl = getDestinationUrl(HttpUtility.UrlDecode(iterator.Current.Value));
 
@@ -959,11 +953,6 @@ namespace DobsonGUI
             InputBL inputbiz = new InputBL();
 
 
-            if (inputs == null)
-
-                return;
-
-
             //Get the current max contextclass id
 
             int maxContextClassid = getMaxContextClassID();
@@ -975,8 +964,21 @@ namespace DobsonGUI
 
             PhraseBL individualUpdater = new PhraseBL();
 
-            for (int cnt = 0; cnt < inputs.Length && inputs[0] != "null";)
+            for (int cnt = 0; inputs != null && cnt < inputs.Length && inputs[0] != "null";)
             {
+
+                //if we have encountered an input that is missing its name or class, just skip it for now
+                if (inputs[cnt] == "" && cnt % 2 == 0)
+                {
+                    cnt += 2;
+                    continue;
+                }
+                else if (inputs[cnt] == "")
+                {
+                    cnt++;
+                    continue;
+                }
+
                 //must decode the input because it has been encoded
                 string inputName = HttpUtility.UrlDecode(inputs[cnt]);
 
@@ -1003,11 +1005,6 @@ namespace DobsonGUI
                 }
                 else 
                     classId = contextClass.classId;
-
-                //DEBUG only 
-                if (!pref.formxpath.StartsWith("/HTML/BODY"))
-                    pref.formxpath = "/html/body" + pref.formxpath;
-                    //pref.formxpath = "/" + pref.formxpath;
 
                 //Get the input value from the pagesource
                 HtmlAgilityPack.HtmlNode parentNode = document.DocumentNode.SelectSingleNode(pref.formxpath.ToLower());
