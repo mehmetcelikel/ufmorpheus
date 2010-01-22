@@ -87,7 +87,7 @@ def insertQrm(realmid, code, queryid):
 	
 	code = urllib.quote(code)
 
-	query = """INSERT INTO qrm(code, realmid) values('%s',%s);""" % (code,str(realmid))
+	query = r"""INSERT INTO qrm(code, realmid) values('%s',%s);""" % (code,str(realmid))
 
 	insertResults = executeQuery(query)
 
@@ -101,7 +101,7 @@ def insertQrm(realmid, code, queryid):
 
 	results = executeQuery(query)
 
-	query = "UPDATE query set qrmid = "+str(results[0])+" where queryid = "+str(queryid)
+	query = "UPDATE query SET qrmid = %s WHERE queryid = %s"% (str(results[0][0]), str(queryid))
 
 	executeQuery(query)
 
@@ -543,17 +543,7 @@ def get(field, value):
 	
 	return [pageReferencesRows,outputHighlights,answers,results[0]]	
 
-def executeQuery(*args):
-
-	q = None
-	code = None
-
-	if len(args) == 1:
-		q = args[0]
-	else:
-		q = args[0]
-		code = args[1]
-
+def executeQuery(q):
 	#Database parameters
 	server = "babylon.cise.ufl.edu"
 	user = "morpheus3"
@@ -572,21 +562,18 @@ def executeQuery(*args):
 	cursor = connection.cursor()
 	
 	try:
-		if len(args) == 1:
-			#Execute query using cursor
-			cursor.execute(q)
-		else:
-			cursor.execute(q, (code,))
-	
+		cursor.execute(q)
+		connection.commit() # <-- important for pyscog
+			
 		#Retrieve result set
-		if q.startswith("INSERT") == False:
+		if q.startswith("SELECT"):
 			result = cursor.fetchall()
-		elif cursor.rowcount == 0:
+		elif cursor.rowcount != 0:
 			result = [True]
 		else:
 			result = [False]
-	except Exception as (errno, strerr):
-		print(strerr)
+	except Exception, e:
+		print(str(e))
 			
 	return result
 		
