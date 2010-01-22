@@ -22,18 +22,18 @@ def abstract():
 
 class URLAction(ActionObject):
 
-	def __init__(_xmlnode):
+	def __init__(self,_xmlnode):
 		self.xmlnode = _xmlnode
 
 	def do(self, state):
 		"""Does URLAction and returns the state"""
-		url = xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
+		url = self.xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
 		request = urllib2.Request(url)
 		response = urllib2.urlopen(request)
 		# state.cookie = CookieJar() -- initialized in state
 		state.cookie.extract_cookies(response,request)
 		cookie_handler = urllib2.HTTPCookieProcessor( state.cookie )
-		redirect_handler= HTTPRedirectHandler()
+		redirect_handler = urllib2.HTTPRedirectHandler()
 		opener = urllib2.build_opener(redirect_handler,cookie_handler)
 		state.page = opener.open(request)
 
@@ -41,7 +41,7 @@ class URLAction(ActionObject):
 class LinkAction(ActionObject):
 
 
-	def __init__(_xmlnode):
+	def __init__(self,_xmlnode):
 		self.xmlnode = _xmlnode
 
 	def do(self, state):
@@ -52,7 +52,7 @@ class LinkAction(ActionObject):
 class HighlightAction(ActionObject):
 
 
-	def __init__(_xmlnode):
+	def __init__(self, _xmlnode):
 		self.xmlnode = _xmlnode
 
 	def do(self, state):
@@ -62,7 +62,7 @@ class HighlightAction(ActionObject):
 
 class FormAction(ActionObject):
 
-	def __init__(_xmlnode):
+	def __init__(self, _xmlnode):
 		self.xmlnode = _xmlnode
 
 	def do(self, state):

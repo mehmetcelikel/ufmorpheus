@@ -7,7 +7,7 @@ __authors__ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
 
 
-def UserDataParser(xmlnode):
+def ActionDataParser(xmlnode):
 	"""Returns hash table pair.
 			The first hash table pair is of the (key,value) pairs
 			The second hash table pair is of the (key,type) pairs
@@ -24,10 +24,10 @@ def UserDataParser(xmlnode):
 		assert(entry.tag == 'info') # sanity check
 		kt[entry.get('key')] = entry.get('type')
 
-	return (kv,kt) # return the pair of elementa
+	return (kv,kt) # return the pair of elements
 
 
-def ActionDataParser(xmlnode):
+def UserDataParser(xmlnode):
 	"""Returns a hash table with the key value pairs.
 
 			Does this by parsing all the children who are of the form:
