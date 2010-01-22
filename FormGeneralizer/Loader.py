@@ -87,7 +87,7 @@ def insertQrm(realmid, code, queryid):
 	
 	code = urllib.quote(code)
 
-	query = """INSERT INTO qrm(code, realmid) values("%s",%s)""" % (code,str(realmid))
+	query = """INSERT INTO qrm(code, realmid) values('%s',%s);""" % (code,str(realmid))
 
 	insertResults = executeQuery(query)
 
