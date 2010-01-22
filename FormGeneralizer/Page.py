@@ -12,6 +12,7 @@ class Page(object):
 		self.xpath = ""
 		self.pagesrc = ""
 		self.actionType = ""
+		self.querystring = ""
 		pass
 		
 def New(self, url, dest, time, xpath, src):

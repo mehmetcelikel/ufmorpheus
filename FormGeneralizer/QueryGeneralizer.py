@@ -11,6 +11,8 @@ import Loader
 from Qrm import Qrm
 import lxml
 import lxml.html    
+sys.path.append('../qre')
+from main import main
 sys.path.append('../badica')
 from ExtractionPath import ExtractionPath
 from Badica import Badica
@@ -70,14 +72,20 @@ def GeneralizeQueries(qrmid, queryid):
 	
     #Generate the actually text of the script, this is to be stored in the 'code' field in the qrm table
     code = scriptGenerator.create(genQrm)
+    
+    #print('\n******************* QRE SCRIPT\n')
 
-    print('\n******************* QRE SCRIPT\n')
-    from lxml import etree
-    print(etree.tostring(code))
+    #print(code)
 
     #insert code with new qrm into database 
-    #Loader.insertQrm(genQrm, code)
+    print('Inserting the new qrm into the database...')
     
+    id = Loader.insertQrm(genQrm.realmId, code, queryid)
+
+    print('done')
+
+    print('New Qrm ID='+str(id))
+
 #Rules:
 #A page with a highlight must be retained in canonical set
 #A page that links to a page in the above set must be retained
@@ -210,9 +218,11 @@ def generalizeQRMS(q1, q2):
         if gp == None:
             print("Generalization of page: "+gp.url+" failed, exiting....\n")
             return None
-        
+
         qS.pageList[i] = gp
-        
+
+    qS.realmId = q1.realmId    
+    
     return qS
 
 def generalizeActions(p1, p2):
@@ -245,8 +255,8 @@ def generalizeActions(p1, p2):
 	#what about form inputs?
 
 	method = getFormMethod(p1)
-
-	p3 = Form.New(p1.url, p1.destinationUrl, "", "", "",method, p1.formInputs)
+	
+	p3 = Form.New(p1.url, p1.destinationUrl, "", "", p1.pagesrc, method, p1.formInputs)
 
 	#we use the input list from the first page, because they should be the same
   
@@ -254,11 +264,10 @@ def generalizeActions(p1, p2):
     
         #Check the validity of the result
         if compareExtractions(p3.xpath,p1.xpath,p1.pagesrc) != NO_SIMILARITY:
-            p3.xpath = p1.xpath
             print("Processed form xpath")
         else:
             print("Generalized form xpath is not valid, using non-generalized xpath\n")
-
+            p3.xpath = p1.xpath
 
     elif p1.actionType == ActionType.Link:    
 
