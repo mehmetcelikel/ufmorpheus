@@ -11,6 +11,7 @@ import ActionState,ActionObject,DataParser
 import sys
 import pdb
 import psycopg2
+import urllib
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
@@ -46,7 +47,7 @@ def main(argv):
 	cursor = connection.cursor()
 	cursor.execute(q)
 	result = cursor.fetchall()
-	code = result[0][0]
+	code = urllib.unquote( result[0][0] )
 
 	assert(len(code) > 0) # ensure text was returned
 	
@@ -56,31 +57,30 @@ def main(argv):
 	kv_hash = {}	
 	kt_hash = {}
 	user_hash = {}
-	pdb.set_trace()
 	# Traversal of code script
 	for child in root:
 		if child.tag == 'actiondata':
-			kv_hash, kt_hash = ActionDataParser(child)
+			kv_hash, kt_hash = DataParser.ActionDataParser(child)
 
 		elif child.tag == 'userdata':
-			user_hash = UserDataParser(child)
+			user_hash = DataParser.UserDataParser(child)
 
 		elif child.tag == 'starturl':
-			action_list.insert(0,URLAction(child))
+			action_list.insert(0,ActionObject.URLAction(child))
 
 		elif child.tag == 'sequence':
 			for ao in child:
 				if ao.tag == 'constantlink':
-					action_list.append(URLAction(ao))
+					action_list.append(ActionObject.URLAction(ao))
 
 				elif ao.tag == 'link':
-					action_list.append(LinkAction(ao))
+					action_list.append(ActionObject.LinkAction(ao))
 
 				elif ao.tag == 'highlight':
-					action_list.append(HighlightAction(ao))
+					action_list.append(ActionObject.HighlightAction(ao))
 
 				elif ao.tag == 'form':
-					action_list.append(FormAction(ao))
+					action_list.append(ActionObject.FormAction(ao))
 	
 	state = ActionState.ActionState(action_list, kv_hash, kt_hash, user_hash)
 	state.run()
