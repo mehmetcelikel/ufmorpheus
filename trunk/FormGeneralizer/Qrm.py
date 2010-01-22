@@ -11,7 +11,7 @@ class Qrm():
 		self.isQRMID = True
 		self.dataHash = dict()
 		self.ssqClasses = list()
-		
+		self.realmId =-1		
 		pass
 
 	def pageLength(self):

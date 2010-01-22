@@ -6,6 +6,7 @@ __authors__ = ['"Chris Shields" <gatorcas@ufl.edu>']
 
 from lxml import etree
 import pdb
+import lxml.html
 from ActionType import ActionType
 class ScriptBuilder():
 	
@@ -18,7 +19,6 @@ class ScriptBuilder():
 
 		#create root of document
 		qre = etree.Element( 'qre' )		
-		#qre = etree.ElementTree(document)
 
 		#add user data
 		userData = etree.SubElement(qre, 'userdata')
@@ -63,8 +63,24 @@ class ScriptBuilder():
 
 		#add action data - now that we have built the hashtable of highlight and ssq info
 		actionData = etree.SubElement(qre, 'actiondata')
+		
+		writeActionData(actionData,actionHash)
+		
+		qre = etree.tostring(qre, pretty_print=False)
 
 		return qre
+	
+def writeActionData(xmlNode, actionHash):
+
+	#attach the action data to the xml node
+	for k in actionHash.keys():
+		info = etree.SubElement(xmlNode, 'info')
+		info.set('key',k)
+		info.set('value',actionHash[k])
+		xmlNode.append(info)
+
+	pass	
+
 	
 def writeStartUrl(xmlNode, qrm):
 
@@ -111,20 +127,68 @@ def writeFormAction(xmlNode, action, sequenceNumber):
 	method = etree.SubElement(form, 'method')
 	method.set("type",action.method)
 
+	#obtain the form element from the page, we need it get info about its inputs
+	formElemList = lxml.html.fromstring(action.pagesrc).xpath(action.xpath)
+	
 	#parameters
 	for i in action.formInputs:
+
+		value = ""
+
+		foundIt = findInList(formElemList[0].inputs.keys(), i.name)
+		
+		input = None
+	
+		#if input is not found, then its probably either a querystring name value pair, or some other input
+		if foundIt == False:
+			#so now we need to parse the querystring for the current page
+			value = parseQueryString(action.querystring, i.name)
+		else:
+			value = formElemList[0].inputs[i.name].value
+			input = formElemList[0].inputs[i.name]
+
+		if foundIt == True and input.type == 'button':
+			continue
+
 		param = etree.SubElement(form, 'param')
 		param.set("name",i.name)
 		param.set("type",i.type)
-		if i.highlightid != None:
-			param.text = "hl" + i.highlightid
-		elif i.individualid != None:
-			param.text = "in" + i.individualid
+		
+		if i.highlightid != None and i.highlightid != -1:
+			param.text = "hl" + str(i.highlightid)
+		elif i.individualid != None and i.individualid != -1:
+			param.text = "in" + str(i.individualid)
 		else:
-			param.text = i.defaultValue
+			param.text = value
 	
 	pass
 
+#for now this won't work because parsing of the querystring isn't working in the scraper or dobson properly
+def parseQueryString(querystring, input):
+
+	#find the input in the querystring and return its value
+		
+	return ''
+
+
+def findInList(ls, i):
+
+	for e in ls:
+		if e == i:
+			return True
+	return False
+
+def getDefaultValue(form, input):
+
+	#in this situation, we need to parse the form and obtain the value for the given input. 
+
+	formElemList = lxml.html.fromstring(form.pagesrc).xpath(form.xpath)
+
+	inputElem = formElemList[0].inputs[input.name]
+
+	return inputElem.value
+
+	
 def writeLinkAction(xmlNode, action, sequenceNumber):
 	
 	link = etree.SubElement(xmlNode, 'link')

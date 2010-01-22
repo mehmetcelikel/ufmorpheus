@@ -6,34 +6,35 @@ __authors___ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
 import lxml
 from lxml import etree
-import psycopg2, sys
-
-import ActionState,ActionObject,DataParser
-
 import pdb
+import ActionState,ActionObject,DataParser
+import sys
+import pdb
+import psycopg2
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
-__connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",\
-										 'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
+__connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
 __code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
 
-def main(id):
-	"""Run the Executor script
-
-		Iterate once over the script xml
-			if node is userdate
-				Create the hash table using UserDataParser
-			else if node is action data
-				Create Hash table pair using ActionDataParser
-			else if is the starturl
-			 create action object for it and make it first element in the action_list
-			else it must be sequence
-				Interate through the children and populate the action object list
+def main(argv):
 	
-		Initialize state with the created data structures
-		Call state.run() 
+	"""Run the Executor script
+	
+	Iterate once over the script xml
+		if node is userdate
+			Create the hash table using UserDataParser
+		else if node is action data
+			Create Hash table pair using ActionDataParser
+		else if is the starturl
+		 create action object for it and make it first element in the action_list
+		else it must be sequence
+			Interate through the children and populate the action object list
+	
+	Initialize state with the created data structures
+	Call state.run()
 	"""
-	#id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
+	id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
+
 	try:
 		connection = psycopg2.connect(__connect_string % __connect_params)
 	except:
@@ -46,7 +47,7 @@ def main(id):
 	cursor.execute(q)
 	result = cursor.fetchall()
 	code = result[0][0]
-	
+
 	assert(len(code) > 0) # ensure text was returned
 	
 	root = etree.fromstring(code)
@@ -55,7 +56,7 @@ def main(id):
 	kv_hash = {}	
 	kt_hash = {}
 	user_hash = {}
-
+	pdb.set_trace()
 	# Traversal of code script
 	for child in root:
 		if child.tag == 'actiondata':
@@ -86,6 +87,8 @@ def main(id):
 	
 	return state
 
-
 if __name__ == '__main__':
-	main(sys.argv[-1])
+
+	main(sys.argv)
+	pass
+

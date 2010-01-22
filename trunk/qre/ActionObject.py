@@ -62,10 +62,19 @@ class HighlightAction(ActionObject):
 
 class FormAction(ActionObject):
 
-
 	def __init__(_xmlnode):
 		self.xmlnode = _xmlnode
 
 	def do(self, state):
-		"""Does the FormAction and returns the state"""
+
+		print('test')
+		#start with the list of inputs for this form
+		#for each input get the value from either the user input or a highlight
+				
+
+		#if none of the above, then use the querystring and take the value thats already there
+
+		#perform form submission 
+		
+
 		pass

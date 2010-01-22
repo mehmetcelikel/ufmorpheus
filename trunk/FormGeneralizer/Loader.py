@@ -25,8 +25,8 @@ def GetQRMFromDb(qrmid):
 	
 	#Perform retrieval of QRM data
 	rowArray = retrieveRecordsFromQRM(qrmid)
-	
-	return getqrm(rowArray, qrmid, True)
+
+	return getqrm(rowArray, qrmid, True, rowArray[3][0])
 
 #loads list of inputs for the given pagereference id
 def getPageInputs(pid):
@@ -47,14 +47,14 @@ def getPageInputs(pid):
 	
 		type = ""
 
-		if r[HILITE] != None:	
-			type="Highlight"	
-		elif r[SSQINPUT] != None:
-			type="Constant"
-		else:
-			type="Default"
-
-		inputList.append(Input.New(r[NAME], type, r[HILITE], r[SSQINPUT]))
+		if r[HILITE] != None and r[HILITE] != -1:	
+			type="highlight"	
+		elif r[SSQINPUT] != None and r[SSQINPUT] != -1:
+			type="userinput"
+		else: #if the value is a default, then parse the pagesrc to get the default value
+			type="default"
+			
+		inputList.append(Input.New(r[NAME], type, r[HILITE], r[SSQINPUT],""))
 
         return inputList
 
@@ -78,21 +78,45 @@ def getQueryText(q1, q2):
 	return [r1,r2]			
 	
 #performs insertion of qrm db
-def InsertQrm(qrm, code):
+def insertQrm(realmid, code, queryid):
 
         #insert new qrm into database	
-        pass
+	pdb.set_trace()
+
+	import urllib
+	
+	code = urllib.quote(code)
+
+	query = """INSERT INTO qrm(code, realmid) values("%s",%s)""" % (code,str(realmid))
+
+	insertResults = executeQuery(query)
+
+	if insertResults == None or insertResults[0] == False :
+		print('Qrm insertion failed')
+		return None
+	else:
+		print('Qrm insertion succeeded')
+
+	query = "SELECT MAX(qrmid) from qrm"
+
+	results = executeQuery(query)
+
+	query = "UPDATE query set qrmid = "+str(results[0])+" where queryid = "+str(queryid)
+
+	executeQuery(query)
+
+	return results[0]
 
 #This function calls the retrieveRecords function and parses them into the proper format
 #that can be used by the other generalization code
 def GetQRMFromQuery (queryID):
 
 	rowArray = retrieveRecordsFromQuery(queryID)
-	
-	return getqrm(rowArray, queryID, False)
+
+	return getqrm(rowArray, queryID, False, rowArray[3][0])
 	
 #This function gets page references and page outputs and returns a query object	
-def getqrm(rowArray, qid, isQRMID):
+def getqrm(rowArray, qid, isQRMID, realmid):
 	
 	pageRows = rowArray[0]
 	
@@ -114,7 +138,7 @@ def getqrm(rowArray, qid, isQRMID):
 
 	if qrm == None:
 		return None
-
+	
 	length = len(qrm.pageList)
 	
 	lastOutputTimestamp = -1
@@ -149,7 +173,9 @@ def getqrm(rowArray, qid, isQRMID):
 	qrm.id = qid
 
 	qrm.isQRMID = isQRMID
-	
+
+	qrm.realmId = realmid	
+
 	#if this is a true qrm, then get its input/output classes
 	if qrm.isQRMID:
 		ssqClasses = executeQuery("SELECT io,classid,contextid FROM qrmHas WHERE qrmHas.qrmid = "+str(qid))
@@ -187,13 +213,6 @@ def exciseRange(i,j,a):
 	
 #Combine the pages, highlights and answers into a single list
 def getCondensedQrm(pps, outs, ans):
-
-#Need to handle different case of qrmid vs queryid
-
-#Need to assign id's to input phrases, who0 who1 ,where0 what0 etc.
-
-#Need to determine usage location in some form, and then extract the class of the form input
-#and assign it to the ssq input
 
 	condensedList = list()
 	
@@ -262,6 +281,7 @@ def getPageOrLink(row):
 	ppagesrc = 6
 	ptimestamp = 8
 	dest = 9
+	querystring = 3
 
 	lowerRowXpath = lower(row[xpath])
 
@@ -274,30 +294,34 @@ def getPageOrLink(row):
 
 	inputList = getPageInputs(row[prefid])
 
-	isForm = False
+	dataElems = list()
 
 	if len(extractedNodes) == 0:
-		isForm = parsePageForForm(inputList,row[pUrl])	
-		if isForm == None:
+		dataElems = parsePageForForm(inputList,row[pUrl])	
+		if dataElems == None:
 			return None
+		
+		if len(dataElems) != 0:
+			lowerRowXpath = dataElems[1]
 
 	temp = Page()
-		
-	if isForm:
+	
+	if len(dataElems) != 0:
 		f = Form()
 		f.xpath = lowerRowXpath
-		temp = f
 		f.formInputs = inputList
+		f.pagesrc = dataElems[0]
+		temp = f
 	else:
 		l = Link()
 		l.xpath = lowerRowXpath
 		temp = l
+		temp.pagesrc = row[ppagesrc]
+
 
 	temp.url = row[pUrl]
 	
-	temp.destinationUrl = row[dest]
-	
-	temp.pagesrc = row[ppagesrc]
+	temp.destinationUrl = row[dest]	
 	
 	temp.timestamp = row[ptimestamp]	
 	
@@ -305,8 +329,14 @@ def getPageOrLink(row):
 
 #parse the page and extract a form
 def parsePageForForm(inputList, url):
-	pdb.set_trace()	
-	body = lxml.html.parse(url).getroot().body
+
+	from lxml import etree
+	
+	root = lxml.html.parse(url).getroot()
+
+	tree = etree.ElementTree(root)
+
+	body = root.body
 
 	if len(body.forms) == 0:
 		return None
@@ -321,24 +351,20 @@ def parsePageForForm(inputList, url):
 		compareHash = form.inputs
 
 		if compareLists(inputList, compareHash) == True:
-			return True
+			return [etree.tostring(tree),tree.getpath(form)]
 							
-	return False
+	return []
 
 def compareLists(inputList, compareHash):
 	
 	found = False
+	for k in compareHash.keys():
+		for i in inputList:
+			if compareHash[k].name == i.name:
+				found = True
+				break
 
-	if len(inputList) != len(compareHash.keys()):
-		return False
-
-        for i in inputList:
-        	for k in compareHash.keys():
-                	if compareHash[k].name == i.name:
-                        	found = True
-                                break
-
-		if found == False:
+		if found == False and compareHash[k].type != 'hidden':
 			return False
 
 		found = False
@@ -510,11 +536,24 @@ def get(field, value):
 	query = query + " AND highlight."+field+"="+value
 	
 	answers = executeQuery(query)
-	
-	return [pageReferencesRows,outputHighlights,answers]	
 
-def executeQuery(q):
+	query = "SELECT realmid from query where query."+field+"="+value
+
+	results = executeQuery(query)
 	
+	return [pageReferencesRows,outputHighlights,answers,results[0]]	
+
+def executeQuery(*args):
+
+	q = None
+	code = None
+
+	if len(args) == 1:
+		q = args[0]
+	else:
+		q = args[0]
+		code = args[1]
+
 	#Database parameters
 	server = "babylon.cise.ufl.edu"
 	user = "morpheus3"
@@ -532,12 +571,23 @@ def executeQuery(q):
 	#obtain the cursor for use in executing our query
 	cursor = connection.cursor()
 	
-	#Execute query using cursor
-	cursor.execute(q)
+	try:
+		if len(args) == 1:
+			#Execute query using cursor
+			cursor.execute(q)
+		else:
+			cursor.execute(q, (code,))
 	
-	#Retrieve result set
-	result = cursor.fetchall()
-		
+		#Retrieve result set
+		if q.startswith("INSERT") == False:
+			result = cursor.fetchall()
+		elif cursor.rowcount == 0:
+			result = [True]
+		else:
+			result = [False]
+	except Exception as (errno, strerr):
+		print(strerr)
+			
 	return result
 		
 if __name__ == "main":
