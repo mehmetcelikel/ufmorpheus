@@ -7,6 +7,8 @@ element qre {
 		element info {
 			attribute  key { text },
 			attribute value { text },
+			attribute dataclass { text },
+			attribute context { text },
 			attributet type { string "highlight" | string "userinput" | string "constant" | string "prompt" }
 		} *
 	}
