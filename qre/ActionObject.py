@@ -8,6 +8,7 @@ import lxml
 from lxml import etree
 import re
 import urllib, urllib2
+import pdb
 
 class ActionObject:
 	"""Base Class of all actions"""
@@ -67,10 +68,15 @@ class FormAction(ActionObject):
 
 	def do(self, state):
 
-		print('test')
 		#start with the list of inputs for this form
-		#for each input get the value from either the user input or a highlight
-				
+		inputs = list()
+
+		#iterate through the list and find the input elements		
+		for e in self.xmlnode.getchildren():
+
+			if e.tag == 'param':
+				#for each input get the value from either the user input or a highlight
+								
 
 		#if none of the above, then use the querystring and take the value thats already there
 
