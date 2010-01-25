@@ -12,8 +12,8 @@
 		         class="chromeclass-toolbar" context="toolbar-context-menu"
              hidden="false" persist="hidden">
 			<toolbaritem flex="0">
-				<!--<toolbarbutton id="MCR-OnOffButton" tooltiptext="Turn on/off"
-				               label="Enable/Disable" oncommand="MCR_ToggleOnOff()" />-->
+				<toolbarbutton id="MCR-OnOffButton" tooltiptext="Turn on/off"
+				               label="Enable/Disable" oncommand="MCR_ToggleOnOff()" />
 				<!--<toolbarbutton id="MCR-LogPageButton" tooltiptext="Log Page Information"
 				               label="Log Page" oncommand="MCR_SaveData()" /> -->
 				<toolbarbutton id="MCR-LogSelectedButton" tooltiptext="Log Selection Information"

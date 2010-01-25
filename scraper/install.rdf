@@ -5,7 +5,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="cgrant@cise.ufl.edu"
                    em:name="Morpheus Clickstream Recorder"
-                   em:version="0.24"
+                   em:version="0.25"
                    em:creator="Christan Grant"
                    em:description="Clickstream recorder for the Morpheus project"
                    em:homepageURL="http://zion.cise.ufl.edu/wiki/">

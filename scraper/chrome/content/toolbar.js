@@ -1001,5 +1001,8 @@ MCR_OnLoad();
 //	}, false);
 window.addEventListener("load", function (event) { 
 	gBrowser.addEventListener("load", function(event) { 
-		AddListeners(gBrowser.selectedBrowser.contentDocument); }, true); 
-	}, false);
+		if(navigator.preference("extensions.mcr.enabled")){
+			AddListeners(gBrowser.selectedBrowser.contentDocument);
+		} 
+	}, true); 
+}, false);
