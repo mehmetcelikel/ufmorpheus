@@ -1,6 +1,6 @@
 <qre> 
 	<actiondata> 
-		<info key="one" value="1" type="userinput"/> 
+		<info key="one" value="1" type="userinput" context="wherein" dataclass="Event"/>
 	</actiondata> 
 	<userdata> 
 		<info key="two" value="2" /> 
