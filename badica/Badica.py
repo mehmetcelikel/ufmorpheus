@@ -69,11 +69,13 @@ class Badica(object):
 
 if __name__ == '__main__':
 	import ExtractionPath
-	ep1 = ExtractionPath.ExtractionPath(3,7,7,"http://www.gatorzone.com/story.php?id=16113","//html/body/div[3]/div/div/b")
+	#ep1 = ExtractionPath.ExtractionPath(3,7,7,"http://www.gatorzone.com/story.php?id=16113","//html/body/div[3]/div/div/b")
+	ep1 = ExtractionPath.ExtractionPath(3,7,7,"http://money.cnn.com/magazines/fortune/bestcompanies/2010/snapshots/8.html","/html/body/div/div/div/div/div")
 	print ep1
 	print ep1.epath_to_xpath()
 	print
-	ep2 = ExtractionPath.ExtractionPath(4,5,5,"http://www.gatorzone.com/story.php?id=16116","//html/body/div[3]/div/div/b")
+	#ep2 = ExtractionPath.ExtractionPath(4,5,5,"http://www.gatorzone.com/story.php?id=16116","//html/body/div[3]/div/div/b")
+	ep2 = ExtractionPath.ExtractionPath(4,5,5,"http://money.cnn.com/magazines/fortune/bestcompanies/2010/snapshots/8.html","/html/body/div/div/div/div/div")
 	print ep2
 	print ep2.epath_to_xpath()
 	print

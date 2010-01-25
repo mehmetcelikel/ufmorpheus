@@ -115,9 +115,9 @@ class ExtractionPath(object):
 		if url_or_html.startswith("http://") or url_or_html.startswith("www"):
 			#root = lxml.html.parse(url_or_html).getroot()
 			#node = root.xpath(path)
-			_page = urllib2.urlopen(url_or_html)
+			#_page = urllib2.urlopen(url_or_html)
 			#root = parse(_page).getroottree()
-			root = parse(_page)
+			root = lxml.html.parse(url_or_html).getroot()
 			node = root.xpath(path)
 		else:
 			root = lxml.html.fromstring(url_or_html)
