@@ -71,16 +71,32 @@ class FormAction(ActionObject):
 		#start with the list of inputs for this form
 		inputs = list()
 
+		querystring = ""
+
+		#get the base url for this form
+		for e in self.xmlnode.getchildren():
+			if e.tag == 'baseurl':
+				querystring = e.text	
+				break
+
+		querystring += "?"
+		first = False
+1
 		#iterate through the list and find the input elements		
 		for e in self.xmlnode.getchildren():
 
+			#for each input get the value from the actiondata hash
 			if e.tag == 'param':
-				#for each input get the value from either the user input or a highlight
-								
+				if !first :
+					querystring += "&"
+	
+				v = state.kv_hash[ e.text ]
+					
+				querystring += e['name'] + "=" + v 
 
-		#if none of the above, then use the querystring and take the value thats already there
-
+	
 		#perform form submission 
-		
+		result = urllib.open( querystring )		
 
+		print(result)
 		pass
