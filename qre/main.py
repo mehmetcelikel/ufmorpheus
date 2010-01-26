@@ -81,7 +81,10 @@ def main(argv):
 
 				elif ao.tag == 'form':
 					action_list.append(ActionObject.FormAction(ao))
-	
+
+	#parse the ssq to populate the value hashes with the user input
+	pdb.set_trace()
+
 	state = ActionState.ActionState(action_list, kv_hash, kt_hash, user_hash)
 	state.run()
 	
