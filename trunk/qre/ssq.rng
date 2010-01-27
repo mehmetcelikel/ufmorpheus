@@ -30,6 +30,7 @@ element ssq {
 		}*
 
 	}*
+
 	element output_list {
 
 		attribute type {string "what" | string "where" | string "who" | string "when" | string "how" | string "why"},
@@ -37,7 +38,5 @@ element ssq {
 		attribute class { text }
 
 	}+
-
-}
 
 }+
