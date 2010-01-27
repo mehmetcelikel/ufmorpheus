@@ -1,0 +1,43 @@
+<!-- Template SSQ Specification --> 
+<!-- This file contains relax ng compact schema for ssq input file -->
+
+element ssq {
+	
+	element realm { text }
+	
+	element query { text }
+	
+	element input_list {
+		
+		element input {
+
+			attribute type {string "what" | string "where" | string "who" | string "when" | string "how" | string "why"},
+
+			attribute class { text },
+
+			attribute type { text },
+
+			text
+
+			element modifier {
+
+				attribute value { text },
+
+				modifier
+
+			}*
+
+		}*
+
+	}*
+	element output_list {
+
+		attribute type {string "what" | string "where" | string "who" | string "when" | string "how" | string "why"},
+
+		attribute class { text }
+
+	}+
+
+}
+
+}+
