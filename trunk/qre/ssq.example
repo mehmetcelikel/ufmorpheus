@@ -4,7 +4,12 @@
 	<query>what size tire do you need for a 97 toyota corolla?</query>
 	
 	<input_list>	
-		<input type="what" class="q" type="textbox">blah</input>
+		<input type="what" class="q" type="textbox">
+			blah
+			<modifier value="blaise">
+				<modifier value="biggity"></modifier>
+			</modifier>
+		</input>
 		...
 	</input_list>
 
