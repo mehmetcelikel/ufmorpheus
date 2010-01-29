@@ -15,8 +15,6 @@ element ssq {
 
 			attribute class { text },
 
-			attribute type { text },
-
 			text
 
 			element modifier {
