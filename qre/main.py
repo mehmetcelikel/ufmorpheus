@@ -17,6 +17,11 @@ __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
 __code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
 
+kv_hash = {}
+kt_hash = {}
+kclass_hash = {}
+kcontext_hash = {}
+
 def main(argv):
 	
 	"""Run the Executor script
@@ -56,11 +61,13 @@ def main(argv):
 	action_list = []
 	kv_hash = {}	
 	kt_hash = {}
+	kclass_hash = {}
+	kcontext_hash = {}
 	user_hash = {}
 	# Traversal of code script
 	for child in root:
 		if child.tag == 'actiondata':
-			kv_hash, kt_hash = DataParser.ActionDataParser(child)
+			kv_hash, kt_hash, kclass_hash, kcontext_hash = DataParser.ActionDataParser(child)
 
 		elif child.tag == 'userdata':
 			user_hash = DataParser.UserDataParser(child)
@@ -82,13 +89,62 @@ def main(argv):
 				elif ao.tag == 'form':
 					action_list.append(ActionObject.FormAction(ao))
 
-	#parse the ssq to populate the value hashes with the user input
+	#parse the ssq to populate the value hashes with the user input	
+	if read_ssq(sys.argv[-2]) == False:
+		pdb.set_trace()
+		return
+	
 	pdb.set_trace()
-
-	state = ActionState.ActionState(action_list, kv_hash, kt_hash, user_hash)
+	
+	state = ActionState.ActionState(action_list, kv_hash, kt_hash, kclass_hash, kcontext_hash, user_hash)
 	state.run()
 	
 	return state
+
+#read in the ssq from an xml file or xml string
+def read_ssq(xml):
+
+	file = open(xml,'r')
+
+	text = file.read()
+
+	file.close()
+
+	return read_ssq_text(text)
+
+#populate the value hash from a string
+def read_ssq_text(xmlstring):
+
+	tree = etree.fromstring(xmlstring)
+	
+	#find the input list and load the values into the kv_hash
+	for e in tree.getchildren():
+	
+		if e.tag == 'input_list':
+			for input in e.getchildren():
+				if loadValueIntoHash(input) == False:	
+					print('The given ssq does not match this qrm\'s ssq, aborting')
+					return False
+	return True
+
+#parse the xml node and load its values into the appropriate spots
+#in the value hash
+def loadValueIntoHash(xml):
+	
+	#for the given xml node, we must find the matching key
+	for entry in kv_hash.keys():
+		cls = kclass_hash[entry]
+		context = kcontext_hash[entry]
+	
+		pdb.set_trace()		
+		#if we have found the appropriate key, then assign this ssq input's value 
+		#to the data hash at the current key
+		if cls == xml['dataclass'] and context == xml['context']:
+			kv_hash[entry] = xml.text
+			return True
+
+	#if we reach this point then we haven't found a match
+	return False			
 
 if __name__ == '__main__':
 

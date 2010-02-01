@@ -108,7 +108,7 @@ def writeUrlAction(xmlNode, url, sequenceNumber):
 
 	pass
 	
-def writeFormAction(xmlNode, action, sequenceNumber):
+def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 
 	#need to handle default input values
 
@@ -153,14 +153,28 @@ def writeFormAction(xmlNode, action, sequenceNumber):
 		param = etree.SubElement(form, 'param')
 		param.set("name",i.name)
 		param.set("type",i.type)
-		
+	
+		type = ""
+		contextAndClass = {}
+		CON = 0
+		CLS = 1
+
+		#we need to assign the context and class information along with the appropriate id		
 		if i.highlightid != None and i.highlightid != -1:
-			param.text = "hl" + str(i.highlightid)
+			param.text = str(i.highlightid)
+			type = "highlight"
+			contextAndClass = Loader.getContextAndClass(i.highlightid, False)
 		elif i.individualid != None and i.individualid != -1:
-			param.text = "in" + str(i.individualid)
+			param.text = str(i.individualid)
+			type = "userinput"
+			contextAndClass = Loader.getContextAndClass(i.individualid, True)
 		else:
 			param.text = value
+			type = "constant"
 	
+		#add form input data to value hash
+		newHashElem = HashElement(param.text.__hash__(),"",type,contextAndClass[CON],contextAndClass[CLS])
+
 	pass
 
 #for now this won't work because parsing of the querystring isn't working in the scraper or dobson properly
