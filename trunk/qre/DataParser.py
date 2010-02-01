@@ -8,11 +8,11 @@ __authors__ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
 
 def ActionDataParser(xmlnode):
-	"""Returns hash table pair.
+	"""Returns hash table quartet.
 			The first hash table pair is of the (key,value) pairs
 			The second hash table pair is of the (key,type) pairs
 			It does this by parsing children of the form:
-				<info key="one" value="1" type="userinput"/>
+				<info key="one" value="1" type="userinput" dataclass="classA" context="contextB"/>
 	"""
 	kv = {}
 	for entry in xmlnode:
@@ -24,7 +24,17 @@ def ActionDataParser(xmlnode):
 		assert(entry.tag == 'info') # sanity check
 		kt[entry.get('key')] = entry.get('type')
 
-	return (kv,kt) # return the pair of elements
+	kcl = {}	
+	for entry in xmlnode:
+		assert(entry.tag == 'info')
+		kcl[entry.get('key')] = entry.get('dataclass')
+	
+	kco = {}
+	for entry in xmlnode:
+		assert(entry.tag == 'info')
+		kco[entry.get('key')] = entry.get('context')
+
+	return (kv,kt,kcl,kco) # return the quartet of elements
 
 
 def UserDataParser(xmlnode):

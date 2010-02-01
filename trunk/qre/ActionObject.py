@@ -81,13 +81,13 @@ class FormAction(ActionObject):
 
 		querystring += "?"
 		first = False
-1
+
 		#iterate through the list and find the input elements		
 		for e in self.xmlnode.getchildren():
 
 			#for each input get the value from the actiondata hash
 			if e.tag == 'param':
-				if !first :
+				if first == False:
 					querystring += "&"
 	
 				v = state.kv_hash[ e.text ]
