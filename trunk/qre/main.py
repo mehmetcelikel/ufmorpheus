@@ -55,7 +55,9 @@ def main(argv):
 	code = urllib.unquote( result[0][0] )
 
 	assert(len(code) > 0) # ensure text was returned
-	
+
+	pdb.set_trace()	
+
 	root = etree.fromstring(code)
 
 	action_list = []
@@ -91,10 +93,7 @@ def main(argv):
 
 	#parse the ssq to populate the value hashes with the user input	
 	if read_ssq(sys.argv[-2]) == False:
-		pdb.set_trace()
 		return
-	
-	pdb.set_trace()
 	
 	state = ActionState.ActionState(action_list, kv_hash, kt_hash, kclass_hash, kcontext_hash, user_hash)
 	state.run()
@@ -107,7 +106,7 @@ def read_ssq(xml):
 	file = open(xml,'r')
 
 	text = file.read()
-
+	pdb.set_trace()
 	file.close()
 
 	return read_ssq_text(text)
@@ -136,7 +135,6 @@ def loadValueIntoHash(xml):
 		cls = kclass_hash[entry]
 		context = kcontext_hash[entry]
 	
-		pdb.set_trace()		
 		#if we have found the appropriate key, then assign this ssq input's value 
 		#to the data hash at the current key
 		if cls == xml['dataclass'] and context == xml['context']:

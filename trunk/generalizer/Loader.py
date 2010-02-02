@@ -81,7 +81,6 @@ def getQueryText(q1, q2):
 def insertQrm(realmid, code, queryid):
 
         #insert new qrm into database	
-	pdb.set_trace()
 
 	import urllib
 	
@@ -326,6 +325,39 @@ def getPageOrLink(row):
 	temp.timestamp = row[ptimestamp]	
 	
 	return temp
+
+#gets the context and class information for the given highlight or ssq input
+def getContextAndClass(id, isSsqInput):
+	
+	q = ""
+	
+	if isSsqInput:
+		q = """SELECT	
+				class.name, context.contextname
+			FROM
+				individual,class,context,phrase,phrasebelongstocontext
+			WHERE
+				individual.classid = class.classid AND
+				individual.phraseid = phrase.phraseid AND
+				phrase.phraseid = phrasebelongstocontext.phraseid AND
+				phrasebelongstocontext.contextid = context.contextid AND
+				individual.individualid = %s
+		"""
+	else:
+		q = """SELECT   
+                                class.name
+                        FROM
+                                highlight,class
+                        WHERE
+                                highlight.classid = class.classid AND
+				highlight.highlightid = %s
+		"""
+	#insert the id into the querystring
+	q = q % id
+
+	result = executeQuery(q)
+	
+	return result	
 
 #parse the page and extract a form
 def parsePageForForm(inputList, url):

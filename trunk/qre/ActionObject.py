@@ -47,6 +47,9 @@ class LinkAction(ActionObject):
 
 	def do(self, state):
 		"""Does LinkAction and returns the state"""
+		obj = URLAction(xmlnode)
+		obj.do(state)
+
 		pass
 
 
