@@ -7,6 +7,7 @@ __authors__ = ['"Chris Shields" <gatorcas@ufl.edu>']
 from lxml import etree
 import pdb
 import lxml.html
+from HashElement import HashElement
 from ActionType import ActionType
 class ScriptBuilder():
 	
@@ -51,7 +52,7 @@ class ScriptBuilder():
 			
 			#write out actions
 			if action.actionType == ActionType.Form:
-				writeFormAction(sequence, action,sequenceNumber)
+				writeFormAction(sequence, action,sequenceNumber,actionHash)
 			elif action.actionType == ActionType.Link:
 				writeLinkAction(sequence, action, sequenceNumber)
 			elif action.actionType == ActionType.Highlight:
@@ -75,8 +76,23 @@ def writeActionData(xmlNode, actionHash):
 	#attach the action data to the xml node
 	for k in actionHash.keys():
 		info = etree.SubElement(xmlNode, 'info')
-		info.set('key',k)
-		info.set('value',actionHash[k])
+		info.set('key',k)	
+
+		helem = actionHash[k]
+		
+		info.set('value',helem.value)
+		info.set('type',helem.type)
+
+		if helem.context != None:
+			info.set('context',helem.context)
+		else:
+			info.set('context','')
+		
+		if helem.dataclass != None:
+			info.set('dataclass',helem.dataclass)
+		else:
+			info.set('dataclass','')
+
 		xmlNode.append(info)
 
 	pass	
@@ -130,6 +146,9 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 	#obtain the form element from the page, we need it get info about its inputs
 	formElemList = lxml.html.fromstring(action.pagesrc).xpath(action.xpath)
 	
+	#keep a count of the inputs for use as an id
+	inputIndex = 0	
+
 	#parameters
 	for i in action.formInputs:
 
@@ -156,25 +175,48 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 	
 		type = ""
 		contextAndClass = {}
-		CON = 0
-		CLS = 1
+		TIME = 2
+		CON = 1
+		CLS = 0
+		h = None
 
 		#we need to assign the context and class information along with the appropriate id		
 		if i.highlightid != None and i.highlightid != -1:
-			param.text = str(i.highlightid)
 			type = "highlight"
-			contextAndClass = Loader.getContextAndClass(i.highlightid, False)
-		elif i.individualid != None and i.individualid != -1:
-			param.text = str(i.individualid)
-			type = "userinput"
-			contextAndClass = Loader.getContextAndClass(i.individualid, True)
-		else:
-			param.text = value
-			type = "constant"
-	
-		#add form input data to value hash
-		newHashElem = HashElement(param.text.__hash__(),"",type,contextAndClass[CON],contextAndClass[CLS])
+			classContextAndTimestamp = Loader.getNeededScriptInfo(i.highlightid, False)
+			newHashElem = actionHash[ classContextAndTimestamp[TIME] ]
+			newHashElem.dataclass = classContextAndTimestamp[CLS]
 
+			h = classContextAndTimestamp[TIME]
+
+		elif i.individualid != None and i.individualid != -1:
+			type = "userinput"
+			contextAndClass = Loader.getNeededScriptInfo(i.individualid, True)
+			          
+			#add form input data to value hash
+	                newHashElem = HashElement(value, type,contextAndClass[CON],contextAndClass[CLS])
+
+        	        #get the hash key and set it in the action data hash
+                	h = getKey(sequenceNumber,inputIndex)
+
+		else:
+			type = "constant"
+			contextAndClass = [None, None]
+
+	                #add form input data to value hash
+        	        newHashElem = HashElement(value, type,contextAndClass[CON],contextAndClass[CLS])
+
+                	#get the hash key and set it in the action data hash
+	                h = getKey(sequenceNumber,inputIndex)
+
+		#add the newHashElem
+       	        actionHash[ h ] = newHashElem
+		
+		#set the key in the xml node
+		param.text = h
+
+		#increment the input element index
+		inputIndex += 1
 	pass
 
 #for now this won't work because parsing of the querystring isn't working in the scraper or dobson properly
@@ -212,17 +254,17 @@ def writeLinkAction(xmlNode, action, sequenceNumber):
 
 def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 
-	id = str(action.timestamp.__hash__())
+	key = str(action.timestamp)
 
 	#need to handle actiondata 
 
 	hilite = etree.SubElement(xmlNode, 'highlight')
 	hilite.text = action.meetpoint
-	hilite.set("id",id)
+	hilite.set("id",key)
 	xmlNode.set("number",str(sequenceNumber))
 
 	#add data to actionHash
-	actionHash[id] = action.meetpoint		
+	actionHash[key] = HashElement(action.meetpoint,'highlight','','')
 
 	pass
 
@@ -245,6 +287,8 @@ def linkBetweenPages(p1, p2):
 
 	return False;
 
+def getKey(seq, index):
+	return str(seq) + ':' + str(index)
 
 if __name__ == "main":
 	pass
