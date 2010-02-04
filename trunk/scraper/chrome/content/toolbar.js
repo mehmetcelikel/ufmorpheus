@@ -255,74 +255,69 @@ function SaveData() {
 	var data = "";
 	if(this.nodeName.toLowerCase() == 'form'){
 		try{
-		var g = GetContexClasses();
+			var g = GetContexClasses();
 	
-		var inner_textarray = new Array(); // Used if innertext is available
-		var labelarray = new Array(); // used for labels
+			var inner_textarray = new Array(); // Used if innertext is available
+			var labelarray = new Array(); // used for labels
 		
-		//var inputs = this.parentNode.getElementByTagName('input');
-		var inputs = this.elements;
-		for (var i = 0; i < inputs.length; ++i){
+			var inputs = this.elements;
+			for (var i = 0; i < inputs.length; ++i){
 	
-			if( inputs[i].type.toLowerCase() == 'text' && 
-				inputs[i].type.toLowerCase() == 'hidden'){
-				continue;
-			}
-					labelarray.push( inputs[i].getAttribute('name') );
-			
-			
-			// The inner text
-			if(inputs[i].selectedIndex === undefined ||
-				inputs[i].selectedIndex == null){
-				//alert("This is null and undefined");
-				// This is not a selction drop down
+				if( inputs[i].type.toLowerCase() == 'text' && 
+					inputs[i].type.toLowerCase() == 'hidden'){
+					continue;
+				}
 				
-				inner_textarray.push(inputs[i].value);
-				//inner_textarray.push("---");
+				labelarray.push( inputs[i].getAttribute('name') );
+						
+				// The inner text
+				if(inputs[i].selectedIndex === undefined ||
+					inputs[i].selectedIndex == null){
+					// This is not a selction drop down
+				
+					inner_textarray.push(inputs[i].value);
+				}
+				else{
+					var selection_index = inputs[i].selectedIndex ;
+					var theitem = inputs[i].options.item(selection_index);
+					inner_textarray.push(theitem.innerHTML);
+				}
 			}
-			else{
-				var selection_index = inputs[i].selectedIndex ;
-				//alert("index: " + selection_index);
-				var theitem = inputs[i].options.item(selection_index);
-				//alert("theitem: "+theitem.innerHTML);
-				inner_textarray.push(theitem.innerHTML);
-			}
-		}
 		
-		//alert(inner_textarray);
+			//alert(inner_textarray);
 		
-		// Note: retvals is a call back
-		var retVals = { param1: null, 
-						param2: null, 
-						param3: g, // Contex classes 
-						param4: form_defaults, // for checking what was selected
-						type: null, // The type, 'selection' or 'form'
-						selectclass: null, 
-						labelarray: labelarray, // all the name attributes fof the input array
-						classarray:null, // returns an array of node names and the classes
-						isAnswer: false,
-						intext: inner_textarray, // This is all the possible inner text of a selection
-												// if the item 1. has inter text and 2. its value may be '---' 
-												// if no selection is available	
-						xpath: GetXPath(this)
-					}; 
-	window.openDialog("chrome://mcr/content/popup.xul","Pete's Popup","chrome,modal",
-		"dummy", // [0]
-		"form", // [1] - this is not a slection
-		retVals); // [2]
+			// Note: retvals is a call back
+			var retVals = { param1: null, 
+							param2: null, 
+							param3: g, // Contex classes 
+							param4: form_defaults, // for checking what was selected
+							type: null, // The type, 'selection' or 'form'
+							selectclass: null, 
+							labelarray: labelarray, // all the name attributes fof the input array
+							classarray:null, // returns an array of node names and the classes
+							isAnswer: false,
+							intext: inner_textarray, // This is all the possible inner text of a selection
+													// if the item 1. has inter text and 2. its value may be '---' 
+													// if no selection is available	
+							xpath: GetXPath(this)
+						}; 
+			window.openDialog("chrome://mcr/content/popup.xul","Pete's Popup","chrome,modal",
+				"dummy", // [0]
+				"form", // [1] - this is not a slection
+				retVals); // [2]
 	
-		//alert(retVals.classarray);
+			//alert(retVals.classarray);
 		
-		// form element
-		data = "<morpheus>\n";
-		data += "  <type> form </type>\n";
-		data += "  " + GetURLXML(this);
-		data += "  " + GetTimestampXML();
-		data += "  <xpath>"+GetXPath(this)+"</xpath>\n";
-		data += "  <inputlist>" + escape(retVals.classarray) + "</inputlist>\n";
-		data += "  <node class=\"form\">" + PrintNode(this) +"</node>\n";
-		data += "  " + GetPageSource(this);
-		data += "</morpheus>";
+			// form element
+			data = "<morpheus>\n";
+			data += "  <type> form </type>\n";
+			data += "  " + GetURLXML(this);
+			data += "  " + GetTimestampXML();
+			data += "  <xpath>"+GetXPath(this)+"</xpath>\n";
+			data += "  <inputlist>" + escape(retVals.classarray) + "</inputlist>\n";
+			data += "  <node class=\"form\">" + PrintNode(this) +"</node>\n";
+			data += "  " + GetPageSource(this);
+			data += "</morpheus>";
 		}catch(e) {alert(e.message)}
 	}
 	else{

@@ -137,9 +137,6 @@
 					
 					mp.appendChild(mi);
 				}
-				//var mi = document.createElement("menuitem");
-				//mi.setAttribute('label','Default');
-				//mi.setAttribute('selected','true');
 				m.appendChild(mp);
 				return m;
 			
@@ -170,34 +167,20 @@
 				
 					var d = document.getElementsByTagName('label');
 
-					//var d = document.getElementsByAttribute('selected',true);
-					//alert("num labels: " + d.length);
-					var lc_index = 0;
+					var lc_index = 0; // label class index
 					for(var i = 0; i != d.length; ++i){
 						var attr = d.item(i).getAttribute('value');
 						
-						//labelclasses.push(trim(attr));
 						// put in the name from the label class
 						var c_name = retVals.labelarray[lc_index++];
 						c_name = trim(c_name);
 						labelclasses.push(c_name);
 						
-						//++i;
-						//alert("attr: " + attr);
 						var menulist = document.getElementsByAttribute('name',attr);
 						var menupop = menulist.item(0).childNodes;
 						var nme_list = menupop.item(0).childNodes;
-						//alert(nme_list.length);
 						for(var j = 0; j != nme_list.length; ++j){
-							//alert(nme_list.item(j));
-							//alert(nme_list.item(j).nodeName);
-							//alert(nme_list.item(j).getAttribute('label'));
-							//alert(nme_list.item(j).getAttribute('selected'));
-						
-							//var c_list = document.getElementsByName(attr);
-							//alert("c_list: " + c_list.item(0));
 							if(nme_list.item(j).getAttribute('selected') == "true"){
-								//alert("reached");
 								labelclasses.push(trim(nme_list.item(j).getAttribute('label')));
 								break;
 							}
@@ -216,10 +199,8 @@
 		
 		function GetFormIndex(){
 			var current = retVals.xpath;
-			//alert("current: " + current);
 			try{
 				for(var i = 0; i != retVals.param4.length; ++i){
-					//alert("i: " + retVals.param4[i].xpath);
 					if (current == retVals.param4[i].xpath){
 						return i;
 					}
@@ -228,26 +209,13 @@
 				alert("GetFormIndex(): "+e.message);
 			}
 			
-			//alert("Could not match the current form");
 			return 0; // the first one (zero) is just a best guess
 		
 		}
 	</script>
 
-	<dialogheader title="Pete's Popus" description="We need to record your context info"/>
+	<dialogheader description="We need to record your context info"/>
 	<groupbox id="petepane" align="center" >
-		<!--
-		<hbox>
-			<select>
-				<option value="one">One</option>
-				<option value="two">Two</option>
-				<option value="three">Three</option>
-			</select>
-		</hbox>
-		<hbox>
-			<description flex="0">Christan's Test</description>
-		</hbox>
-		-->
 	</groupbox>
 	
 
