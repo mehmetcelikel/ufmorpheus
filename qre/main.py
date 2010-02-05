@@ -56,8 +56,6 @@ def main(argv):
 
 	assert(len(code) > 0) # ensure text was returned
 
-	pdb.set_trace()	
-
 	root = etree.fromstring(code)
 
 	action_list = []
@@ -90,7 +88,7 @@ def main(argv):
 
 				elif ao.tag == 'form':
 					action_list.append(ActionObject.FormAction(ao))
-
+	pdb.set_trace()
 	#parse the ssq to populate the value hashes with the user input	
 	if read_ssq(sys.argv[-2]) == False:
 		return
@@ -106,7 +104,7 @@ def read_ssq(xml):
 	file = open(xml,'r')
 
 	text = file.read()
-	pdb.set_trace()
+
 	file.close()
 
 	return read_ssq_text(text)
@@ -118,7 +116,7 @@ def read_ssq_text(xmlstring):
 	
 	#find the input list and load the values into the kv_hash
 	for e in tree.getchildren():
-	
+		pdb.set_trace()	
 		if e.tag == 'input_list':
 			for input in e.getchildren():
 				if loadValueIntoHash(input) == False:	
@@ -129,7 +127,7 @@ def read_ssq_text(xmlstring):
 #parse the xml node and load its values into the appropriate spots
 #in the value hash
 def loadValueIntoHash(xml):
-	
+
 	#for the given xml node, we must find the matching key
 	for entry in kv_hash.keys():
 		cls = kclass_hash[entry]

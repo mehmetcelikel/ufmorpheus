@@ -264,7 +264,7 @@ def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 	xmlNode.set("number",str(sequenceNumber))
 
 	#add data to actionHash
-	actionHash[key] = HashElement(action.meetpoint,'highlight','','')
+	#actionHash[key] = HashElement(action.meetpoint,'highlight','','')
 
 	pass
 
