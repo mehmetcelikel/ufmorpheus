@@ -47,8 +47,15 @@ class LinkAction(ActionObject):
 
 	def do(self, state):
 		"""Does LinkAction and returns the state"""
-		obj = URLAction(xmlnode)
-		obj.do(state)
+                url = self.xmlnode.text.strip()
+                request = urllib2.Request(url)
+                response = urllib2.urlopen(request)
+                # state.cookie = CookieJar() -- initialized in state
+                state.cookie.extract_cookies(response,request)
+                cookie_handler = urllib2.HTTPCookieProcessor( state.cookie )
+                redirect_handler = urllib2.HTTPRedirectHandler()
+                opener = urllib2.build_opener(redirect_handler,cookie_handler)
+                state.page = opener.open(request)
 
 		pass
 
@@ -61,6 +68,23 @@ class HighlightAction(ActionObject):
 
 	def do(self, state):
 		"""Does the HighlightAction and returns the state"""
+		
+		pdb.set_trace()
+
+		#get the page
+		page = lxml.html.fromstring(state.page)
+	
+		#get xpath	
+		xpath = self.xmlnode.text
+
+		#extract the page snippet
+		htmlSnippet = page.xpath(xpath)
+
+		#get key and insert html into data hash
+		key = self.xmlnode['key']
+
+		state.kv_hash[key] = htmlSnippet
+		
 		pass
 
 
@@ -99,7 +123,7 @@ class FormAction(ActionObject):
 
 	
 		#perform form submission 
-		result = urllib.open( querystring )		
+		result = urllib2.open( querystring )		
 
 		print(result)
 		pass
