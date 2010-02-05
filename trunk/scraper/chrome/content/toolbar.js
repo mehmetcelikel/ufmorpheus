@@ -267,24 +267,25 @@ function SaveData() {
 					inputs[i].type.toLowerCase() == 'hidden'){
 					continue;
 				}
-				
-				labelarray.push( inputs[i].getAttribute('name') );
-						
-				// The inner text
-				if(inputs[i].selectedIndex === undefined ||
-					inputs[i].selectedIndex == null){
-					// This is not a selction drop down
-				
-					inner_textarray.push(inputs[i].value);
-				}
-				else{
-					var selection_index = inputs[i].selectedIndex ;
-					var theitem = inputs[i].options.item(selection_index);
-					inner_textarray.push(theitem.innerHTML);
-				}
+				//else {	
+					labelarray.push( inputs[i].getAttribute('name') );
+					labelarray = RemoveDuplicates(labelarray);
+							
+					// The inner text
+					if(inputs[i].selectedIndex === undefined ||
+						inputs[i].selectedIndex == null){
+						// This is not a selction drop down
+					
+						inner_textarray.push(inputs[i].value);
+					}
+					else{
+						var selection_index = inputs[i].selectedIndex ;
+						var theitem = inputs[i].options.item(selection_index);
+						inner_textarray.push(theitem.innerHTML);
+					}
+				//}
 			}
 		
-			//alert(inner_textarray);
 		
 			// Note: retvals is a call back
 			var retVals = { param1: null, 
@@ -329,7 +330,7 @@ function SaveData() {
 		data += "  <label>";
 		data += "  " + escape(this.innerHTML);
 		data += "  </label>\n";
-		data += " <node class=\"link\">"+PrintNode(this)+"</node>\n";
+		data += "  <node class=\"link\">"+PrintNode(this)+"</node>\n";
 		data += "  <xpath>"+GetXPath(this)+"</xpath>\n";
 		data += "  " + GetPageSource(this);
 		data += "</morpheus>";
@@ -854,7 +855,19 @@ function isWhitespaceOrEmpty(text) {
    return !/[^\s]/.test(text);
 }
 
-
+function RemoveDuplicates(arr){
+    //get sorted array as input and returns the same array without duplicates.
+  var result=new Array();
+  var lastValue="";
+	for (var i=0; i<arr.length; i++){
+ 	  var curValue=arr[i];
+ 	  if (curValue != lastValue){
+			result[result.length] = curValue;
+		}
+		lastValue=curValue;
+  }
+	return result;
+}
 
 /*
 	Perform setup functions on load
