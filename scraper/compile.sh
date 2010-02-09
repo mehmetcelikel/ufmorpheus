@@ -6,3 +6,4 @@ rm ../compiled/plugin.xpi
 rm ../compiled/scraper.xpi
 mv scraper.xpi ../compiled/
 echo "Successfull!"
+date

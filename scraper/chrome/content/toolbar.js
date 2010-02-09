@@ -254,6 +254,7 @@ function SaveData() {
 	MCR_Log( this.nodeName );
 	var data = "";
 	if(this.nodeName.toLowerCase() == 'form'){
+		
 		try{
 			var g = GetContexClasses();
 	
@@ -261,15 +262,19 @@ function SaveData() {
 			var labelarray = new Array(); // used for labels
 		
 			var inputs = this.elements;
-			for (var i = 0; i < inputs.length; ++i){
+			
+			for (var i = 0; i != inputs.length; ++i){
 	
 				if( inputs[i].type.toLowerCase() == 'text' && 
 					inputs[i].type.toLowerCase() == 'hidden'){
+					// Don't remember why i needed this so I added the false statement
+					continue;
+				}
+				else if (inputs[i].type.toLowerCase() == 'submit'){
 					continue;
 				}
 				//else {	
 					labelarray.push( inputs[i].getAttribute('name') );
-					labelarray = RemoveDuplicates(labelarray);
 							
 					// The inner text
 					if(inputs[i].selectedIndex === undefined ||
@@ -285,7 +290,8 @@ function SaveData() {
 					}
 				//}
 			}
-		
+			// Remove array duplicate (for cases such as radio buttons)
+			labelarray = RemoveDuplicates(labelarray);
 		
 			// Note: retvals is a call back
 			var retVals = { param1: null, 
@@ -306,9 +312,7 @@ function SaveData() {
 				"dummy", // [0]
 				"form", // [1] - this is not a slection
 				retVals); // [2]
-	
-			//alert(retVals.classarray);
-		
+
 			// form element
 			data = "<morpheus>\n";
 			data += "  <type> form </type>\n";
@@ -698,8 +702,6 @@ function MCR_ReadDefFile(fname) {
 
 
 function recordPopup(data,isaselection){
-	//var popcontent = buildPetePopup(data, isSelection);
-	//alert("recordPopup");
 	
 	var g = GetContexClasses();
 	var retVals = { param1: null, 
@@ -714,8 +716,6 @@ function recordPopup(data,isaselection){
 		"dummy", // [0]
 		isaselection, // [1]
 		retVals); // [2]
-	
-	//alert(retVals.selectclass);
 	
 	//window.open(data);
 	return retVals;
