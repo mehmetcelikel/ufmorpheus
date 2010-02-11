@@ -121,20 +121,23 @@ def getqrm(rowArray, qid, isQRMID, realmid):
 	
 	outputRows = rowArray[1]
 	
-	answerRows = rowArray[2]
+	answerCount = rowArray[2]
 
 	if pageRows == None or len(pageRows) == 0:
+		print('No pages found, aborting.')
 		return None
 	
 	if outputRows == None or len(outputRows) == 0:
+		print('No highlights found, aborting.')
 		return None
 	
-	if answerRows == None or len(answerRows) == 0:
+	if answerCount == 0:
+		print('No answers found, aborting.')
 		return None
 
 	#List of page refs, highlights, and answers combined
-	qrm = getCondensedQrm(pageRows, outputRows, answerRows)
-
+	qrm = getCondensedQrm(pageRows, outputRows)
+	pdb.set_trace()
 	if qrm == None:
 		return None
 	
@@ -211,19 +214,19 @@ def exciseRange(i,j,a):
 	return a
 	
 #Combine the pages, highlights and answers into a single list
-def getCondensedQrm(pps, outs, ans):
+def getCondensedQrm(pps, outs):
 
 	condensedList = list()
 	
 	HILITE_HLID = 0
-	ANSWER_HLID = 4
+	ANSWERID = 10
 	ppsTime = 8
 	outsTime = 7
 
 	qrm = Qrm()
 
 	#Keep condensing until everything, including the answers has been condensed
-	while len(ans) > 0:
+	while len(outs) > 0:
 
 		if len(pps) > 0 and pps[0][ppsTime] < outs[0][outsTime]:
 			
@@ -243,13 +246,10 @@ def getCondensedQrm(pps, outs, ans):
 			h = getHighlight(outputRow)
 			
 			#If the current highlight is an answer then set the flag in the page
-			if outputRow[HILITE_HLID] == ans[0][ANSWER_HLID]:
+			if outputRow[ANSWERID] != -1:
 				
 				h.isAnswer = True
 				
-				#Remove the answer 
-				ans.pop(0)
-		
 			condensedList.append(h)
 
 	qrm.pageList = condensedList
@@ -548,7 +548,7 @@ def retrieveRecordsFromQuery(qid):
 	return get("queryid",str(qid))
 
 def get(field, value):
-	
+
 	#Gets the set of PageReferences joined with their inputs and outputs (highlights)
 	query = "SELECT * FROM page,pagereference WHERE";
 	query = query + " page.pageid = pagereference.pageid"
@@ -562,18 +562,18 @@ def get(field, value):
 	query = query + " ORDER BY timestamp"
 	
 	outputHighlights = executeQuery(query)
-	
-	query = "SELECT * FROM answer,highlight WHERE"
-	query = query + " highlight.answerid = answer.answerid"
-	query = query + " AND highlight."+field+"="+value
-	
-	answers = executeQuery(query)
+
+	ANSWERID = 10
+	answerCount = 0
+	for h in outputHighlights:
+		if h[ANSWERID] != -1:
+			answerCount+= 1		
 
 	query = "SELECT realmid from query where query."+field+"="+value
 
 	results = executeQuery(query)
 	
-	return [pageReferencesRows,outputHighlights,answers,results[0]]	
+	return [pageReferencesRows,outputHighlights,answerCount,results[0]]	
 
 def executeQuery(q):
 	#Database parameters

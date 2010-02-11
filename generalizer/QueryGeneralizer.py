@@ -37,12 +37,12 @@ def GeneralizeQueries(qrmid, queryid):
         qrm1 = Loader.GetQRMFromQuery(queryid)
 
     qrm2 = Loader.GetQRMFromQuery(queryid)
-
+    pdb.set_trace()
     if qrm1 == None or qrm2 == None:
         print("Query data not found")
         return      
     
-#Check queries for appropriateness of generalization
+    #Check queries for appropriateness of generalization
     if qrm1.pageLength() != qrm2.pageLength():
        print("Entities containing differing page lengths cannot be generalized")    
        return
@@ -53,13 +53,12 @@ def GeneralizeQueries(qrmid, queryid):
 
     #Need to ensure the usages of the SSQ inputs and highlights is the same between both entities
      
-#Normalization
     #Normalize each query separately
     qrm1 = normalize(qrm1)
     
     qrm2 = normalize(qrm2)
     
-#Generalization
+    #Generalization
     #generalize all matching pages (same page, same form)
     #Whichever tree has fewer nodes, replace all matching nodes with their generalized versions
     #remaining nodes are left alone

@@ -38,7 +38,7 @@ class ScriptBuilder():
 		actionHash = dict()
 
 		#write out ssq data
-		#TODO: need to determine if appropriate info is in qrm or not
+		pdb.set_trace()
 	
 		#for the current qrm, we need  the data section
 		for action in qrm.pageList:
