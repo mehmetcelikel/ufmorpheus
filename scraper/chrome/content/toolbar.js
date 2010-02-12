@@ -105,8 +105,8 @@ function MCR_GenPageInfo() {
 		//if (inps[i].type == 'text' || inps[i].type == '' || inps[i].type == undefined) {
 		//	inputs.push(inps[i]);
 		//}
-		if( inps[i].type.toLowerCase() == 'text' || 
-				inps[i].type.toLowerCase() == 'hidden'
+		if( inps[i].type != undefined && (inps[i].type.toLowerCase() == 'text' || 
+				inps[i].type.toLowerCase() == 'hidden')
 				){
 			inputs.push(inps[i]);
 		}
@@ -264,7 +264,8 @@ function SaveData() {
 			var inputs = this.elements;
 			
 			for (var i = 0; i != inputs.length; ++i){
-	
+				if (inputs[i].type == undefined)
+					alert(inputs[i])	
 				if( inputs[i].type.toLowerCase() == 'text' && 
 					inputs[i].type.toLowerCase() == 'hidden'){
 					// Don't remember why i needed this so I added the false statement
@@ -323,7 +324,7 @@ function SaveData() {
 			data += "  <node class=\"form\">" + PrintNode(this) +"</node>\n";
 			data += "  " + GetPageSource(this);
 			data += "</morpheus>";
-		}catch(e) {alert(e.message)}
+		}catch(e) {alert('Error Saving the data: '+ e.lineNumber+':' + e.message + '(' +e.fileName +')')}
 	}
 	else{
 		// Link clicked
@@ -542,7 +543,7 @@ function GetPageSource(node){
 	return "<page>%3Chtml%3E"+escape(html.innerHTML)
 	       +"%3C/html%3E"
 		   +"</page>\n";
-	}catch(e) {alert(e.message)}
+	}catch(e) {alert('Error GetPageSource: '+ e.lineNumber+':' + e.message + '(' +e.fileName +')')}
 }
 
 /**
@@ -656,7 +657,7 @@ function AddListeners(doc){
 		}
 		MCR_Log("Saved form defaults");
 	}catch(e) {
-		alert("Error form_defaults(): " + e.message);
+		alert("Error form_defaults(): " + e.lineNumber+':' + e.message + '(' +e.fileName +')');
 	}
 }
 
