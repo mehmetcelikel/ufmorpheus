@@ -37,7 +37,7 @@ def GeneralizeQueries(qrmid, queryid):
         qrm1 = Loader.GetQRMFromQuery(queryid)
 
     qrm2 = Loader.GetQRMFromQuery(queryid)
-    pdb.set_trace()
+
     if qrm1 == None or qrm2 == None:
         print("Query data not found")
         return      

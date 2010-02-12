@@ -58,7 +58,7 @@ def main(argv):
 
 	root = etree.fromstring(code)
 	print(etree.tostring(root,pretty_print=True))
-	pdb.set_trace()
+
 	action_list = []
 	kv_hash = {}	
 	kt_hash = {}
@@ -120,7 +120,6 @@ def read_ssq_text(xmlstring):
 
 		if e.tag == 'input_list':
 			for input in e.getchildren():
-				pdb.set_trace()
 				if loadValueIntoHash(input) == False:	
 					print('The given ssq does not match this qrm\'s ssq, aborting')
 					return False

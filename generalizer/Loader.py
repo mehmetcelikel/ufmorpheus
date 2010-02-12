@@ -28,14 +28,50 @@ def GetQRMFromDb(qrmid):
 
 	return getqrm(rowArray, qrmid, True, rowArray[3][0])
 
+#get the class and context information for the given input/highlight
+def getNeededScriptInfo(id, isInput):
+
+	#if this is an input, then get both class and context
+	if isInput:
+		q = """select 
+				class.name,context.contextname 
+			from 
+				class, context, individual,phrase,phrasebelongstocontext 
+			where 
+				individual.individualid = %d AND
+				individual.phraseid = phrase.phraseid AND
+				phrase.phraseid = phrasebelongstocontext.phraseid AND
+				phrasebelongstocontext.contextid = context.contextid AND
+				individual.classid = class.classid
+			""" % id
+
+		results = executeQuery(q)
+	
+		#the results are a list in and of them selves
+		return results[0]
+	else:
+		q = """select
+				class.name, timestamp 
+			from 
+				class, highlight
+			where
+				class.classid = highlight.classid AND
+				highlight.highlightid = %d
+			""" % id
+
+		results = executeQuery(q)
+		
+		#its already a list, just get first row
+		return results[0]
+
 #loads list of inputs for the given pagereference id
 def getPageInputs(pid):
     
         NAME = 3
   
-	HILITE = 4
+	HILITE = 5
 
-	SSQINPUT = 5	
+	SSQINPUT = 4	
 
         inputList = list()
 
@@ -137,7 +173,7 @@ def getqrm(rowArray, qid, isQRMID, realmid):
 
 	#List of page refs, highlights, and answers combined
 	qrm = getCondensedQrm(pageRows, outputRows)
-	pdb.set_trace()
+
 	if qrm == None:
 		return None
 	
@@ -598,7 +634,7 @@ def executeQuery(q):
 		connection.commit() # <-- important for pyscog
 			
 		#Retrieve result set
-		if q.startswith("SELECT"):
+		if q.upper().startswith("SELECT"):
 			result = cursor.fetchall()
 		elif cursor.rowcount != 0:
 			result = [True]
