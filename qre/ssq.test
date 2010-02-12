@@ -1,0 +1,19 @@
+<ssq>
+
+	<realm>Automotive</realm>
+	<query>Where is the highest-rated Korean restaurant in Gainesville, FL?</query>
+	
+	<input_list>
+		<input type="where" class="City">
+		Gainesville, FL
+		</input>	
+	</input_list>
+
+	<output_list>
+		<output type="what" class="Restaurant">
+			<modifier value="highest-rated"/>
+			<modifier value="Korean"/>
+		</output>
+	</output_list>
+
+</ssq>
