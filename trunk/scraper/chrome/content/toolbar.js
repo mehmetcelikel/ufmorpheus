@@ -264,8 +264,8 @@ function SaveData() {
 			var inputs = this.elements;
 			
 			for (var i = 0; i != inputs.length; ++i){
-				if (inputs[i].type == undefined)
-					alert(inputs[i])	
+				if (inputs[i].tagName.toLowerCase() == 'fieldset')
+					continue;
 				if( inputs[i].type.toLowerCase() == 'text' && 
 					inputs[i].type.toLowerCase() == 'hidden'){
 					// Don't remember why i needed this so I added the false statement
