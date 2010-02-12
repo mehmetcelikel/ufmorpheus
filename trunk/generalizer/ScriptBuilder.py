@@ -7,6 +7,7 @@ __authors__ = ['"Chris Shields" <gatorcas@ufl.edu>']
 from lxml import etree
 import pdb
 import lxml.html
+import Loader
 from HashElement import HashElement
 from ActionType import ActionType
 class ScriptBuilder():
@@ -38,7 +39,6 @@ class ScriptBuilder():
 		actionHash = dict()
 
 		#write out ssq data
-		pdb.set_trace()
 	
 		#for the current qrm, we need  the data section
 		for action in qrm.pageList:
@@ -67,8 +67,10 @@ class ScriptBuilder():
 		
 		writeActionData(actionData,actionHash)
 		
-		qre = etree.tostring(qre, pretty_print=False)
-
+		qre = etree.tostring(qre, pretty_print=True)
+	
+		print('\n****Script\n'+qre)
+		
 		return qre
 	
 def writeActionData(xmlNode, actionHash):
@@ -182,6 +184,8 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 
 		#we need to assign the context and class information along with the appropriate id		
 		if i.highlightid != None and i.highlightid != -1:
+			
+			pdb.set_trace()
 			type = "highlight"
 			classContextAndTimestamp = Loader.getNeededScriptInfo(i.highlightid, False)
 			newHashElem = actionHash[ classContextAndTimestamp[TIME] ]
