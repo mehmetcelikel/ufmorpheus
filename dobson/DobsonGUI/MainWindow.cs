@@ -338,7 +338,7 @@ namespace DobsonGUI
 
         }
 
-        private void gatherXML(string path, Query thisQuery, int answerid)
+        private void gatherXML(string path, Query thisQuery, int answerid, int sequenceNumber)
         {
 
             using (TransactionScope scope = new TransactionScope())
@@ -404,13 +404,9 @@ namespace DobsonGUI
 
                 string expression;
 
-
-
                 expression = xmlStringStarter + "/*";
 
                 iterator = nav.Select(expression);
-
-
 
                 if (iterator != null && iterator.MoveNext())
                 {
@@ -435,7 +431,7 @@ namespace DobsonGUI
 
                         case "link":
 
-                            processPageAndPageReferences(thisQuery, iterator);
+                            processPageAndPageReferences(thisQuery, iterator, sequenceNumber,true);
 
                             break;
 
@@ -443,7 +439,7 @@ namespace DobsonGUI
 
                         case "form":
 
-                            processPageAndPageReferences(thisQuery, iterator);
+                            processPageAndPageReferences(thisQuery, iterator, sequenceNumber,false);
 
                             break;
 
@@ -713,19 +709,8 @@ namespace DobsonGUI
         {
             int index = url.IndexOf("?");
 
-            //bool isgoogle = false;
-
-            //if (index == -1)
-            //{
-            //    index = url.IndexOf("/#");
-            //    isgoogle = true;
-            //}
-
             if (index != -1)
             {
-                ////the delimeter for google querystring is longer than the standard one so increment
-                //if (isgoogle)
-                //    index++;
 
                 PageReferenceBL prefbiz = new PageReferenceBL();
 
@@ -823,7 +808,7 @@ namespace DobsonGUI
 
 
 
-        private static void processPageAndPageReferences(Query thisQuery, XPathNodeIterator iterator)
+        private static void processPageAndPageReferences(Query thisQuery, XPathNodeIterator iterator, int sequenceNumber, bool islink)
 
         {
 
@@ -932,6 +917,10 @@ namespace DobsonGUI
                 }
 
             }
+
+            if (islink == false && thisPage.baseURL.Contains("www.google.com") && sequenceNumber == 0)
+                throw new Exception("Scraping from google is not supported at this time, please re-run this query " +
+                    "using a different site.");
 
             //Insert the page object
 
@@ -1250,29 +1239,34 @@ namespace DobsonGUI
 
                         }
 
-                        if (excep)
-                            startButton.Text = "STOP";
-
-                        if (MessageBox.Show("Do you want to clear out this form?", "Clear Data", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        {
-
-                            clearForm();
-                            startButton.Text = "START";
-                        }
-                        
-                        setRealmsFromDatabase();
-
-                        setContextsAndClassesFromDatabase();
-
-                        queryElementManager.Clear();
-
-                        unresolvedInputs.Clear();
-
+                        resetState(excep);
                     }
 
                 }
 
             }
+
+        }
+
+        private void resetState(bool excep)
+        {
+            if (excep)
+            {
+                startButton.Text = "STOP";
+                setRealmsFromDatabase();
+            }
+
+            if (MessageBox.Show("Do you want to clear out this form?", "Clear Data", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                clearForm();
+                startButton.Text = "START";
+            }
+
+            setContextsAndClassesFromDatabase();
+
+            queryElementManager.Clear();
+
+            unresolvedInputs.Clear();
 
         }
 
@@ -1367,14 +1361,24 @@ namespace DobsonGUI
 
             string[] files = Directory.GetFiles(folderPath);
 
+            if (files == null || files.Length == 0)
+            {
+                MessageBox.Show("No data has been scraped, skipping insertion into database.",
+                    "Missing Scraper Output",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1,
+                    MessageBoxOptions.DefaultDesktopOnly);
+                return;
+            }
+
             files = sortByFileNumber(files);
-
+            int sequenceNumber = 0;
             //Run through each file and handle the page references, highlights, etc. 
-
             foreach (string file in files)
             {
 
-                gatherXML(file, thisQuery, thisAnswer.answerID);
+                gatherXML(file, thisQuery, thisAnswer.answerID, sequenceNumber);
 
             }
 
@@ -1831,6 +1835,17 @@ namespace DobsonGUI
         {
             if (outputListBox.SelectedIndex >= 0)
                 inputListBox.SelectedIndex = -1;
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            startButton.Text = "START";
+
+            clearXMLData();
+
+            setRealmsFromDatabase();
+
+            resetState(false);
         }
       
     }
