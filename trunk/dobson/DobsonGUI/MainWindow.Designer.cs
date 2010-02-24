@@ -62,6 +62,7 @@
             this.subjectMenuDropDown = new System.Windows.Forms.ToolStripComboBox();
             this.modifierDoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifierCancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -113,7 +114,7 @@
             this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.startButton.Enabled = false;
             this.startButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startButton.Location = new System.Drawing.Point(279, 301);
+            this.startButton.Location = new System.Drawing.Point(208, 307);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(115, 40);
             this.startButton.TabIndex = 12;
@@ -253,7 +254,7 @@
             this.outItem,
             this.modifierItem});
             this.selectionMenu.Name = "selectionMenu";
-            this.selectionMenu.Size = new System.Drawing.Size(153, 92);
+            this.selectionMenu.Size = new System.Drawing.Size(122, 70);
             // 
             // inItem
             // 
@@ -263,7 +264,7 @@
             this.inputDoneToolStripMenuItem,
             this.inCancelToolStripMenuItem});
             this.inItem.Name = "inItem";
-            this.inItem.Size = new System.Drawing.Size(152, 22);
+            this.inItem.Size = new System.Drawing.Size(121, 22);
             this.inItem.Text = "In";
             // 
             // contextMenuDropDown
@@ -303,7 +304,7 @@
             this.outputDoneToolStripMenuItem,
             this.outCancelToolStripMenuItem});
             this.outItem.Name = "outItem";
-            this.outItem.Size = new System.Drawing.Size(152, 22);
+            this.outItem.Size = new System.Drawing.Size(121, 22);
             this.outItem.Text = "Out";
             // 
             // outContextMenuDropDown
@@ -335,7 +336,7 @@
             this.modifierDoneToolStripMenuItem,
             this.modifierCancelToolStripMenuItem});
             this.modifierItem.Name = "modifierItem";
-            this.modifierItem.Size = new System.Drawing.Size(152, 22);
+            this.modifierItem.Size = new System.Drawing.Size(121, 22);
             this.modifierItem.Text = "Modifer";
             // 
             // subjectMenuDropDown
@@ -360,11 +361,24 @@
             this.modifierCancelToolStripMenuItem.Text = "Cancel";
             this.modifierCancelToolStripMenuItem.Click += new System.EventHandler(this.modifierCancelToolStripMenuItem_Click);
             // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelButton.Location = new System.Drawing.Point(329, 307);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(115, 40);
+            this.cancelButton.TabIndex = 32;
+            this.cancelButton.Text = "CANCEL";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(646, 372);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.realmTextBox);
             this.Controls.Add(this.answerTextBox);
@@ -426,6 +440,7 @@
         private System.Windows.Forms.ToolStripMenuItem inCancelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem outCancelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modifierCancelToolStripMenuItem;
+        private System.Windows.Forms.Button cancelButton;
     }
 }
 
