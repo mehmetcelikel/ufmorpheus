@@ -60,12 +60,14 @@ class ScriptBuilder():
 
 			#save previous action for use in next iteration
 			previousAction = action
-			
-
+		
+		
 		#add action data - now that we have built the hashtable of highlight and ssq info
-		actionData = etree.SubElement(qre, 'actiondata')
+		actionData = etree.Element('actiondata')
 		
 		writeActionData(actionData,actionHash)
+
+		qre.insert(0,actionData)
 		
 		qre = etree.tostring(qre, pretty_print=True)
 	
@@ -185,7 +187,6 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 		#we need to assign the context and class information along with the appropriate id		
 		if i.highlightid != None and i.highlightid != -1:
 			
-			pdb.set_trace()
 			type = "highlight"
 			classContextAndTimestamp = Loader.getNeededScriptInfo(i.highlightid, False)
 			newHashElem = actionHash[ classContextAndTimestamp[TIME] ]
@@ -268,7 +269,7 @@ def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 	xmlNode.set("number",str(sequenceNumber))
 
 	#add data to actionHash
-	#actionHash[key] = HashElement(action.meetpoint,'highlight','','')
+	actionHash[key] = HashElement(key,'highlight','',str(action.classId))
 
 	pass
 

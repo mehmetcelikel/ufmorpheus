@@ -1,19 +1,16 @@
 <ssq>
 
 	<realm>Automotive</realm>
-	<query>Where is the highest-rated Korean restaurant in Gainesville, FL?</query>
+	<query>What tires should I get for a 97 Toyota Corolla?</query>
 	
 	<input_list>
-		<input type="where" class="City">
-		Gainesville, FL
+		<input type="what" dataclass="Car">
+		97 Toyota Corolla
 		</input>	
 	</input_list>
 
 	<output_list>
-		<output type="what" class="Restaurant">
-			<modifier value="highest-rated"/>
-			<modifier value="Korean"/>
-		</output>
+		<output type="what" dataclass="tires"/>
 	</output_list>
 
 </ssq>
