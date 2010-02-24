@@ -302,8 +302,17 @@ def getHighlight(row):
 	hpagesrc = 8
 	htimestamp = 7
 	hUrl = 6
+	classid = 9
 
-        h = Highlight.New(lower(row[meetpoint]),lower(row[startxpath]),lower(row[endxpath]),row[beginoffset],row[endoffset], row[hUrl], row[hpagesrc], row[htimestamp])
+        h = Highlight.New(lower(row[meetpoint]),
+		lower(row[startxpath]),
+		lower(row[endxpath]),
+		row[beginoffset],
+		row[endoffset], 
+		row[hUrl], 
+		row[hpagesrc], 
+		row[htimestamp],
+		row[classid])
 
 	return h
 

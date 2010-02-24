@@ -28,6 +28,7 @@ class URLAction(ActionObject):
 
 	def do(self, state):
 		"""Does URLAction and returns the state"""
+
 		url = self.xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
 		request = urllib2.Request(url)
 		response = urllib2.urlopen(request)
@@ -99,16 +100,16 @@ class FormAction(ActionObject):
 		inputs = list()
 
 		querystring = ""
-
+		
 		#get the base url for this form
 		for e in self.xmlnode.getchildren():
-			if e.tag == 'baseurl':
-				querystring = e.text	
+			if e.tag == 'url':
+				querystring = e.text.strip()	
 				break
 
 		querystring += "?"
 		first = False
-
+		
 		#iterate through the list and find the input elements		
 		for e in self.xmlnode.getchildren():
 
@@ -119,11 +120,12 @@ class FormAction(ActionObject):
 	
 				v = state.kv_hash[ e.text ]
 					
-				querystring += e['name'] + "=" + v 
+				querystring += e.get('name').strip() + "=" + v.strip()
 
-	
+		pdb.set_trace()
+		querystring = urllib2.quote(querystring)
 		#perform form submission 
-		result = urllib2.open( querystring )		
+		result = urllib2.urlopen( querystring )		
 
 		print(result)
 		pass

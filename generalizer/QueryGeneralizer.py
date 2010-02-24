@@ -65,7 +65,7 @@ def GeneralizeQueries(qrmid, queryid):
 
     genQrm = generalizeQRMS(qrm1,qrm2)
 
-#Script generation
+    #Script generation
 
     scriptGenerator = ScriptBuilder()
 	
@@ -312,7 +312,7 @@ def generalizeActions(p1, p2):
         print("xpath after: "+genXpath+"\n")
 
         #Currently, start and end xpaths are not used. 
-        genh = Highlight.New(genXpath,None,None,0,0,p1.url,None,p1.timestamp)        
+        genh = Highlight.New(genXpath,None,None,0,0,p1.url,None,p1.timestamp,p1.classId)        
 
         #Check the validity of the result
         if compareExtractions(genh.meetpoint,p1.meetpoint,p1.pagesrc) != NO_SIMILARITY:
