@@ -126,7 +126,7 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 #parse the xml node and load its values into the appropriate spots
 #in the value hash
 def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
-
+	pdb.set_trace()
 	#for the given xml node, we must find the matching key
 	for entry in valueHash.keys():
 		cls = classHash[entry]
