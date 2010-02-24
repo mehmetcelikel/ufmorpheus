@@ -53,12 +53,52 @@
 - The best way to answer questions is to see/know if a question has been asked before.
 - IEEE potentials talks about the the beaten trail.
 - Use reuse in the specific domain of question answering
+- 
+- 
 
 \section{Statistical Hierarchy}
 \subsection*{Class Hierarchy}
 %clint
 \subsection*{Markov Blanket}
 %joir-dan
+Once the semantic hierarchy is created, the next step is to create training data for the system. The task is then to grab the pages, build a corpus relating to a given category, and then compile the information in a meaningful way. The overall goal is to grab enough information to properly characterize a category while limiting the amount of unnecessary content within the corpus. The problem with this approach is the page density varies greatly across the heterarchy. Each category within the DBpedia/ Wikipedia heterarchy contains a set of information pages, P, that correspond to concepts that share said category. Considering that the categorical structure is a directed acyclic graph (Suchanek et al., 2008), we consider the use of a Markov Blanket (Friedman et al., 1997) in describing a particular category. The category's that The assumption is that a node can be fully described by its ancestor, descendant, and spousal nodes (parent node of subcategory not equal to the category). While this does not completely solve the issue of a category residing in a sparse area of the graph, the amount of information that can be obtained per blanket is usually more helpful than per category.
+
+Consider the abbreviated Markov blanket for the category Basketball:
+\includegraphics[width=4in,height=4in,viewport=0 0 300 300]{abbreviated_basketball_blanket.png}
+
+The subcategories of the category Basketball (… Basketball Organizations, Basketball Competitions, Basketball Terminology, Basketball Teams…) can be seen as grabbing information specifc to the category. The supercategories (Ball Games, Olympic Sports, Team Sports) place the category in a higher perspective, abstractly describing basketball as a concept. The spousal categories are an abstract description of the subcategories.
+
+Clustering the categories alone does not guarantee adequate corpus creation. Since the above model relies on the subcategories to describe specifcs of a given category, the ideal situation would be that the subcategories have many more pages than the supercategories and that there is a signifcant amount of information per page. In the case of Wikipedia, there are an average of 25.7 pages per category (Yu et al., 2007). The assumption for collecting the training data is the more subcategory data we have, the more detailed our description of our category. Considering that there are many categories that have much more than 26 pages, we instituted a PlusOne mechanism to extract extra information. This mechanism checks if a subcategory has an adequate number of pages a to fully describe its subtopic. We set this number to 10 * average, or 39. level represents how many extra levels we are to go down in the hierarchy, if necessary. SubjectSet is the overall set of all pages associated with the blanket structure along with any plusOne subjects obtained.
+
+\begin{algorithmic}
+\function BlanketSubjectRetrieval(blanket, maxLevel):
+	\for{category in blanket}
+		subjectSet.add(grabSubjects(category))
+		diff = afterSize - beforeSize;
+		\if{ diff \leq \alpha \and category is a subcategory}
+			PlusOneMechanism(category, maxLevel)
+		\endif
+	\endfor
+	return subjectSet
+\end{algorithmic}
+
+\begin{algorithmic}
+\function PlusOneMechanism(category, level)
+	plusOneSet = grabPlusOneSubcategories(category)
+	\for{ subcategory in plusOneSet do}
+		subjectSet.add(grabSubjects(subcategory));
+		diff = afterSize - beforeSize
+		\if{ diff \leq \alpha \and level \gt 0}
+			PlusOneMechanism(subcategory, level - 1);
+		\endif
+	\endfor
+\end{algorithmic}
+
+The overall mechanism does not take into account the amount of information within each page, but generally that can be ignored when considering the size of the blanket corpus when we extract the text from the Wikipedia subject pages. Using this method on the category Basketball, we can construct a corpus of 1843 subject pages and 1,301,006 terms.
+
+When a category's corpus is built, we then build our n-gram frequency distributions and store them in a database for the NLP processing.
+
+
 
 \section{Semantic Query Representation}
 % Christan - fois
@@ -87,7 +127,13 @@
 \section{Acknowledgements}
 
 \section{References}
+Bayesian Network Classifers
+Friedman, Geiger, Goldszmidt 1997
 
+YAGO: A Large Ontology from Wikipedia and WordNet
+Fabian M. Suchanek, Gjergji Kasnecia, and Gerhard Weikuma 2008
 
+Ontology Evaluation: Using Wikipedia Categories for Browsing
+Yu, Thom, Tam 2007
 
 \end{document}            % End of document. 
