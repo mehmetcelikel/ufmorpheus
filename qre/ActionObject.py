@@ -126,6 +126,9 @@ class FormAction(ActionObject):
 		querystring = urllib2.quote(querystring)
 		#perform form submission 
 		result = urllib2.urlopen( querystring )		
-
 		print(result)
+
+		self.page = result
+
 		pass
+

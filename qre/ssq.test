@@ -1,16 +1,24 @@
 <ssq>
 
 	<realm>Automotive</realm>
-	<query>What tires should I get for a 97 Toyota Corolla?</query>
+	<query>What size tires should I get for a 1997 Toyota Camry V6?</query>
 	
 	<input_list>
-		<input type="what" dataclass="Car">
-		97 Toyota Corolla
+		<input type="when" dataclass="year">
+		1997
 		</input>	
+		<input type="what" dataclass="make">
+		Toyota
+		</input>
+		<input type="what" dataclass="model">
+		Camry V6
+		</input>
 	</input_list>
 
 	<output_list>
-		<output type="what" dataclass="tires"/>
+		<output type="what" dataclass="size">
+			<modifier value="tires"/>
+		</output>
 	</output_list>
 
 </ssq>
