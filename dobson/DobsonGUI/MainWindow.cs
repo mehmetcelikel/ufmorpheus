@@ -705,16 +705,17 @@ namespace DobsonGUI
 
         }
 
-        private static void parseQuerystring(string url)
+        private static string parseQuerystring(string url)
         {
             int index = url.IndexOf("?");
+            string qs = "";
 
             if (index != -1)
             {
 
                 PageReferenceBL prefbiz = new PageReferenceBL();
 
-                string qs = url.Substring(index, url.Length - index);
+                qs = url.Substring(index, url.Length - index);
 
                 //The querystring on fthis page is actually for the previous page reference
                 //so we need to update the database to reflect this
@@ -784,6 +785,8 @@ namespace DobsonGUI
                 }
 
             }
+
+            return qs;
         }
 
 
@@ -851,7 +854,7 @@ namespace DobsonGUI
 
                         pref.queryString = "";
 
-                        parseQuerystring(url);
+                        pref.queryString = parseQuerystring(url);
 
                         break;
 
@@ -1004,7 +1007,7 @@ namespace DobsonGUI
                 
                 if (parentNode != null)
                 {
-                    HtmlAgilityPack.HtmlNode selectedNode = parentNode.ParentNode.SelectSingleNode("//input[@name='" + inputName + "']");
+                    HtmlAgilityPack.HtmlNode selectedNode = parentNode.ParentNode.SelectSingleNode("//node()[@name='" + inputName + "']");
 
                     if (selectedNode != null)
                     {
@@ -1013,6 +1016,8 @@ namespace DobsonGUI
                             txt = selectedNode.Attributes["value"].Value.ToUpper();
                         else if (selectedNode.Attributes["title"] != null)
                             txt = selectedNode.Attributes["title"].Value.ToUpper();
+                        else if (selectedNode.Name.Equals("select", StringComparison.CurrentCultureIgnoreCase))
+                            txt = parseSelectValue(inputName, selectedNode, pref.queryString);
 
                         elem = queryElementManager.FindSsqInput(classId, txt);
                     }
@@ -1058,6 +1063,18 @@ namespace DobsonGUI
 
             }
 
+        }
+        //Parse the querystring to extract the dropdown selected value 
+        private static string parseSelectValue(string inputName, HtmlAgilityPack.HtmlNode selectedNode, string qs)
+        {
+            string[] parts = qs.Split(new char[] { '&' });
+
+            //find the appropriate key/value pair in the querystring
+            foreach (string nvp in parts)
+                if (nvp.StartsWith(inputName))
+                    return nvp.Substring(inputName.Length + 1);
+
+            return "";
         }
 
         private static string getDestinationUrl(string url)
@@ -1396,20 +1413,24 @@ namespace DobsonGUI
 
         private string[] sortByFileNumber(string[] files)
         {
-            for (int i = 0; i < files.Length - 1; i++)
+            bool swap = false;
+            do
             {
-                for (int j = 1; j < files.Length; j++)
+                swap = false;
+                for (int j = 0; j < files.Length-1; j++)
                 {
                     //if the ith file has a greater ordinal than the jth file, then swap
-                    if (compareOrdinal(files[i], files[j]) > 0)
+                    if (compareOrdinal(files[j], files[j+1]) > 0)
                     {
                         string t = files[j];
-                        files[j] = files[i];
-                        files[i] = t;
+                        files[j] = files[j+1];
+                        files[j+1] = t;
+                        swap = true;
                     }
                 }
-            }
 
+            } while (swap);
+            
             return files;
         }
         private int compareOrdinal(string s, string r)
@@ -1851,6 +1872,7 @@ namespace DobsonGUI
     }
 
 }
+
 
 
 
