@@ -56,7 +56,7 @@ Clustering the categories alone does not guarantee adequate corpus creation. Sin
 \caption{Blanket Subject Retrieval}
 \label{alg1}
 	\begin{algorithmic}
-	\STATE BlanketSubjectRetrieval(blanket, maxLevel):
+		\STATE BlanketSubjectRetrieval(blanket, maxLevel):
 		\FOR{category c in blanket}
 			\STATE subjectSet.add(grabSubjects(c))
 			\STATE diff = afterSize - beforeSize
@@ -64,7 +64,7 @@ Clustering the categories alone does not guarantee adequate corpus creation. Sin
 				\STATE PlusOneMechanism(category, maxLevel)
 			\ENDIF
 		\ENDFOR
-	\STATE return subjectSet
+		\STATE return subjectSet
 	\end{algorithmic}
 \end{algorithm}
 
@@ -74,7 +74,7 @@ Clustering the categories alone does not guarantee adequate corpus creation. Sin
 \caption{Plus One Mechanism}
 \label{alg2}
 	\begin{algorithmic}
-	\STATE PlusOneMechanism(category, level)
+		\STATE PlusOneMechanism(category, level)
 		\STATE plusOneSet = grabPlusOneSubcategories(category)
 		\FOR{ subcategory in plusOneSet}
 			\STATE subjectSet.add(grabSubjects(subcategory))
@@ -101,6 +101,13 @@ When a category's corpus is built, we then build our n-gram frequency distributi
 % Chris
 \subsection{Generalization}
 % Christan
+The response pages created by querying web forms are
+dynamically generated with a templated structure.
+This
+generalization per page is done using the GenPath algorithm developed by Badica et al. \cite{Badica06}. Additionally, the community may be able to answer a particular SSQ using many different page interactions. Therefore, we proposed a method of generalizing extraction path to a result across pages. This method removes unnecessary page interactions and finds the shortest path to the result pages.
+
+The websites that are wrapped are highly susceptible to structural changes \cite{TanZMG07}. Generalizing the extraction paths help to overcome small structural changes. If a website changes to the point where a QRM is no longer useful, the QRM not considered fresh. Morpheus allows users to rate the freshness of QRMs.
+
 
 \section{Semantic Query Answering}
 \subsection{Semi-Structured Query}
