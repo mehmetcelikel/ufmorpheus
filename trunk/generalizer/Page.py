@@ -14,7 +14,7 @@ class Page(object):
 		self.actionType = ""
 		self.querystring = ""
 		pass
-		
+	
 def New(self, url, dest, time, xpath, src):
 	p = Page()
         p.url = url
