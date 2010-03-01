@@ -65,7 +65,7 @@ def getNeededScriptInfo(id, isInput):
 		return results[0]
 
 #loads list of inputs for the given pagereference id
-def getPageInputs(pid):
+def getPageInputs(pid, formNode):
     
         NAME = 3
   
@@ -82,13 +82,31 @@ def getPageInputs(pid):
 	for r in forminputs:
 	
 		type = ""
+		
+		#need to deermine the input type
+		nodes = formNode.xpath("//node()[@name='"+r[NAME]+"']")
+		
+		if len(nodes) == 0:
+			return None	
+	
+		nodeTag = nodes[0].tag.lower()
 
-		if r[HILITE] != None and r[HILITE] != -1:	
-			type="highlight"	
-		elif r[SSQINPUT] != None and r[SSQINPUT] != -1:
-			type="userinput"
-		else: #if the value is a default, then parse the pagesrc to get the default value
-			type="default"
+		if nodeTag == 'select':
+			type = "select"
+		elif nodeTag == 'input':
+
+			if nodes[0].get('type') != None:
+				nodeTag = nodes[0].get('type').lower()
+				if nodeTag == 'textbox':	
+					type = 'textbox'
+				if nodeTag == 'radio':
+					type = 'radio'
+				else:
+					type = 'input'
+			else:
+				type = 'input'
+		else:
+			type = 'textbox'	
 			
 		inputList.append(Input.New(r[NAME], type, r[HILITE], r[SSQINPUT],""))
 
@@ -152,7 +170,7 @@ def GetQRMFromQuery (queryID):
 	
 #This function gets page references and page outputs and returns a query object	
 def getqrm(rowArray, qid, isQRMID, realmid):
-	
+
 	pageRows = rowArray[0]
 	
 	outputRows = rowArray[1]
@@ -225,7 +243,7 @@ def getqrm(rowArray, qid, isQRMID, realmid):
 		ssqClasses = executeQuery(classQuery)
 
 	qrm.ssqClasses = extractSsqElements(ssqClasses)
-		
+
 	return qrm
 
 #get the class data into ssqelement objects and return a list of them
@@ -253,7 +271,7 @@ def exciseRange(i,j,a):
 def getCondensedQrm(pps, outs):
 
 	condensedList = list()
-	
+		
 	HILITE_HLID = 0
 	ANSWERID = 10
 	ppsTime = 8
@@ -267,7 +285,7 @@ def getCondensedQrm(pps, outs):
 		if len(pps) > 0 and pps[0][ppsTime] < outs[0][outsTime]:
 			
 			pageRow = pps.pop(0)
-			
+
 			p = getPageOrLink(pageRow)
 			
 			if p == None: 
@@ -329,18 +347,36 @@ def getPageOrLink(row):
 
 	lowerRowXpath = lower(row[xpath])
 
+	#determine if this is a link or not
+	islink = None
+
+	index = lowerRowXpath.rfind('/')
+
+	if index != -1:
+		if lowerRowXpath[index+1:index+2] == 'a':
+			islink = True
+		else:
+			islink = False
+	
+	#get the current node from the pagesource
 	if row[ppagesrc] != None:
 		node = lxml.html.document_fromstring(row[ppagesrc])
 	else:
 		node = lxml.html.parse(row[pUrl])
 
 	extractedNodes = node.xpath(lowerRowXpath)
-
-	inputList = getPageInputs(row[prefid])
-
+ 
+	#if this is not a link, then get the form inputs
+	if  islink == False:
+		inputList = getPageInputs(row[prefid], extractedNodes[0])
+		if len(inputList) == 0:
+			return None
+	
 	dataElems = list()
 
-	if len(extractedNodes) == 0:
+	#if this is a form but we aren't able to find it, parse the page to get
+	#the form xpath
+	if islink == False and len(extractedNodes) == 0:
 		dataElems = parsePageForForm(inputList,row[pUrl])	
 		if dataElems == None:
 			return None
@@ -349,19 +385,23 @@ def getPageOrLink(row):
 			lowerRowXpath = dataElems[1]
 
 	temp = Page()
-	
-	if len(dataElems) != 0:
+
+	if islink == False:
 		f = Form()
 		f.xpath = lowerRowXpath
 		f.formInputs = inputList
-		f.pagesrc = dataElems[0]
+
+		if len(dataElems) != 0:
+			f.pagesrc = dataElems[0]
+		else:
+			f.pagesrc = row[ppagesrc]
+
 		temp = f
 	else:
 		l = Link()
 		l.xpath = lowerRowXpath
 		temp = l
 		temp.pagesrc = row[ppagesrc]
-
 
 	temp.url = row[pUrl]
 	

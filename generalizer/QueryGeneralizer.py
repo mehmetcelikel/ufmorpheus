@@ -54,9 +54,9 @@ def GeneralizeQueries(qrmid, queryid):
     #Need to ensure the usages of the SSQ inputs and highlights is the same between both entities
      
     #Normalize each query separately
-    qrm1 = normalize(qrm1)
+    #qrm1 = normalize(qrm1)
     
-    qrm2 = normalize(qrm2)
+    #qrm2 = normalize(qrm2)
     
     #Generalization
     #generalize all matching pages (same page, same form)
@@ -186,7 +186,7 @@ def compareExtractions(genXpath, nonGenXpath, src):
     return STRONG_SIMILARITY
         
 def generalizeQRMS(q1, q2):
-    
+
     qS = None
     qL = None
     
@@ -272,9 +272,9 @@ def generalizeActions(p1, p2):
 
 	print('Processing link click action')
 
-       	p1Epath.xpath_to_epath(p1.pagesrc,p1.links[i])
+       	p1Epath.xpath_to_epath(p1.pagesrc,p1.xpath)
         
-       	p2Epath.xpath_to_epath(p2.pagesrc,p2.links[i])
+       	p2Epath.xpath_to_epath(p2.pagesrc,p2.xpath)
         
        	p3Epath = g.Learn([p1Epath,p2Epath])
         
@@ -283,11 +283,11 @@ def generalizeActions(p1, p2):
 	p3 = Link.New(p1.url, p1.destinationUrl, "", "", "")
 
        	#Check the validity of the result
-       	if compareExtractions(newxpath,p1.links[i],p1.pagesrc) != NO_SIMILARITY:
+       	if compareExtractions(newxpath,p1.xpath,p1.pagesrc) != NO_SIMILARITY:
        	    p3.xpath = newxpath
        	else:
 	    print("Generalized link xpath is not valid, using non-generalized xpath\n")
-            p3.xpath = p1.links[i]
+            p3.xpath = p1.xpath
 
         print("Done with link\n")
 

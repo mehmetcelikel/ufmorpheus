@@ -7,7 +7,8 @@ from Page import Page
 class Link(Page,object):
 
 	def __init__(self):
-		super(Link,self).__init__()		
+		super(Link, self).__init__()		
+		self.actionType = ActionType.Link
 		pass
 
 def New(url, destinationUrl, xpath, pagesrc, timestamp):

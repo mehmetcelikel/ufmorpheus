@@ -39,7 +39,6 @@ class ScriptBuilder():
 		actionHash = dict()
 
 		#write out ssq data
-	
 		#for the current qrm, we need  the data section
 		for action in qrm.pageList:
 			
@@ -60,7 +59,9 @@ class ScriptBuilder():
 
 			#save previous action for use in next iteration
 			previousAction = action
-		
+
+			#increment sequence number
+			sequenceNumber+=1		
 		
 		#add action data - now that we have built the hashtable of highlight and ssq info
 		actionData = etree.Element('actiondata')
@@ -254,7 +255,7 @@ def writeLinkAction(xmlNode, action, sequenceNumber):
 	
 	link = etree.SubElement(xmlNode, 'link')
 	link.text = action.destinationUrl
- 	xmlNode.set("number",str(sequenceNumber))
+ 	link.set("number",str(sequenceNumber))
 	pass
 
 def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
@@ -266,7 +267,7 @@ def writeHighlightAction(xmlNode, action, sequenceNumber, actionHash):
 	hilite = etree.SubElement(xmlNode, 'highlight')
 	hilite.text = action.meetpoint
 	hilite.set("id",key)
-	xmlNode.set("number",str(sequenceNumber))
+	hilite.set("number",str(sequenceNumber))
 
 	#add data to actionHash
 	actionHash[key] = HashElement(key,'highlight','',str(action.classId))

@@ -49,6 +49,9 @@ class LinkAction(ActionObject):
 	def do(self, state):
 		"""Does LinkAction and returns the state"""
                 url = self.xmlnode.text.strip()
+	
+		pdb.set_trace()
+		
                 request = urllib2.Request(url)
                 response = urllib2.urlopen(request)
                 # state.cookie = CookieJar() -- initialized in state
@@ -109,7 +112,11 @@ class FormAction(ActionObject):
 
 		querystring += "?"
 		first = False
-		
+
+		pdb.set_trace()
+		#get the form node from the page
+		form = self.xmlnode						
+
 		#iterate through the list and find the input elements		
 		for e in self.xmlnode.getchildren():
 
@@ -121,8 +128,8 @@ class FormAction(ActionObject):
 				v = state.kv_hash[ e.text ]
 					
 				querystring += e.get('name').strip() + "=" + v.strip()
-
-		pdb.set_trace()
+		
+	
 		querystring = urllib2.quote(querystring)
 		#perform form submission 
 		result = urllib2.urlopen( querystring )		

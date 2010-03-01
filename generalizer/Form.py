@@ -9,7 +9,7 @@ from Page import Page
 class Form(Page, object):
 
         def __init__(self):
-		super(Form, self).__init__()
+		super(Form,self).__init__()
                 self.formInputs = list()
 		self.actionType = ActionType.Form
 
