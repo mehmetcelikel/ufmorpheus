@@ -41,7 +41,7 @@ Since, our representation of semi structured query [citation needed] is in OWL o
 
 %-------------------------------------------------------------------------------
 
-\subsection*{Markov Blanket}
+\subsection{Markov Blanket}
 %joir-dan
 Once the semantic hierarchy is created, the next step is to create training data for the system. The task is then to grab the pages, build a corpus relating to a given category, and then compile the information in a meaningful way. The overall goal is to grab enough information to properly characterize a category while limiting the amount of unnecessary content within the corpus. The problem with this approach is the page density varies greatly across the heterarchy. Each category within the DBpedia/ Wikipedia heterarchy contains a set of information pages, P, that correspond to concepts that share said category. Considering that the categorical structure is a directed acyclic graph \cite{Suchanek07yago:a}, we consider the use of a Markov Blanket \cite{Friedman97bayesiannetwork} in describing a particular category. The category's that The assumption is that a node can be fully described by its ancestor, descendant, and spousal nodes (parent node of subcategory not equal to the category). While this does not completely solve the issue of a category residing in a sparse area of the graph, the amount of information that can be obtained per blanket is usually more helpful than per category.
 
