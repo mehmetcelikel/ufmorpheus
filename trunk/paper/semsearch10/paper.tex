@@ -34,10 +34,13 @@
 - We believe that treating these repeat visits as special visits will enhance user search experience
 - To demonstrate this concept we are building a tool that facilitates reuse in the specific domain of question answering
 -
+\section{Semantic Query Representation}
+% Christan - fois
 
 \section{Establishing the Semantic Hierarchy}
+
 \subsection{Class Hierarchy} 
-% Author: Clint P. George 
+% Author: Clint 
 Since, our representation of semi structured query [citation needed] is in OWL ontology format, and our aim is to compare and rank the queries in this format, we had to define a similarity measure between ontologies. The defined ontology class comparison measure "class divergence" [citation needed] assumes that we have an ontology store with unambiguous interpretation of classes and strict hierarchical subclass super class relationships and the classes to be compared should belong to it. We cannot find any robust existing ontology library of that nature for this purpose. So we decided to build a new ontology store and as an initial step the categories from DBPedia store [citation needed] are used. Even though, some of these categories are loosely coupled and not fully agreed upon the sub category and super category relationships, this DBPedia has enormous amount of data in linked form [citation needed]. The OWL ontology [citation needed] format is followed in this process. The DBPedia categories are converted into OWL ontology classes and the super class - sub class relationships are built using the OWL super class sub class axioms [citation needed]. Another reason for selecting OWL for this purpose is that we can make use of the existing APIs for building and reasoning [citation needed] the ontology relationships.    
 
 
@@ -64,8 +67,6 @@ The overall mechanism does not take into account the amount of information withi
 
 When a category's corpus is built, we then build our n-gram frequency distributions and store them in a database for the NLP processing.
 
-\section{Semantic Query Representation}
-% Christan - fois
 
 \section{Building Query Store}
 \subsection{Query Resolution Recorder}
@@ -163,16 +164,13 @@ that is, the divergence of a source class to a target ancestor class is smaller 
 \begin{figure}[t]
 \centering
 \includegraphics[width=90mm]{class_divergence.eps}
-\caption{Graphical representation of an Ontology}
+\caption{Abbrv. graphical representation of an automotive ontology}
 \label{fig:class_divergence}
 \end{figure}
 
-Figure \ref{fig:class_divergence} illustrates the calculation of class divergence. This sample ontology is rooted at the class \textit{Accommodations}. The arrows represent the inheritance relationship between the classes in the topology.
+Figure \ref{fig:class_divergence} illustrates the calculation of class divergence. This sample abbreviated ontology that was created from the DBpedia category heirarchy is rooted at the class \textit{DBpediaRoot}. The arrows represent the inheritance relationship between the classes in the topology. 
 
-Suppose we want to find the divergence $d_{class}$\textit{(Hotel, Motel)}. Both are subclasses of the class \textit{Hotel/Motel} ($C$). They share the path from \textit{Hotel/Motel} to the $root$. So, the unnormalized divergence \textit{d(Hotel, root)} is two (shown by bold arrows), \textit{d(Motel, Hotel/Motel)} is one (dashed arrow), and \textit{d(Hotel, Hotel/Motel)} is one (dashed arrow). Thus, \textit{d(Hotel, Motel)} is four, which corresponds to a normalized value of $2/3$. 
-
-Consider $d_{class}$\textit{(Motel, Hostel)}. The classes $root$ and $C$ in the definition of $d_{class}$ are the same in this case so we add \textit{d(Motel, Accommodations)} (two), \textit{d(Hostel, Accommodations)} (one), and \textit{d(Motel, Accommodations)} (two), yielding a total unnormalized divergence of five, or a normalized divergence of $5/6$.
-
+Suppose we want to find the divergence $d_{class}$\textit{(Automotive Industry, Racing Cars)}. The \textit{Automotive Industry} is the subclass of \textit{Automobiles} and \textit{Racing Cars} is the subclass of \textit{Auto Racinng}. Therefore, the common ancestor for these two can be determined as \textit{Automobiles} ($C$). They share the path from \textit{Automobiles} to the $root$. So, the unnormalized divergence \textit{d(Automotive Industry, root)} is 32 (calcuted from the path to root), \textit{d(Automotive Industry, Automobiles)} is one (dashed arrow), and \textit{d(Racing Cars, Automobiles)} is two (dashed arrow). Suppose, the ontology tree height is calculated as 294. Thus, \textit{d(Automotive Industry, Racing Cars)} is 35, which corresponds to a normalized value of $35/294$. 
 
 %-------------------------------------------------------------------------------
 \subsubsection{SSQ Ontology Matching}
@@ -210,6 +208,8 @@ d_{\Upsilon}  = \sum_{k=1}^4 {\pi_k} {d_{class}(\Upsilon_{S_k},\Upsilon_{Q_k})} 
 
 If an SSQ and a QRM have identical classes for all inputs and their realms then the QRM relevance value will be one. Otherwise, the relevance of the QRM will be in the range $[0, 1)$.   
 
+% Need to show an example ?
+
 %-------------------------------------------------------------------------------
 
 \subsection{Query Re-Execution}
@@ -220,6 +220,9 @@ If an SSQ and a QRM have identical classes for all inputs and their realms then 
 % Walk through of example query
 
 \section{Future Work}
+% Talk about the offline execution mode and class structural matching algorithm  
+
+% Sort classes based on the prior 
 
 \section{Conclusion}
 
@@ -227,14 +230,9 @@ If an SSQ and a QRM have identical classes for all inputs and their realms then 
 
 
 %
-% The following two commands are all you need in the
-% initial runs of your .tex file to
-% produce the bibliography for the citations in your paper.
+% The bibliography for the citations in the paper 
 \bibliographystyle{abbrv}
-\bibliography{citations}  % sigproc.bib is the name of the Bibliography in this case
-% You must have a proper ".bib" file
-%  and remember to run:
-% latex bibtex latex latex
-% to resolve all references
+\bibliography{citations}  						% citations.bib is the name of the Bibliography
 
-\end{document}            % End of document. 
+
+\end{document}            						% End of document. 
