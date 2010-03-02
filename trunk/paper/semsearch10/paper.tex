@@ -28,12 +28,14 @@
 
 \section{Introduction}
 % Christan
-- When traveling though a jungle to a destination, it is easy to get lost.  If you are the first person to take a path then you have to make a lot of mitakes in order to find the best path to a destination.  However if you are the \emph{n}th person, there is a beaten trail of the most commonly used path.
-- IEEE potentials article talks discussed the idea of using the beaten trail. \cite{5379671} To solve problems
-- Typical search engines have several repeat queries.
-- We believe that treating these repeat visits as special visits will enhance user search experience
-- To demonstrate this concept we are building a tool that facilitates reuse in the specific domain of question answering
--
+- When traveling though a jungle to a destination, it is easy to get lost.  If you are the first person to take a path then you have to make a lot of mitakes in order to find the best path to a destination.  However, if you are the \emph{n}th person to take a path, you may be able to follow the path that was left by the \emph{n-1} other people to walk the path.  An article by Olsen and Malizia describe this idea as \emph{exploiting trails} \cite{5379671}.  This idea translates to the arena of semantic search.
+
+Instead of treating each user search as a unique search, it is beneficial to assume that a similar search has been previously performed.  Researchers have shown that almost 40 percent of the all queries are repeats \cite{1277770}.  This means there is a large missing area for optimization for search engines.  We have built a prototype system for deep web question answering that uses previously answered questions to obtain new answers.
+
+... expand here...
+
+The paper proceeds as follows:
+
 \section{Semantic Query Representation}
 % Christan - fois
 
@@ -220,7 +222,8 @@ If an SSQ and a QRM have identical classes for all inputs and their realms then 
 % Walk through of example query
 
 \section{Future Work}
-% Talk about the offline execution mode and class structural matching algorithm  
+- Talk about the offline execution mode and class structural matching algorithm
+- Researchers have stated 39, 57, and 63 percent of web queries are unique \cite{1277770,331405,621942}.  We believe that an even higher number of those are parameterizable, meaning, a set of queries are all related and may be answered using a single QRM.  We plan to investigate this.
 
 % Sort classes based on the prior 
 
