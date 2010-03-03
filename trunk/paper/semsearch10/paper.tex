@@ -1,7 +1,7 @@
 \documentclass{www2010-submission}
 \begin{document}
 
-\title{Leveraging Semantics for a Deep Web Question Answering System} 
+\title{Re-finding to support a Deep Web Question Answering System} 
 \numberofauthors{1}
 \author{
 	 \alignauthor Christan Grant, Clint P. George, Joseph N. Wilson, Peter J. Dobbins, Jeff T. Depree, Christopher A. Shields and Joir-dan Gumbs\\
@@ -28,14 +28,21 @@
 
 \section{Introduction}
 % Christan
-- When traveling though a jungle to a destination, it is easy to get lost.  If you are the first person to take a path then you have to make a lot of mitakes in order to find the best path to a destination.  However, if you are the \emph{n}th person to take a path, you may be able to follow the path that was left by the \emph{n-1} other people to walk the path.  An article by Olsen and Malizia describe this idea as \emph{exploiting trails} \cite{5379671}.  This idea translates to the arena of semantic search.
+When traveling though a jungle to a destination, it is easy to get lost.  If you are the first person to take a path then you have to make a lot of mitakes in order to find the best path to a destination.  However, if you are the \emph{n}th person to take a path, you may be able to follow the path that was left by the \emph{n-1} other people to walk the path.  An article by Olsen and Malizia describe this idea as \emph{exploiting trails} \cite{5379671}.  We use this insight to to improve the efficency of retrieval in semantic search.
 
-Instead of treating each user search as a unique search, it is beneficial to assume that a similar search has been previously performed.  Researchers have shown that almost 40 percent of the all queries are repeats \cite{1277770}.  This means there is a large missing area for optimization for search engines.  We have built a prototype system for deep web question answering that uses previously answered questions to obtain new answers.
+Instead of treating each user search as a unique search, it is beneficial to assume that a similar search has been previously performed.  Researchers have shown that almost 40 percent of the all queries are repeats \cite{1277770}.  This means there is a large open area for optimization for search engines.  We have built a prototype system for deep web question answering that uses previously answered questions to obtain new answers.
 
-... expand here...
+In this paper we describe a system for recording the answer to user queries and executing solutions to similar queries.  To support this we use a structured query representation.  The structured representation allows queries to be parameterized so that similar queries may be discovered at query-time.  To recognizing these queries we build a semantic heterarchy and define algorithms for matching the classes.
 
 The paper proceeds as follows:
-
+\begin{itemize}
+\item Discussion of the query structure.  We call this structure an \emph{semi-structured query} SSQ.
+\item Next we discuss how we create the class heterarchy to support the semantic comparisons.
+\item In section \ref{sec:Building Query Store} we discuss how we record user web queries and correctly annotate them.
+\item Next, we discribe how we match rank 
+\item ....
+\item We will conclude by discussing the examples of the system.
+\end{itemize}
 \section{Semantic Query Representation}
 % Christan - fois
 - We translate natural language queries into a format we call - semi structured query
