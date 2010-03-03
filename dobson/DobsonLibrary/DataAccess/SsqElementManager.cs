@@ -34,11 +34,11 @@ namespace DobsonLibrary.DataAccess
             highlights[elem.ClassId] = elems;
         }
 
-        public SsqElement FindSsqInput(int classID, string name)
+        public SsqElement FindSsqInput(int classID, string val)
         {
             List<SsqElement> elems = (List<SsqElement>)ssqInputs[classID];
 
-            SsqElement elem = getElement(name, elems);
+            SsqElement elem = getElement(val, elems);
 
             return elem;
         }

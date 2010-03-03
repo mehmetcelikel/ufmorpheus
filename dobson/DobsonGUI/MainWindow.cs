@@ -724,13 +724,16 @@ namespace DobsonGUI
                 {
                     int NAME = 0;
 
-                    int VALUE = 0;
+                    int VALUE = 1;
 
                     prefbiz.updatePageReferenceQuerystring(previousPageReferenceId, qs);
 
                     // Check if any pending input object inserts are waiting on data from 
                     //this querystring
                     Hashtable elems = (Hashtable)unresolvedInputs[previousPageReferenceId];
+
+                    if (qs[0] == '?')
+                        qs = qs.Substring(1);
 
                     //split the querystring into substrings which consist of name/value pairs
                     string[] nameValuePairs = qs.Split(new char[] { '&' });
@@ -1016,9 +1019,7 @@ namespace DobsonGUI
                             txt = selectedNode.Attributes["value"].Value.ToUpper();
                         else if (selectedNode.Attributes["title"] != null)
                             txt = selectedNode.Attributes["title"].Value.ToUpper();
-                        else if (selectedNode.Name.Equals("select", StringComparison.CurrentCultureIgnoreCase))
-                            txt = parseSelectValue(inputName, selectedNode, pref.queryString);
-
+                       
                         elem = queryElementManager.FindSsqInput(classId, txt);
                     }
                 }
