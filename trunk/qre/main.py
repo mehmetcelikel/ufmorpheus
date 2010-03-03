@@ -52,7 +52,6 @@ def main(argv):
 	assert(len(code) > 0) # ensure text was returned
 
 	root = etree.fromstring(code)
-	print(etree.tostring(root,pretty_print=True))
 
 	action_list = []
 	kv_hash = {}	
@@ -94,8 +93,14 @@ def main(argv):
 	state = ActionState.ActionState(action_list, kv_hash, kt_hash, kclass_hash, kcontext_hash, user_hash)
 	
 	state.run()
-	
-	return state
+
+	result = ''
+	for k in state.kv_hash.keys():
+		if state.kv_hash[k] != '':
+			result += state.kv_hash[k] 
+
+	print(result)
+	return result
 
 #read in the ssq from an xml file or xml string
 def read_ssq(xml):
@@ -112,21 +117,29 @@ def read_ssq(xml):
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 	tree = etree.fromstring(xmlstring)
-	
+	total = 0
+	#any highlights present need to be counted first
+	for k in valueHash.keys():
+		if valueHash[k] != '':total+=1
+
 	#find the input list and load the values into the kv_hash
 	for e in tree.getchildren():
 
 		if e.tag == 'input_list':
 			for input in e.getchildren():
-				if loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash) == False:	
-					print('The given ssq does not match this qrm\'s ssq, aborting')
-					return False
-	return True
+				total += loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash)	
+
+	if total == len(valueHash.keys()):
+		return True
+	
+	print('The given ssq does not match this qrm\'s ssq, aborting')
+	return False
 
 #parse the xml node and load its values into the appropriate spots
 #in the value hash
 def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 
+	found = 0
 	#for the given xml node, we must find the matching key
 	for entry in valueHash.keys():
 		cls = classHash[entry]
@@ -136,10 +149,9 @@ def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 		#to the data hash at the current key
 		if cls.lower() == xml.get('dataclass').lower() and context.lower() == xml.get('type').lower():
 			valueHash[entry] = xml.text
-			return True
+			found+=1
 
-	#if we reach this point then we haven't found a match
-	return False			
+	return found
 
 if __name__ == '__main__':
 

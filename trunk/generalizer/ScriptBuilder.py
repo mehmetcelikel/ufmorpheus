@@ -136,9 +136,10 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 	form = etree.SubElement(xmlNode, 'form')
 	form.set("number",str(sequenceNumber))
 		
+	#TODO: fix this, using this because scraper isn't working for xpaths 
 	#handle the xpath for this form
 	xpath = etree.SubElement(form, 'xpath')
-	xpath.text = action.xpath
+	xpath.text = action.xpath 
 
 	#handle the url for this form
 	url = etree.SubElement(form, 'url')
@@ -150,7 +151,7 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 
 	#obtain the form element from the page, we need it get info about its inputs
 	formElemList = lxml.html.fromstring(action.pagesrc).xpath(action.xpath)
-	
+
 	#keep a count of the inputs for use as an id
 	inputIndex = 0	
 
@@ -252,9 +253,9 @@ def getDefaultValue(form, input):
 
 	
 def writeLinkAction(xmlNode, action, sequenceNumber):
-	
+
 	link = etree.SubElement(xmlNode, 'link')
-	link.text = action.destinationUrl
+	link.text = action.xpath
  	link.set("number",str(sequenceNumber))
 	pass
 

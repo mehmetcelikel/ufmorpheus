@@ -27,6 +27,30 @@ def GetQRMFromDb(qrmid):
 	rowArray = retrieveRecordsFromQRM(qrmid)
 
 	return getqrm(rowArray, qrmid, True, rowArray[3][0])
+def getHiLiteXpath(id):
+
+	q = 'select meetpoint from highlight where timestamp = '+id
+
+	rows = executeQuery(q)[0][0]
+
+	return rows	
+
+def getFormXpath(url, snum):
+
+	snum += 1
+	q = """select 
+			formxpath
+		from 
+			pagereference,page
+		where 
+			pagereference.pageid = page.pageid AND
+			page.baseurl = '{0}'
+		ORDER BY timestamp
+		LIMIT {1}""".format(url,snum)
+
+	rows = executeQuery(q)
+	
+	return rows[-1][0]
 
 #get the class and context information for the given input/highlight
 def getNeededScriptInfo(id, isInput):

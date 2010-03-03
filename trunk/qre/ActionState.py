@@ -29,7 +29,7 @@ class ActionState:
 
 		self.action_list = copy.copy(_action_list) # The list of actions 
 		#self.iter = action_list.__iter__() # The action iterator
-
+		self.resolved_seq = -1
 
 	def run(self):
 		""" This function call the do function on all the items im action_list"""
