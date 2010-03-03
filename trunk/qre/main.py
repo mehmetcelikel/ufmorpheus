@@ -1,4 +1,4 @@
-"""
+1"""
 This class runs the code
 """
 
@@ -86,7 +86,7 @@ def main(argv):
 					action_list.append(ActionObject.FormAction(ao))
 
 	#parse the ssq to populate the value hashes with the user input	
-	txt = read_ssq(sys.argv[-2])
+	txt = sys.argv[-2]
 	if read_ssq_text(txt,kv_hash,kclass_hash, kcontext_hash, kt_hash) == False:	
 		return
 	
@@ -99,19 +99,7 @@ def main(argv):
 		if state.kv_hash[k] != '':
 			result += state.kv_hash[k] 
 
-	print(result)
 	return result
-
-#read in the ssq from an xml file or xml string
-def read_ssq(xml):
-
-	file = open(xml,'r')
-
-	text = file.read()
-
-	file.close()
-
-	return text
 
 #populate the value hash from a string
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
