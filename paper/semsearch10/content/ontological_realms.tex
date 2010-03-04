@@ -1,6 +1,4 @@
 \section{Representing and Ontological Realms}
-\subsection{Category Heterarchy} 
-% Author: Clint 
 Two types of ontologies are used by our system:
 \begin{enumerate}
 \item Realm ontologies, comprising a heterarchy of categories that
@@ -21,6 +19,7 @@ The primary benefit of using the DBPedia for this purpose is
 that not only does it supply a categorical heterarchy, but it
 also links to wikipedia documents which provides us with a large
 realm-specific document corpus.
+\subsection{Category Heterarchy} 
 
 To support our process, we map DBPedia categories into classes in our
 realm ontology with the superclass/subclass relationships built using
@@ -28,14 +27,7 @@ DBPedia properties broader/narrower.  By using OWL, we can exploit the
 OWL API for matching SSQ ontologies that reference these realm
 ontologies.
 
-
-%-------------------------------------------------------------------------------
-
-
-
-\subsection{Associating Terms with Categories}
-%joir-dan
-
+%Start with a collection of relevant categories 
 
 Once the semantic hierarchy is created, the next step is to create
 training data for the system. The task is then to grab the pages,
@@ -104,6 +96,10 @@ def PlusOneMechanism(category, level):
 
 
 \end{lstlisting}
+
+
+\subsection{Associating Terms with Categories}
+%joir-dan
 
 The overall mechanism does not take into account the amount of
 information within each page, but generally that can be ignored when

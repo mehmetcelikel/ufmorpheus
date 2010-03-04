@@ -1,4 +1,4 @@
-\subsection{SSQ Ranking}
+\section{SSQ Ranking}
 \label{sec:ssq}
 In order to match a new query with a SSQ within our data store, we
 have defined similarity measures between the ontologies of the new
@@ -30,8 +30,7 @@ ontologies. It is based on class divergence, which is motivated by the
 concept of multiple dispatch in CLOS \cite{95411} and Dylan
 programming \cite{DBLP:conf/oopsla/BarrettCHMPW96} for generic
 function type matches. We consider the realm class and context
-property ranges for determining SSQ similarity. Subsections
-\ref{sec:ctd}, and \ref{sec:oqom} describe about this in detail.
+property ranges for determining SSQ similarity. Once we have the similarity measures between the user defined SSQ and relevant QRMs in the store, we can order the relevant QRMs. The order provides a ranking for the results to the user. Subsections \ref{sec:ctd}, and \ref{sec:oqom} describe about this in detail.
 
 
 \subsubsection{Class Divergence}
@@ -141,8 +140,6 @@ d_{\Upsilon}  = \sum_{k=1}^4 {\pi_k} {d_{class}(\Upsilon_{S_k},\Upsilon_{Q_k})} 
 
 If an SSQ and a QRM have identical classes for all inputs and their
 realms then the QRM relevance value will be one. Otherwise, the
-relevance of the QRM will be in the range $[0, 1)$.
-
-% Need to show an example ?
+relevance of the QRM will be in the range $[0, 1)$. 
 
 %-------------------------------------------------------------------------------
