@@ -14,18 +14,15 @@ for any non-trivial realm. The realm of automobiles (which
 we use for illustration in this paper) contains, for example,
 over XXXX categories and XXXX terms. We were unable to find
 an appropriate ontology for this realm, so we constructed it
-using categories from the DBPedia [!!!! citation needed].
+using categories from the DBPedia \cite{Auer07dbpedia:a}.
 The primary benefit of using the DBPedia for this purpose is
 that not only does it supply a categorical heterarchy, but it
-also links to wikipedia documents which provides us with a large
+also links to Wikipedia documents which provides us with a large
 realm-specific document corpus.
+
 \subsection{Category Heterarchy} 
 
-To support our process, we map DBPedia categories into classes in our
-realm ontology with the superclass/subclass relationships built using
-DBPedia properties broader/narrower.  By using OWL, we can exploit the
-OWL API for matching SSQ ontologies that reference these realm
-ontologies.
+To support our process, we map DBPedia categories into classes in our realm ontology with the \textit{superclass/subclass} relationships built using DBPedia properties \textit{broader/narrower}. By using OWL, we can exploit the OWL API for matching SSQ ontologies that reference these realm ontologies.
 
 %Start with a collection of relevant categories 
 
@@ -50,18 +47,18 @@ obtained per blanket is usually more helpful than per category.
 
 
 The subcategories of the category Automobiles (… Driving, Traffic Law,
-Automobiles by Decade, Auto Racing…) can be seen as grabbing
-information specific to the category. The supercategories (Road
+Automobiles by Decade, Auto Racing …) can be seen as grabbing
+information specific to the category. The super categories (Road
 Vehicles) place the category in a higher perspective, abstractly
 describing basketball as a concept. The spousal categories
-(...Motorsport, Individual Sport...) are an abstract description of
+(...Motor Sport, Individual Sport...) are an abstract description of
 the subcategories.
 
 
 Clustering the categories alone does not guarantee adequate corpus
 creation. Since the above model relies on the subcategories to
 describe specifics of a given category, the ideal situation would be
-that the subcategories have many more pages than the supercategories
+that the subcategories have many more pages than the super categories
 and that there is a significant amount of information per page.  In
 the case of Wikipedia, there are an average of 25.7 pages per category
 \cite{1321474}. The assumption for collecting the training data is the
@@ -75,7 +72,7 @@ extra levels we are to go down in the hierarchy, if
 necessary. SubjectSet is the overall set of all pages associated with
 the blanket structure along with any plusOne subjects obtained.
 
-\begin{lstlisting}[language=Python,frame=none,tabsize=2,caption=BlanketSubjectRetreival,label=BlanketSubjectRetreival,basicstyle=\small]
+\begin{lstlisting}[language=Python, frame=none, tabsize=2, caption=BlanketSubjectRetreival, label=BlanketSubjectRetreival, basicstyle=\small]
 def BlanketSubjectRetreival(blanket, maxLevel):
 	for category in blanket:
 		subjectSet.add(grabsubjects(category))
@@ -85,7 +82,7 @@ def BlanketSubjectRetreival(blanket, maxLevel):
 	return subjectSet
 \end{lstlisting}
 
-\begin{lstlisting}[language=Python,frame=none,tabsize=2,caption=PlusOneMechanism, label=PlusOneMechanism,basicstyle=\small]
+\begin{lstlisting}[language=Python, frame=none, tabsize=2, caption=PlusOneMechanism, label=PlusOneMechanism, basicstyle=\small]
 def PlusOneMechanism(category, level):
 	plusOneSet = grabPlusOneSubcategories(category)
 	for subcategory in plusOneSet:
