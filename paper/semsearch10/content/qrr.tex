@@ -17,13 +17,18 @@ Any query answering process consists of a sequence of these transactions.
 Additionally, data collected for inputs and outputs may be found
 during any stage of the complete query process.  An output
 collected during one stage of an extraction may be the input to a
-subsequent stage in the extraction. The QRR builds the completed user
-collection process into a Query Resolution Method (QRM).  The following is a mathematical formulation of information collected for user web interactions.
+subsequent stage in the extraction.  The QRR builds the completed user
+collection process into a QRM.  
+
+Conceptually, a QRM is the data structure that models the question answering process.  All QRMs are associated with a SSQ set of possible input categories and also output catgories.  It contains representations for every page visited and the order of visitation.  For each page, we store the list of inputs to the URL such as form inputs and the possible outputs (highlight portions of the webpage).
+
+
+The ontologcal representation of the SSQ is described in section {{XXX}}.  The following is a mathematical description of the information collected for user web interactions.
 
 A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ such that:
 
 \begin{enumerate}
-
+%%%%%%%%%%%%%%% Separate the first 2 points as descriptions of the SSQ. --------------
 \item $\Upsilon$ is the sequence of input categories $\left<
   \Upsilon_{1}, \Upsilon_{2}, \Upsilon_{3}, \Upsilon_{4} \right>$
   where $\Upsilon_{1}$ represents the \emph{who} context of the
