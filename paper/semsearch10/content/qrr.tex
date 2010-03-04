@@ -2,36 +2,23 @@
 \label{sec:qrr}
 % Chris
 Answering a question using the deep web requires one to navigate
-through a sequence of one or more web pages and links.  Many of the
-accesses involve clicks through web forms to resulting pages.  We have
-developed a model that represents the various actions a user may carry
-out during this process.
+through a sequence of one or more web pages. Many of the accesses involve clicks through web forms or links to resulting pages.  We have developed a model that represents the various actions a user may carry out during this process.
 
-During the answer retrieval process, a user discovers an element of
-the query's result on a web page.  Next, she highlights that element,
-typically a text string.  This highlight allows the QRR to record the
-source of the query's answer.  The QRR stores all information from the
-user query in our data store.  When the user submits a web form she
-may associate each of the form's inputs with one of our stored context
-classes.
-
-The discovery process can be broken down into three cases:
+Web interactions can be broken down into three types:
 \begin{enumerate}
-\item The user typed in a URL and highlighted part of or all the
-  answer.
-\item The user typed in a URL, clicked a link, and found part or all
-  of the answer.
-\item The user typed in a URL, filled out a form, and found part or
-  all of the answer on a subsequent page.
+\item The user highlights text that is needed in the query or forms part of the answer.
+\item The user clicks a link.
+\item The user fills in and submits a web form. 
 \end{enumerate}
 
-Any discovery process consists of a sequence of these transactions.
+When a user submits a web form they are prompted for the classes of each of the form inputs. Here, class refers to categorization of data, e.g. name, date, etc. These classes allow the QRR to map the user's input SSQ tokens (which are also categorized) to their usage in a given form. For a clicked link, the QRR simply records the target url and nothing more. Finally, during the answer retrieval process when a user discovers all or part of the desired information on a web page, she highlights the text in question. This highlight allows the QRR to record the source of the query's answer. All information gathered during the recording process is saved in our data store. 
+
+Any query answering process consists of a sequence of these transactions.
 Additionally, data collected for inputs and outputs may be found
-during any stage of the complete discovery process.  An output
+during any stage of the complete query process.  An output
 collected during one stage of an extraction may be the input to a
-subsequent stage in the extraction.  The QRR builds the completed user
-collection process into a QRM.  The following is a mathematical
-formulation of information collected for user web interactions.
+subsequent stage in the extraction. The QRR builds the completed user
+collection process into a Query Resolution Method (QRM).  The following is a mathematical formulation of information collected for user web interactions.
 
 A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ such that:
 
