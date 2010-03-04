@@ -21,8 +21,8 @@ Consider the abbreviated Markov blanket for the category Automobiles:
 % figure: abbreviated Markov blanket for the category Basketball  
 \begin{figure}[t]
 \centering
-\includegraphics[width=90mm]{abbrv_bb_blanket.eps}
-\caption{Abbreviated Markov blanket for the category Basketball}
+\includegraphics[width=90mm]{BlanketExample.eps}
+\caption{Abbreviated Markov blanket for the category Automobiles}
 \label{fig:abbrv_bb_blanket}
 \end{figure}
 
@@ -36,7 +36,7 @@ def BlanketSubjectRetreival(blanket, maxLevel):
 	for category in blanket:
 		subjectSet.add(grabsubjects(category))
 		diff = afterSize - beforeSize
-		if diff <= \alpha and category is subcategory:
+		if diff <= a and category is subcategory:
 			PlusOneMechanism(category, maxLevel)
 	return subjectSet
 \end{lstlisting}
@@ -45,7 +45,10 @@ def BlanketSubjectRetreival(blanket, maxLevel):
 def PlusOneMechanism(category, level):
 	plusOneSet = grabPlusOneSubcategories(category)
 	for subcategory in plusOneSet:
-		subject.add(grabSubjects
+		subject.add(grabSubjects(subcategory))
+		diff = afterSize - beforeSize
+		if diff <= a and level > 0:
+			PlusOneMechanism(subcategory, level-1)
 
 
 \end{lstlisting}
