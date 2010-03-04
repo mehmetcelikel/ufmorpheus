@@ -1,0 +1,13 @@
+\subsection{Query Re-execution}
+% Chris
+	I ASSUME CLINT HAS COVERED QRM SELECTION ALREADY
+	When a user submits a new query to the Morpheus system, one or more stored 
+Query Resolution Methods are executed to obtain results. These QRMs are sorted based
+on their relevance to the query at hand and are chosen by the ontology matching subsystem.
+	A QRM consists of an XML script which instructs the Query Resolution Executor how to 
+obtain the required result. The QRE may "click" links, submit forms or highlight and save
+important pieces of html, including answers. Once it has visited all pages included in the 
+script the QRE returns the HTML snippet containing the answer. This answer can then be
+rendered in a browser. As mentioned above, normally a list or relevant QRMs will be given
+to the QRE which will in turn be executed using the provided SSQ, the results will be 
+displayed in order for the user. 
