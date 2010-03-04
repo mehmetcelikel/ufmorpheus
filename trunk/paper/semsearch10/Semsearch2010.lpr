@@ -38,34 +38,6 @@ Bookmark#6=0
 Bookmark#7=0
 Bookmark#8=0
 Bookmark#9=0
-CaretPos.X=295
-CaretPos.Y=2
-CharSet=def
-FileName=content\example.tex
-FoldedLines=
-IsMainFile=no
-Opened=no
-ScrollPos.X=0
-ScrollPos.Y=28
-SearchListCount=0
-ShowSyntax=yes
-SpellChecking=yes
-TabOrder=-1
-UseThesaurus=yes
-WrapLine=yes
-
-[Files\11]
-ActiveFilters=
-Bookmark#0=0
-Bookmark#1=0
-Bookmark#2=0
-Bookmark#3=0
-Bookmark#4=0
-Bookmark#5=0
-Bookmark#6=0
-Bookmark#7=0
-Bookmark#8=0
-Bookmark#9=0
 CaretPos.X=0
 CaretPos.Y=0
 CharSet=def
@@ -82,7 +54,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\12]
+[Files\11]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -110,7 +82,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\13]
+[Files\12]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -138,7 +110,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\14]
+[Files\13]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -166,7 +138,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\15]
+[Files\14]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -194,7 +166,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\16]
+[Files\15]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -237,34 +209,6 @@ Bookmark#9=0
 CaretPos.X=0
 CaretPos.Y=0
 CharSet=def
-FileName=abbreviated_basketball_blanket.png
-FoldedLines=
-IsMainFile=no
-Opened=no
-ScrollPos.X=0
-ScrollPos.Y=0
-SearchListCount=0
-ShowSyntax=yes
-SpellChecking=no
-TabOrder=-1
-UseThesaurus=no
-WrapLine=no
-
-[Files\2]
-ActiveFilters=
-Bookmark#0=0
-Bookmark#1=0
-Bookmark#2=0
-Bookmark#3=0
-Bookmark#4=0
-Bookmark#5=0
-Bookmark#6=0
-Bookmark#7=0
-Bookmark#8=0
-Bookmark#9=0
-CaretPos.X=0
-CaretPos.Y=0
-CharSet=def
 FileName=algorithm.sty
 FoldedLines=
 IsMainFile=no
@@ -278,7 +222,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\3]
+[Files\2]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -306,7 +250,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\4]
+[Files\3]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -334,7 +278,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\5]
+[Files\4]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -362,7 +306,7 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\6]
+[Files\5]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -390,7 +334,7 @@ TabOrder=-1
 UseThesaurus=no
 WrapLine=no
 
-[Files\7]
+[Files\6]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -418,7 +362,7 @@ TabOrder=-1
 UseThesaurus=no
 WrapLine=no
 
-[Files\8]
+[Files\7]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -430,23 +374,23 @@ Bookmark#6=0
 Bookmark#7=0
 Bookmark#8=0
 Bookmark#9=0
-CaretPos.X=12
-CaretPos.Y=76
+CaretPos.X=0
+CaretPos.Y=0
 CharSet=def
 FileName=content\ssq_ranking.tex
 FoldedLines=
 IsMainFile=no
-Opened=no
+Opened=yes
 ScrollPos.X=0
-ScrollPos.Y=71
+ScrollPos.Y=1
 SearchListCount=0
 ShowSyntax=yes
 SpellChecking=yes
-TabOrder=-1
+TabOrder=0
 UseThesaurus=yes
 WrapLine=yes
 
-[Files\9]
+[Files\8]
 ActiveFilters=
 Bookmark#0=0
 Bookmark#1=0
@@ -474,8 +418,36 @@ TabOrder=-1
 UseThesaurus=yes
 WrapLine=yes
 
+[Files\9]
+ActiveFilters=
+Bookmark#0=0
+Bookmark#1=0
+Bookmark#2=0
+Bookmark#3=0
+Bookmark#4=0
+Bookmark#5=0
+Bookmark#6=0
+Bookmark#7=0
+Bookmark#8=0
+Bookmark#9=0
+CaretPos.X=295
+CaretPos.Y=2
+CharSet=def
+FileName=content\example.tex
+FoldedLines=
+IsMainFile=no
+Opened=no
+ScrollPos.X=0
+ScrollPos.Y=28
+SearchListCount=0
+ShowSyntax=yes
+SpellChecking=yes
+TabOrder=-1
+UseThesaurus=yes
+WrapLine=yes
+
 [Files]
-Count=17
+Count=16
 
 [Project]
 ActiveFilters=
@@ -532,7 +504,7 @@ Zoom=9
 FileName=1
 FirstPage=0
 Magnifier=5
-Page=1
+Page=0
 PaperHeight=297
 PaperWidth=210
 Zoom=5
