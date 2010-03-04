@@ -1,12 +1,6 @@
 %jnw
 
-The end-user employs the Morpheus question-answering system much like a
-search engine with a natural-language interface. One can type a question
-in a text box and receive a response from the system. Those questions
-dealing with an ontological realm familiar to the system, whose form is
-similar to previously answered queries in that realm, and that can be
-answered using (possibly deep web) information from a source the system
-has encountered can yield relevant responses.
+The end-user employs the Morpheus question-answering system much like a search engine with a natural-language interface. One can type a question in a text box and receive a response from the system. The system uses previously answered queries to answer new questions.  The reused questions have have a similar form, and the same ontological realm, and employ sources that will yield relevant solutions.  We focus our on the sources that are hidden behind web forms, or the \emph{deep web}.
 
 \begin{figure}
 \caption{Typical Morpheus interaction}
@@ -15,20 +9,20 @@ has encountered can yield relevant responses.
 
 Figure \ref{fig:screenshot} shows a screenshot of a typical Morpheus
 interaction. The user has typed a question ``Blah blah blah!!!!!!?'' and
-received a response together with information describing assumptions
+received a response data.  Included with the response is together with information describing assumptions
 about the question, the likely relevance of the answer provided,
 the source of information, and the method of answer production.
 
 Each answer to a question is created using a \emph{query response
   method} (QRM). A QRM is constructed when a special user, known as a
-\emph{guide} answers a question using an instrumented web browser (the
+\emph{guide}, answers a question using an instrumented web browser (the
 \emph{query response recorder} or QRR) that records web
 interactions. The system extracts the relevant artifacts of the
 guide's actions and stores them in the QRM. The QRM is characterized
 by a \emph{semi-structured query} (SSQ), a schematic representation of
-the information contained in the query, namely the inputs and output
+the information contained in the query, namely the input and output
 contexts---the \emph{who, what, when,} and \emph{where}
-categories---that characterize the question together with an
+categories---that characterize the question.  In addition the QRR has categorized an
 appropriately generalized representation of the guide's browser
 interactions.  The \emph{query response evaluator} (QRE) evaluates a
 query by binding specific arguments to its input parameters and
