@@ -1,1 +1,12 @@
 % Joir-dan stuff
+
+When we have completed our Wikipedia corpora from all the blankets in the category hierarchy, our system needs to make sense of the data for execution. The learning process involves the calculation of two n-gram frequency distributions: an n-gram/vocabulary distribution, and an n-gram/category distribution. The first value is the count of individual n-grams in the combined vocabulary of all corpora, and the second one is just the count of individual n-grams within a category’s blanket. The categories’ corpora reflect one long context per category, instead of breaking up sentences into different contexts. The idea behind this is that Wikipedia pages are already grouped into categories, that we can assume are related to the topics of each sentence within the corpus. We store distributions, rather than priors, primarily because if at anytime a blanket vocabulary seems inadequate, we can append terms from other sources to both distribution types and recalculate our values. We can simply calculate probabilities and store these separately for the execution of our natural query engine. 
+
+The goal, is to choose that category for use in the SSQ structure. This process requires the tagging and parsing of our natural query, the extraction of key elements, primarily adjectives and nouns, and then using n-gram priors to calculate the appropriate category associated with that term. 
+
+Picking out these terms requires knowledge of the structure of the question being passed to the system. The ideal situation would be that we could recognize question patterns, and decide where key information is within the question based on a given pattern. Currently, we only work with questions in an “answer” form, which means there is little to no transformation of the structure, to go from a question to an answer.
+
+Example
+
+Question: A 1997 Toyota Corolla needs what size tires?
+Answer:   A 1997 Toyota Corolla needs 17” tires.
