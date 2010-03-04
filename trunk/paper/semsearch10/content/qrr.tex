@@ -1,53 +1,107 @@
-\subsection{Query Resolution Recorder}
+\section{Query Resolution Recorder (QRR)}
+\label{sec:qrr}
 % Chris
-Answering a question using the deep web requires one to navigate through a sequence of one or more web pages and links.  Many of the accesses involve clicks through web forms to resulting pages.  We have developed a model that represents the various actions a user may carry out during this process.  We record the user actions with a browser plugin called the \emph{query resolution recorder} (QRR).
+Answering a question using the deep web requires one to navigate
+through a sequence of one or more web pages and links.  Many of the
+accesses involve clicks through web forms to resulting pages.  We have
+developed a model that represents the various actions a user may carry
+out during this process.
 
-During the answer retrieval process, a user discovers an element of the query's result on a web page.  Next, she highlights that element, typically a text string.  This highlight allows the QRR to record the source of  the query's answer.  The QRR stores all information from the user query in our data store.  When the user submits a web form she may associate each of the form's inputs with one of our stored context classes. 
+During the answer retrieval process, a user discovers an element of
+the query's result on a web page.  Next, she highlights that element,
+typically a text string.  This highlight allows the QRR to record the
+source of the query's answer.  The QRR stores all information from the
+user query in our data store.  When the user submits a web form she
+may associate each of the form's inputs with one of our stored context
+classes.
 
 The discovery process can be broken down into three cases:
 \begin{enumerate}
-\item The user typed in a URL  and highlighted part of or all the answer. 
-\item The user typed in a URL, clicked a link, and found part or all of the answer. 
-\item The user typed in a URL, filled out a form, and found part or all of the answer on a subsequent page. 
+\item The user typed in a URL and highlighted part of or all the
+  answer.
+\item The user typed in a URL, clicked a link, and found part or all
+  of the answer.
+\item The user typed in a URL, filled out a form, and found part or
+  all of the answer on a subsequent page.
 \end{enumerate}
 
-Any discovery process  consists of a sequence of these transactions.  Additionally, data collected for inputs and outputs may be found during any stage of the complete discovery process.  An output collected during one stage of an extraction may be the input to a subsequent stage in the extraction.  The QRR builds the completed user collection process into a QRM.  The following is a mathematical formulation of information collected for user web interactions.\\
+Any discovery process consists of a sequence of these transactions.
+Additionally, data collected for inputs and outputs may be found
+during any stage of the complete discovery process.  An output
+collected during one stage of an extraction may be the input to a
+subsequent stage in the extraction.  The QRR builds the completed user
+collection process into a QRM.  The following is a mathematical
+formulation of information collected for user web interactions.
 
 A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ such that:
 
 \begin{enumerate}
 
-\item $\Upsilon$ is the sequence of input classes $\left< \Upsilon_{1}, \Upsilon_{2}, \Upsilon_{3}, \Upsilon_{4} \right>$ where $\Upsilon_{1}$ represents the \emph{who} context of the associated query, $\Upsilon_{2}$ represents the \emph{what} context, $\Upsilon_{3}$ represents the \emph{when} context, and $\Upsilon_{4}$ represents the \emph{where} context.
+\item $\Upsilon$ is the sequence of input categories $\left<
+  \Upsilon_{1}, \Upsilon_{2}, \Upsilon_{3}, \Upsilon_{4} \right>$
+  where $\Upsilon_{1}$ represents the \emph{who} context of the
+  associated query, $\Upsilon_{2}$ represents the \emph{what} context,
+  $\Upsilon_{3}$ represents the \emph{when} context, and
+  $\Upsilon_{4}$ represents the \emph{where} context.
 
-\item $\Omega$ is the sequence of output classes $\left<\Omega_{1}, \Omega_{2}, \Omega_{3}, \Omega_{4}\right>$ where $\Omega_{1}$ represents the \emph{who} context of the associated query, $\Omega_{2}$ represents the \emph{what} context, $\Omega_{3}$ represents the \emph{when} context, and $\Omega_{4}$ represents the \emph{where} context.
+\item $\Omega$ is the sequence of output categories $\left<\Omega_{1},
+  \Omega_{2}, \Omega_{3}, \Omega_{4}\right>$ where $\Omega_{1}$
+  represents the \emph{who} context of the associated query,
+  $\Omega_{2}$ represents the \emph{what} context, $\Omega_{3}$
+  represents the \emph{when} context, and $\Omega_{4}$ represents the
+  \emph{where} context.
 
-\item $P$ is an ordered list of web pages $P = \left<P_1,P_2,..., P_n\right>$ where $P_h = \left<U_h,\left<I_{h_1},I_{h_2},...,I_{h_u}\right>,\left<O_{h_1},O_{h_2},...O_{h_v}\right>\right>$ for $1 \leq h \leq n$, $u = \left| I_h \right|$, $v = \left| O_h \right|$. $P_h$ is a triple comprised of a URL $U_h$, a sequence of input arguments, and a sequence of output results.
-\\
-Let $I_{\$} = \bigcup_{j=1}^{4} I_{\downarrow_j}$ be the set of the selector expressions for the inputs of a query and $O_{\$} = \bigcup_{j=1}^{4} O_{\downarrow_j}$ be the set of selectors expressions for the outputs of a query.
-\\
-Let $K$ be the set of all string constants.
+\item $P$ is an ordered list of web pages $P = \left<P_1,P_2,...,
+  P_n\right>$ where $P_h =
+  \left<U_h,\left<I_{h_1},I_{h_2},...,I_{h_u}\right>,\left<O_{h_1},O_{h_2},...O_{h_v}\right>\right>$
+  for $1 \leq h \leq n$, $u = \left| I_h \right|$, $v = \left| O_h
+  \right|$. $P_h$ is a triple comprised of a URL $U_h$, a sequence of
+  input arguments, and a sequence of output results.  \\ Let $I_{\$} =
+  \bigcup_{j=1}^{4} I_{\downarrow_j}$ be the set of the selector
+  expressions for the inputs of a query and $O_{\$} =
+  \bigcup_{j=1}^{4} O_{\downarrow_j}$ be the set of selectors
+  expressions for the outputs of a query.  \\ Let $K$ be the set of
+  all string constants.
 \begin{itemize}
-\item URI $U_1 \in K$ is a string and \\
-for $1 < g \leq n$, URI $U_g \in K \cup \left( \bigcup^{g-1}_{p=1} \left( \bigcup^{\left|O_p\right|}_{h=1}O_{p_h} \right)\right)$ where $1 \leq h \leq \left| O_p \right| $,
+\item URI $U_1 \in K$ is a string and \\ for $1 < g \leq n$, URI $U_g
+  \in K \cup \left( \bigcup^{g-1}_{p=1} \left(
+  \bigcup^{\left|O_p\right|}_{h=1}O_{p_h} \right)\right)$ where $1
+  \leq h \leq \left| O_p \right| $,
 
-\item for $1 < h < \left| I_1 \right|$, input $I_{1_h} \in K \cup I_{\$} \cup O_{\$}$ and \\
-for $1 < g <= n$, then for $1 < h < \left| I_g \right|$, input $I_{g_h} \in K \cup I_{\$} \cup O_{\$} \cup \left( \bigcup^{g-1}_{p=1} \left( \bigcup^{\left|O_p\right|}_{h=1}O_{p_h} \right)\right)$.
+\item for $1 < h < \left| I_1 \right|$, input $I_{1_h} \in K \cup
+  I_{\$} \cup O_{\$}$ and \\ for $1 < g <= n$, then for $1 < h <
+  \left| I_g \right|$, input $I_{g_h} \in K \cup I_{\$} \cup O_{\$}
+  \cup \left( \bigcup^{g-1}_{p=1} \left(
+  \bigcup^{\left|O_p\right|}_{h=1}O_{p_h} \right)\right)$.
 \end{itemize}
 
 \item $M$ is a map between $\Upsilon$, $K$, $\Omega$ to page list inputs $I_h$.
 
 \item $R$ is an ontological realm. 
 
-\item $A$ is the sequence of outputs from $\Upsilon$, $K$, and $\Omega$ representing the answer.
+\item $A$ is the sequence of outputs from $\Upsilon$, $K$, and
+  $\Omega$ representing the answer.
 
 \end{enumerate}
 
 %-------------------------------------------------------------------------------
 
-\subsection{Generalization}
+%\subsection{Generalization}
 % Christan
-The response pages created by querying web forms are dynamically generated with a templated structure. This generalization per page is done using the GenPath algorithm developed by Badica et al. \cite{Badica06}. Additionally, the community may be able to answer a particular SSQ using many different page interactions. Therefore, we proposed a method of generalizing extraction path to a result across pages. This method removes unnecessary page interactions and finds the shortest path to the result pages.
+The response pages created by querying web forms are dynamically
+generated with a templated structure. This generalization per page is
+done using the GenPath algorithm developed by Badica et
+al. \cite{Badica06}. Additionally, the community may be able to answer
+a particular SSQ using many different page interactions. Therefore, we
+use a method of generalizing extraction path to a result across
+pages. This method removes unnecessary page interactions and finds the
+shortest path to the result pages.
 
-The websites that are wrapped are highly susceptible to structural changes \cite{TanZMG07}. Generalizing the extraction paths help to overcome small structural changes. If a website changes to the point where a QRM is no longer useful, the QRM not considered fresh. Morpheus allows users to rate the freshness of QRMs.
+Websites wrapped by a system such as this are highly susceptible to
+structural changes \cite{TanZMG07}. Generalizing the extraction paths
+helps overcome small structural changes. If a website changes to the
+point where a QRM is no longer useful, the QRM is not considered
+fresh. User ratings of QRM freshness can be employed in the SSQ matching
+process detailed in Section \ref{sec:ssq}.
 
 %-------------------------------------------------------------------------------
