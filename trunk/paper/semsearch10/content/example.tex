@@ -1,0 +1,51 @@
+The end-user employs the Morpheus question-answering system much like a
+search engine with a natural-language interface. One can type a question
+in a text box and receive a response from the system. Those questions
+dealing with an ontological realm familiar to the system, whose form is
+similar to previously answered queries in that realm, and that can be
+answered using (possibly deep web) information from a source the system
+has encountered can yield relevant responses.
+
+\begin{figure}
+\caption{Typical Morpheus interaction}
+\label{fig:screenshot}
+\end{figure}
+
+Figure \ref{fig:screenshot} shows a screenshot of a typical Morpheus
+interaction. The user has typed a question ``Blah blah blah!!!!!!?'' and
+received a response together with information describing assumptions
+about the question, the likely relevance of the answer provided,
+the source of information, and the method of answer production.
+
+Each answer to a question is created using a {\it query response
+  method} (QRM). A QRM is constructed when a special user, known as a
+{\it guide} answers a question using an instrumented web browser (the
+{\it query response recorder} or QRR) that records web
+interactions. The system extracts the relevant artifacts of the
+guide's actions and stores them in the QRM. The QRM is characterized
+by a {\it semi-structured query} (SSQ), a schematic representation of
+the information contained in the query, namely the inputs and output
+contexts---the {\it who, what, when,} and {\it where}
+categories---that characterize the question together with an
+appropriately generalized representation of the guide's browser
+interactions.  The {\it query response evaluator} (QRE) evaluates a
+query by binding specific arguments to its input parameters and
+replaying the generalized web interactions the guide used to answer
+the original question.
+
+To answer a user's question, we must identify likely contextual
+categories associated with the terms in the question to form an SSQ,
+find those QRMs having contextually compatible SSQs, then use the QRE to
+generate a response.
+
+
+In what follows, we detail the elements of the system.  We first
+discuss the processing of natural language queries to generate SSQs.
+Next, we discuss the recording of guide behavior with the QRR.  We
+then discuss how the categorical heterarchies associated with
+ontological realms are constructed in a semi-automated fashion.  We
+describe the method we use to assess how well a stored QRM matches a
+user SSQ.  We then discuss the QRM evaluation process and discuss the
+system's behavior on example queries. We conclude with a discussion of
+future work.
+ 
