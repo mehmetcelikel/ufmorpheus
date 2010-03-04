@@ -1,3 +1,5 @@
+%jnw
+
 The end-user employs the Morpheus question-answering system much like a
 search engine with a natural-language interface. One can type a question
 in a text box and receive a response from the system. Those questions
@@ -17,18 +19,18 @@ received a response together with information describing assumptions
 about the question, the likely relevance of the answer provided,
 the source of information, and the method of answer production.
 
-Each answer to a question is created using a {\it query response
+Each answer to a question is created using a \emph{query response
   method} (QRM). A QRM is constructed when a special user, known as a
-{\it guide} answers a question using an instrumented web browser (the
-{\it query response recorder} or QRR) that records web
+\emph{guide} answers a question using an instrumented web browser (the
+\emph{query response recorder} or QRR) that records web
 interactions. The system extracts the relevant artifacts of the
 guide's actions and stores them in the QRM. The QRM is characterized
-by a {\it semi-structured query} (SSQ), a schematic representation of
+by a \emph{semi-structured query} (SSQ), a schematic representation of
 the information contained in the query, namely the inputs and output
-contexts---the {\it who, what, when,} and {\it where}
+contexts---the \emph{who, what, when,} and \emph{where}
 categories---that characterize the question together with an
 appropriately generalized representation of the guide's browser
-interactions.  The {\it query response evaluator} (QRE) evaluates a
+interactions.  The \emph{query response evaluator} (QRE) evaluates a
 query by binding specific arguments to its input parameters and
 replaying the generalized web interactions the guide used to answer
 the original question.

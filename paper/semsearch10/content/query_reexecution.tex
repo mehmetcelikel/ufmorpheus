@@ -1,9 +1,25 @@
 \subsection{Query Re-execution}
 % Chris
-	I ASSUME CLINT HAS COVERED QRM SELECTION ALREADY
-	When a user submits a new query to the Morpheus system, one or more stored 
-Query Resolution Methods are executed to obtain results. A QRM consists of an XML script which instructs the Query Resolution Executor how to obtain the required result. The Query Resolution Executor may "click" links, submit forms or highlight and save important pieces of html, including answers. At the present, the GET form submission method is used. 
-	There is greater complexity in dealing with web forms than with links. For a given
-form, there may be text fields, drop-down boxes, radio buttons etc. In order to support form submission in such circumstances the QRE will take different actions based on the input type. For text fields, simply adding a key/value pair to the querystring suffices. For a drop-down box, the QRE extracts the form element and performs a lookup on its options to find the appropriate value to include in the querystring. 
-	All input data as well as highlighted HTML is kept in an internal hash table. The QRM script contains keys which allow the QRE to map SSQ inputs from the table to the appropriate form inputs. Furthermore, highlights which are collected during execution are stored in the hash table. 
-	Once all pages included in the script have been visited, the QRE returns the HTML snippet containing the answer. This answer can then be rendered in a browser. Normally a list of QRMs, sorted by relevance, are given to the QRE. Therefore after execution a list of results is returned in order of relevance. 
+When a user submits a new query to the Morpheus system, one or more
+stored Query Resolution Methods are executed to obtain results. A QRM
+consists of an XML script which instructs the Query Resolution
+Executor how to obtain the required result. The Query Resolution
+Executor may "click" links, submit forms or highlight and save
+important pieces of html, including answers. At the present, the GET
+form submission method is used.  There is greater complexity in
+dealing with web forms than with links. For a given form, there may be
+text fields, drop-down boxes, radio buttons etc. In order to support
+form submission in such circumstances the QRE will take different
+actions based on the input type. For text fields, simply adding a
+key/value pair to the querystring suffices. For a drop-down box, the
+QRE extracts the form element and performs a lookup on its options to
+find the appropriate value to include in the querystring.  All input
+data as well as highlighted HTML is kept in an internal hash
+table. The QRM script contains keys which allow the QRE to map SSQ
+inputs from the table to the appropriate form inputs. Furthermore,
+highlights which are collected during execution are stored in the hash
+table.  Once all pages included in the script have been visited, the
+QRE returns the HTML snippet containing the answer. This answer can
+then be rendered in a browser. Normally a list of QRMs, sorted by
+relevance, are given to the QRE. Therefore after execution a list of
+results is returned in order of relevance.
