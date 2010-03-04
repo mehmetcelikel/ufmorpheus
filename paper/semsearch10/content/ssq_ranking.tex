@@ -50,7 +50,7 @@ is defined as follows:
 
 \begin{equation}
 d_{class}(S, T) = \begin{cases}
-0 & if S.{uri} \equiv T.{uri}\\
+0 & if S.{Uri} \equiv T.{Uri}\\
 d(S, T) & if S \prec T\\
 1 & if T \prec S\\
 d(S,root) \\+ d(S,C) + d(T,C) & otherwise
@@ -72,36 +72,33 @@ that a SSQ that answers queries from any non-ancestral class.
 \begin{figure}[t]
 \centering
 \includegraphics[width=90mm]{class_divergence.eps}
-\caption{Abbrv. graphical representation of an automotive ontology}
+\caption{Abbrev. graphical representation of an automotive ontology}
 \label{fig:class_divergence}
 \end{figure}
 
 Figure \ref{fig:class_divergence} illustrates the calculation of class
 divergence. This sample abbreviated ontology that was created from the
-DBpedia category heirarchy is rooted at the class
+DBpedia category hierarchy is rooted at the class
 \textit{DBpediaRoot}. The arrows represent the inheritance
 relationship between the classes in the topology.
 
 Suppose we want to find the divergence $d_{class}$\textit{(Automotive
   Industry, Racing Cars)}. The \textit{Automotive Industry} is the
 subclass of \textit{Automobiles} and \textit{Racing Cars} is the
-subclass of \textit{Auto Racinng}. Therefore, the common ancestor for
+subclass of \textit{Auto Racing}, which is a subclass of \textit{Automobiles}. Therefore, the common ancestor for
 these two can be determined as \textit{Automobiles} ($C$). They share
 the path from \textit{Automobiles} to the $root$. So, the unnormalized
-divergence \textit{d(Automotive Industry, root)} is 32 (calcuted from
-the path to root), \textit{d(Automotive Industry, Automobiles)} is one
+divergence \textit{d(Automotive Industry, root)} is 32 that is calculated from the path to the root \textit{DBpediaRoot}, \textit{d(Automotive Industry, Automobiles)} is one
 (dashed arrow), and \textit{d(Racing Cars, Automobiles)} is two
 (dashed arrow). Suppose, the ontology tree height is calculated as
-294. Thus, \textit{d(Automotive Industry, Racing Cars)} is 35, which
-corresponds to a normalized value of $35/294$.
+294. Thus, $d_{class}$\textit{(Automotive Industry, Racing Cars)} is 35, which corresponds to a normalized value of $35/294$.
 
 %-------------------------------------------------------------------------------
 \subsection{SSQ Ontology Matching}
 \label{sec:oqom}
 
-We use class divergence to calculate the relevance between a source
-SSQ and a target SSQ associated with a QRM.  Each SSQ will have four
-input classes, four output classes, and one realm.  We refer to the
+We use class divergence to calculate the relevance between a new 
+SSQ and a SSQ associated with a QRM in the store.  Each SSQ will have four input classes, four output classes, and one realm.  We refer to the
 sequence of these classes $\langle \Upsilon_1, ..., \Upsilon_4,
 \Omega_1, ..., \Omega_4, R \rangle$ as the signature of an SSQ. If an
 input or output class is unspecified in the query, it is associated
@@ -111,32 +108,30 @@ The relevance of QRM $Q$ with signature $\langle \Upsilon_{Q_1}, ...,
 \Upsilon_{Q_4}, \\\Omega_{Q_1}, ... , \Omega_{Q_4}, R_Q\rangle$ to SSQ
 $S$ with signature $\langle \Upsilon_{S_1}, ..., \Upsilon_{S_4},
 \\\Omega_{S_1}, ... , \Omega_{S_4}, R_S \rangle$ is
-
 \begin{eqnarray}
 \label{qrmsimilarity}
  R(S,Q) = 1 - (d_{R} + d_{\Upsilon} + d_{\Omega})
 \end{eqnarray}
 \noindent where 
 \begin{eqnarray}
-d_{R} = \pi_9 d_{class}(R_S,R_Q) \nonumber
+d_{R} = \pi_9 d_{class}(R_S,R_Q) 
 \end{eqnarray}
 \begin{eqnarray}
-d_{\Upsilon}  = \sum_{k=1}^4 {\pi_k} {d_{class}(\Upsilon_{S_k},\Upsilon_{Q_k})} \nonumber
+d_{\Upsilon}  = \sum_{k=1}^4 {\pi_k} {d_{class}(\Upsilon_{S_k},\Upsilon_{Q_k})} 
 \end{eqnarray}
 \begin{eqnarray}
- d_{\Omega} = \sum_{j=1}^4 \pi_{4+j} d_{class}(\Omega_{S_j},\Omega_{Q_j})  \nonumber
+ d_{\Omega} = \sum_{j=1}^4 \pi_{4+j} d_{class}(\Omega_{S_j},\Omega_{Q_j}) 
 \end{eqnarray}
-\noindent the weights ${\pi}_k$ of the property hasRealm and other context properties satisfies the conditions 
+\noindent the weights ${\pi}_i$ of the property hasRealm and other context properties satisfies the conditions
 \begin{equation}
 \label{piconstraint1}
-\sum_{k=1}^{9} {{\pi}_k} = 1
+\sum_{i=1}^{9} {{\pi}_i} = 1
 \end{equation}
-\noindent and for $1 \leq i \leq 9$
-
 \begin{equation}
 \label{piconstraint2}
 {\pi}_i > 0
 \end{equation}
+\noindent and for $1 \leq i \leq 9$
 
 If an SSQ and a QRM have identical classes for all inputs and their
 realms then the QRM relevance value will be one. Otherwise, the
