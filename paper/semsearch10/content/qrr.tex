@@ -20,12 +20,13 @@ collected during one stage of an extraction may be the input to a
 subsequent stage in the extraction.  The QRR builds the completed user
 collection process into a QRM.  
 
-Conceptually, a QRM is the data structure that models the question answering process.  All QRMs are associated with a SSQ set of possible input categories and also output catgories.  It contains representations for every page visited and the order of visitation.  For each page, we store the list of inputs to the URL such as form inputs and the possible outputs (highlight portions of the webpage).
+Conceptually, a QRM is the data structure that models the question answering process.  Each QRMs contains an ontilogical realm, an SSQ, and information to support the query answering process.  The realm may be one or more descriptive categories and is used for is used for classification of the QRMs.  The SSQ describes the set of possible input categories and also output catgories from the associated natural language query.  The possible set of input phrase inputs and outputs are grouped in to contextual bins labeled \emph{who}, \emph{what}, \emph{when} and \emph{where}.  The ontilogical realm and the SSQ parameters act as a signature for the the QRM object, analogous to a function signature.   The ontologcal representation of the SSQ is described in section {{XXX}}.  
 
+Additionally, the QRM contains representations for every page visited and the order of visitation.  For each page, we store the list of inputs to the URL such as form inputs and the possible outputs (highlight portions of the webpage).  There is a mapping between the SSQ the possible inputs user inputs or outputs used on any page to the specific page input.  Finally, there is a structure with mappings to the user inputs or outputs that are displayed to the user as answers.
 
-The ontologcal representation of the SSQ is described in section {{XXX}}.  The following is a mathematical description of the information collected for user web interactions.
+The following is a mathematical description of the information collected for user web interactions.
 
-A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ such that:
+A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ \footnote{It is important to not that both $\Upsilon$ and $\Omega$ make up the SSQ structure.} such that:
 
 \begin{enumerate}
 %%%%%%%%%%%%%%% Separate the first 2 points as descriptions of the SSQ. --------------
