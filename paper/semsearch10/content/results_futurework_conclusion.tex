@@ -1,11 +1,27 @@
 \section{Results}
 % Walk through of example query
 
-screen_intro.jpg caption:
-The user types a natural language query into the search box and clicks submit. The query is then converted into an SSQ and the process of locating appropriate QRMs begins. For any given query there may be several suitable QRMs, these are executed in order of relevance. 
+% Results: figure 1  
+\begin{figure}[t]
+\centering
+\includegraphics[width=85mm]{screen_intro.eps}
+\caption{Introductory screen}
+\label{fig:screen_intro}
+\end{figure}
 
-screen_results.jpg caption:
-After execution has completed, the user is informed of how the query was parsed and what answers were found sorted by relevance. Furthermore, the sequence of pages visited is displayed for the most relevant result. 
+Initially, the user enters a query of interest, much as one would ask a question. When the user submits the query, the query is broken down into constituent parts of who, what when, and where. From there, a relevant answer is produced to respond to the requested information.
+
+% Results: figure 2  
+\begin{figure}[t]
+\centering
+\includegraphics[width=85mm]{screen_result.eps}
+\caption{Results screen}
+\label{fig:screen_result}
+\end{figure}
+
+
+After typing in a query, the user is presented with two sections. First, the user is shown the query and how it was broken down during the form submission. Second, the user is presented with the relevant answer, the realm to which it belongs, and the sites in which the answer was found. If multiple answers are retrieved, they are sorted by relevance, with the most relevant answer displaying at the top of the list.
+
 
 
 \section{Future Work}
