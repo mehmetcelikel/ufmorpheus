@@ -8,17 +8,17 @@ Two types of ontologies are used by our system:
 \end{enumerate}
 For any particular ontological realm, the number of potential
 terms and their associated categories can be quite large.
-Construction of a realm ontology and the terms associated
+Manual construction of a realm ontology and the terms associated
 with its categories would be an extremely laborious task
-for any non-trivial realm. For example, the realm of automobiles (which
-we use for illustration in this paper) contains 
-over XXXX categories and XXXX terms. We were unable to find
-an appropriate ontology for this realm, so we constructed it
+for any non-trivial realm. For example, the realm of vehicles
+in our current ontology contains 32 categories and millions of terms.
+We were unable to find
+an existing ontology for this realm, so we constructed one
 using categories from the DBPedia \cite{Auer07dbpedia:a}.
 The primary benefit of using the DBPedia for this purpose is
 that not only does it supply a categorical heterarchy, but it
-also links to Wikipedia documents which provides us with a large
-realm-specific document corpus.
+also links to Wikipedia documents which provide us with a large
+realm-specific corpus.
 
 \subsection{Category Heterarchy} 
 
@@ -33,92 +33,59 @@ for matching SSQ ontologies that reference these realm ontologies.
 %Start with a collection of relevant categories 
 
 Once the semantic heterarchy is created, the next step is to create
-training data for the system. The task is then to grab the pages,
-build a corpus relating to a given category, and then compile the
-information in a meaningful way. The overall goal is to grab enough
-information to properly characterize a category while limiting the
+training data for the system. To do this, we extract words from the pages,
+thus building a corpus related to a given category.
+Finally, we have compiled enough information to properly characterize
+a category while limiting the
 amount of unnecessary content within the corpus. The problem with this
 approach is the page density varies greatly across the
-heterarchy. Each category within the DBpedia/Wikipedia heterarchy
+heterarchy. Each category within the DBpedia and Wikipedia heterarchy
 contains a set of information pages, P, corresponding to the concepts
 shared by the category. Since the categorical structure is a directed
 acyclic graph \cite{Suchanek07yago:a}, we use of a Markov Blanket
 \cite{Friedman97bayesiannetwork} to describe a particular
-category. Our assumption is that a node can be fully described by its
-ancestor, descendant, and spousal nodes (parent node of subcategory
-not equal to the category). While this does not completely solve the
+category. We hypothesize that the terms associated with a category
+can be found by identifying those terms associated with that category's
+ancestor, descendant, and spousal nodes (i.e., other parent nodes of a subcategory). While this does not completely solve the
 issue of a category residing in a sparse area of the graph, the amount
-of information that can be obtained per blanket is usually more
+of information that can be obtained per blanket is more
 helpful than per category.
 
-
-The subcategories of the category Automobiles (Driving, Traffic Law,
-Automobiles by Decade, and Auto Racing) can be seen as grabbing
-information specific to the category. The super categories (Road
-Vehicles) place the category in a higher perspective, abstractly
-describing basketball as a concept. The spousal categories
-(...Motor Sport, Individual Sport...) are an abstract description of
-the subcategories.
-
-
 Clustering the categories alone does not guarantee adequate corpus
-creation. Since the above model relies on the subcategories to
-describe specifics of a given category, the ideal situation would be
-that the subcategories have many more pages than the super categories
-and that there is a significant amount of information per page.  In
-the case of Wikipedia, there are an average of 25.7 pages per category
-\cite{1321474}. The assumption for collecting the training data is the
-more subcategory data we have, the more detailed our description of
-our category. Considering that there are many categories that have
-much more than 26 pages, we instituted a PlusOne mechanism to extract
+creation. Since our model relies on the subcategories to
+to provide terms associated with a given category, it will fail if
+the subcategories do not provide enough data to our corpus.
+For the purpose of gathering training data having more subcategory data
+yields a more representative collection of terms for that category. 
+The average number of pages per category in the Wikipedia is 25.7\cite{1321474}.
+We have found that this number of pages is insufficient to provide a representative collection of terms for a category.
+In order to gain more pages and expand the term base, we have used a
+PlusOne mechanism to extract
 extra information. This mechanism checks if a subcategory has an
-adequate number of pages α to fully describe its subtopic. We set this
-number to ten times the average, or 260. $Level$ represents how many
-extra levels we are to go down in the hierarchy, if
-necessary. SubjectSet is the overall set of all pages associated with
-the blanket structure along with any plusOne subjects obtained.
-
-\begin{lstlisting}[language=Python, frame=none, tabsize=2, caption=BlanketSubjectRetreival, label=BlanketSubjectRetreival, basicstyle=\small]
-def BlanketSubjectRetreival(blanket, maxLevel):
-	for category in blanket:
-		subjectSet.add(grabsubjects(category))
-		diff = afterSize - beforeSize
-		if diff <= a and category is subcategory:
-			PlusOneMechanism(category, maxLevel)
-	return subjectSet
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python, frame=none, tabsize=2, caption=PlusOneMechanism, label=PlusOneMechanism, basicstyle=\small]
-def PlusOneMechanism(category, level):
-	plusOneSet = grabPlusOneSubcategories(category)
-	for subcategory in plusOneSet:
-		subject.add(grabSubjects(subcategory))
-		diff = afterSize - beforeSize
-		if diff <= a and level > 0:
-			PlusOneMechanism(subcategory, level-1)
-
-
-\end{lstlisting}
+adequate number of pages to fully describe its subtopic.
+We have chosen this number to be approximately ten times the average
+number of Wikipedia pages per category, or 260.  If a cateogory
+does not contain the required number of pages, PlusOne continues to
+search another level deeper in the hierarchy until a sufficient
+number of pages has been reached.
 
 
 \subsection{Associating Terms with Categories}
 \label{sec:terms}
 %joir-dan
 
-The overall mechanism does not take into account the amount of
-information within each page, but generally that can be ignored when
-considering the size of the blanket corpus when we extract the text
-from the Wikipedia subject pages. Using this method on the category
-Automobiles, we can construct a corpus of 2255 subject pages and
-6,084,260 terms.
+Our approach to category corpus construction does not take into
+account the number of words contained within each page.
+However, we have found this method to be adequate to construct
+usable corpora. For example, when executed on the vehicle ontology,
+this method yields 2255 subject pages and a corpus containing
+1,691,727 unique terms and 6,084,260 total words.
 
-When a category's corpus is built, we then build our n-gram frequency
-distributions and store them in a database for the NLP processing. For
-the purpose of calculating term importance to a blanket, we aggregate
-the frequencies of all blankets and store this information as
-well. For this system, term importance refers to the prior probability
-of a category given an n-gram. We calculate this using Bayes Rule,
-since we can easily obtain the n-gram-category and n-gram-vocabulary
+After a category's corpus is built, we then build term frequency
+distributions and store them in a database for natural language processing.
+For this system, term importance refers to the prior probability
+of a category given a term. We calculate this using Bayes Rule,
+since we can easily obtain the term-category and term-corpus
 probabilities. The higher the probability, the more likely a term is
 referring to a category.
 
