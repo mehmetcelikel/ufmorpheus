@@ -58,45 +58,32 @@ data collection we plan to develop a model to support an unsupervised
 question resolution process.  This will increase the scalability and
 efficiency of the system.
 
-Because each QRM may be treated as a function, we plan on leveraging
+Because each QRM may be treated as a function, we plan to use
 previous work to allow new questions to be solved by connecting
 together several QRMs \cite{morpheus1, transformscout}.  This method
 would expand the types of queries that are answerable by the system.
 
-Currently, the category heterarchy generated from the DBpedia
-categories and our SSQ ontologies is stored in separate XML files. We
-are in the process of moving these ontologies into an efficient
-ontology database. Similarly, employing user input brings about the
+Employing user input brings about the
 likelihood that redundant SSQ ontological elements will be inserted
 into our ontology store. We are working on merging the similar SSQs
 [\ref{sec:ssq}] based on the SSQ realms and other ontological
 structural information so that we can remove the redundancy in the
-database.
+database.  Currently, the category heterarchy generated from the DBpedia
+categories and our SSQ ontologies is stored in separate XML files. We
+are in the process of moving these ontologies into an efficient
+ontology database.
 
-We cannot rely on the DBpedia categories and the associated Wikipedia
-pages to provide corpora for all our realms.  The DBpedia categories
+The DBpedia categories
 and the associated Wikipedia documents are insufficient to
 characterize the linguistic space of queries belonging to many
 different realms.  Reasonable prior probabilities for the names of
 musical groups within the category \emph{musical groups}, for example,
 will be significantly different from what would be manufactured by
 simply finding n-gram frequency within the related Wikipedia
-documents. We are investigating methods to identify categories within
-the deep web and to find new sources to construct \textit{weak} realms
-in our ontology hierarchy.
+documents.
 
 
-%% I may have misstated the statistics that are unique/repeats
-% need to clarify the statistics 
-%% Add language about how we 
-Researchers have stated that somewhere from 39 to 63 percent of web
-queries are unique \cite{1277770,331405,621942}.  We believe that a
-large percentage of the stated unique queries are in-fact related and
-parameterizable, meaning, several subsets of unique queries may be all
-related and may be answered using a single QRM.  It is difficult to
-discover this property between queries.  Previous work suggest
-techniques to find related queries but it will take new efficient
-methods to discover parameterizable queries.
+
 
 % Sort classes based on the prior 
 
@@ -104,9 +91,9 @@ methods to discover parameterizable queries.
 
 In this paper we provide a discussion on a new type of question
 answering system that uses previously answered user questions.  We
-described our method of modeling a users question answering process
-and how we are able to discover semantically similar queries.  The Morpheus system still has a lot of room for optimization.  However, we believe this new technique for question answering system will improve the exploration experience.
+described our method of modeling a user's question answering process
+and how we are able to discover semantically similar queries.  The Morpheus system provides many opportunities for optimization.  However, we believe this new technique for question answering system will improve the exploration experience.
 
 
-\section{Acknowledgements}
-Our thanks to Guillermo Cordero, and Nick Antonelli for thier assistance building this system. Additionally, we would like to thank NSF for their generous support of our project.
+\section{Acknowledgments}
+Our thanks to Guillermo Cordero, and Nick Antonelli for their assistance building this system. Additionally, we would like to thank NSF for their generous support of our project.
