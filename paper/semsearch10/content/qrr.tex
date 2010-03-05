@@ -34,21 +34,21 @@ subsequent stage in the extraction.  The QRR builds the completed user
 collection process into a QRM.  
 
 Conceptually, a QRM is the data structure that models the question
-answering process.  Each QRM contains an ontilogical realm, an SSQ,
+answering process.  Each QRM contains an ontological realm, an SSQ,
 and information to support the query answering process.  The realm may
 be one or more descriptive categories and is used for classification
 of the QRMs.  The SSQ describes the set of possible input and output
 categories from the associated natural language query.  The possible
 set of phrase inputs and outputs are grouped into contextual bins
 labeled \emph{who}, \emph{what}, \emph{when} and \emph{where}.  The
-ontilogical realm and the SSQ parameters act as a signature for the
+ontological realm and the SSQ parameters act as a signature for the
 QRM object, analogous to a function signature.  The ontological
 representation of the SSQ is described in section \ref{sec:ssq}.
 
 Additionally, the QRM contains representations for every page visited
 and the order of visitation.  For each page, we store the list of
 inputs to the URL such as form inputs and the possible outputs
-(highlighted portions of the webpage).  There is a mapping between the
+(highlighted portions of the web page).  There is a mapping between the
 SSQ inputs and outputs used on any page to the specific page input.
 Finally, there is a structure with mappings to the user inputs or
 outputs that are displayed to the user as answers.
