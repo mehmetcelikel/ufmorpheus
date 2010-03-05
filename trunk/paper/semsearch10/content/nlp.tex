@@ -3,10 +3,10 @@
 The first step in answering a user query is to determine what, in
 fact, is being asked.  Any system that supports user queries places
 some constraints on the required input.  These constraints can be
-relatively minimal (``Users must type their input on a keyboard in
-French.'') or quite constrained (``Users must constuct fully
-categorized semi-structured queries employing only those terms and
-categories supplied by our database.'')  Our initial goal in Morpheus
+relatively minimal ,``Users must type their input on a 104-key
+keyboard in English,'' or highly restrictive, ``Users must constuct
+fully categorized semi-structured queries employing only those terms and
+categories supplied by our database.''  Our initial goal in Morpheus
 is two-fold:
 
 \begin{enumerate}
@@ -18,16 +18,17 @@ is two-fold:
   methods.  
 \end{enumerate}
 
-At present, we can process English language questions posed in answer
-form.  This requires minimal structural transformation in order to
-represent the semantic information contained within the question.  We
+At present, we can process English language questions posed in
+\emph{answer form}, for example, ``The closest Ford dealer to the University
+of Florida is where?'' This requires minimal structural transformation in order
+to represent the semantic information contained within the question.  We
 translate these questions into semi-structured queries that associate
-English language terms and modifier phrases with contexts (\emph{who,
-  what, when, where})
+English language terms and modifier phrases with contexts.
 
 Input contexts of such a semi-structured query are generally given as
 terms (particular dates, names of cars, etc.) while output contexts
-are given as categories (tire type, tire size). Thus the inputs of the
+are given as descriptions of categories or contexts, i.e.,
+\emph{tire type, what date, where}. Thus the inputs of the
 user SSQ are uncategorized, while their outputs are categorized.  The
 SSQs associated with a QRM are fully categorized (as will be discussed
 in section \ref{sec:qrr}). To match a user SSQ to existing QRMs, we
