@@ -6,12 +6,12 @@ through a sequence of one or more web pages. Many of the accesses involve clicks
 
 Web interactions can be broken down into three types:
 \begin{enumerate}
-\item The user highlights text that is needed in the query or forms part of the answer.
+\item The user fills in and submits a web form.
 \item The user clicks a link.
-\item The user fills in and submits a web form. 
+\item The user highlights text that is needed in the query or forms part of the answer. 
 \end{enumerate}
 
-When a user submits a web form they are prompted for the classes of each of the form inputs. Here, class refers to categorization of data, e.g. name, date, etc. These classes allow the QRR to map the user's input SSQ tokens (which are also categorized) to their usage in a given form. For a clicked link, the QRR simply records the target url and nothing more. Finally, during the answer retrieval process when a user discovers all or part of the desired information on a web page, she highlights the text in question. This highlight allows the QRR to record the source of the query's answer. All information gathered during the recording process is saved in our data store. 
+When a users submit a web form they are prompted for the classes of each of the form inputs. Here, class refers to categorization of data, e.g. name, date, etc. These classes allow the QRR to map the user's input SSQ tokens (which are also categorized) to their usage in a given form. For a clicked link, the QRR simply records the target url and nothing more. Finally, during the answer retrieval process when a user discovers all or part of the desired information on a web page, she highlights the text in question. This highlight allows the QRR to record the source of the query's answer. All information gathered during the recording process is saved in our data store. 
 
 Any query answering process consists of a sequence of these transactions.
 Additionally, data collected for inputs and outputs may be found
@@ -20,9 +20,9 @@ collected during one stage of an extraction may be the input to a
 subsequent stage in the extraction.  The QRR builds the completed user
 collection process into a QRM.  
 
-Conceptually, a QRM is the data structure that models the question answering process.  Each QRMs contains an ontilogical realm, an SSQ, and information to support the query answering process.  The realm may be one or more descriptive categories and is used for is used for classification of the QRMs.  The SSQ describes the set of possible input categories and also output catgories from the associated natural language query.  The possible set of input phrase inputs and outputs are grouped in to contextual bins labeled \emph{who}, \emph{what}, \emph{when} and \emph{where}.  The ontilogical realm and the SSQ parameters act as a signature for the the QRM object, analogous to a function signature.   The ontologcal representation of the SSQ is described in section {{XXX}}.  
+Conceptually, a QRM is the data structure that models the question answering process.  Each QRM contains an ontilogical realm, an SSQ, and information to support the query answering process.  The realm may be one or more descriptive categories and is used for classification of the QRMs.  The SSQ describes the set of possible input and output categories from the associated natural language query.  The possible set of phrase inputs and outputs are grouped into contextual bins labeled \emph{who}, \emph{what}, \emph{when} and \emph{where}.  The ontilogical realm and the SSQ parameters act as a signature for the QRM object, analogous to a function signature.   The ontological representation of the SSQ is described in section {{XXX}}.  
 
-Additionally, the QRM contains representations for every page visited and the order of visitation.  For each page, we store the list of inputs to the URL such as form inputs and the possible outputs (highlight portions of the webpage).  There is a mapping between the SSQ the possible inputs user inputs or outputs used on any page to the specific page input.  Finally, there is a structure with mappings to the user inputs or outputs that are displayed to the user as answers.
+Additionally, the QRM contains representations for every page visited and the order of visitation.  For each page, we store the list of inputs to the URL such as form inputs and the possible outputs (highlighted portions of the webpage).  There is a mapping between the SSQ inputs and outputs used on any page to the specific page input.  Finally, there is a structure with mappings to the user inputs or outputs that are displayed to the user as answers.
 
 The following is a mathematical description of the information collected for user web interactions.
 
