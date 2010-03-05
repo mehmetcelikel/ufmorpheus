@@ -36,8 +36,7 @@ property ranges for determining SSQ similarity. Once we have the similarity meas
 \subsection{Class Divergence}
 \label{sec:ctd}
 We employ a measure of compatibility, which we call \textit{class
-  divergence}, between a source class and a target class using the
-\textit{topological structure} of the context classes in the
+  divergence}, between a source class\footnote{We use the term \textit{class} when dealing with our ontological structure, however the terms class and \textit{category} are analogous.} and a target class using the \textit{topological structure} of the context classes in the
 ontology. We write $S \prec T$ for the reflexive transitive closure of
 the superclass relation. Let $d(P,Q)$ represent the hop distance in
 the directed ontology inheritance graph from $P$ to $Q$. The
@@ -51,13 +50,13 @@ is defined as follows:
 \begin{equation}
 d_{class}(S, T) = \begin{cases}
 0 & if S.{Uri} \equiv T.{Uri}\\
-d(S, T)/3h & if S \prec T\\
+d(S, T)/(3h) & if S \prec T\\
 1 & if T \prec S\\
-(d(S,root) + d(S,C) \\ \ \ \ \ + d(T,C))/3h & otherwise
+(d(S,root) + d(S,C) \\ \ \ \ \ + d(T,C))/(3h) & otherwise
 \end{cases}
 \end{equation}
 
-where $h$ is three times the height of the ontology tree.
+\noindent where $h$ is the height of the ontology tree.
 
 Note, if $S \prec T$ and $S \not\prec Q$ then $d_{class}(S,T) <
 d_{class}(S,Q)$, that is, the divergence of a source class to a target
