@@ -1,26 +1,20 @@
 \section{Results}
 % Walk through of example query
 
-% Results: figure 1
-
+% Results: figure 1  
 \begin{figure}[t]
 \centering
-\setlength\fboxsep{5pt}
-\setlength\fboxrule{0.5pt}
-\fbox{\includegraphics[width=85mm]{screen_intro.eps}}
+\includegraphics[width=85mm]{screen_intro.eps}
 \caption{Introductory screen}
 \label{fig:screen_intro}
 \end{figure}
 
 Initially, the user enters a query of interest, much as one would ask a question. When the user submits the query, the query is broken down into constituent parts of who, what when, and where. From there, a relevant answer is produced to respond to the requested information.
 
-% Results: figure 2
-
+% Results: figure 2  
 \begin{figure}[t]
 \centering
-\setlength\fboxsep{5pt}
-\setlength\fboxrule{0.5pt}
-\fbox{\includegraphics[width=85mm]{screen_result.eps}}
+\includegraphics[width=85mm]{screen_result.eps}
 \caption{Results screen}
 \label{fig:screen_result}
 \end{figure}
@@ -29,6 +23,21 @@ Initially, the user enters a query of interest, much as one would ask a question
 After execution, the user is presented with a list of relevant answers and a depiction of how the query was parsed. In the above example, the query about tire size was executed and the most relevant result has been returned and displayed. 
 Furthermore, the sequence of pages visited during execution are displayed as well. 
 
+
+\begin{center}
+  \begin{tabular}{ | l | l | c | r | }
+    \hline
+    Category & Prior & Likelihood & Posterior \\ \hline
+    Automobiles & 0.59 & 3.76e-06 & 0.01 \\ 
+    Motorcycles & 0.13 & 4.30e-05 & 0.95 \\
+    Internet search engines & 0.16 & 6.29e-07 & 0.003 \\ 
+    Lists of countries & 0.06 & 3.08e-06 & 0.01 \\
+    Tires & 0.05 & 5.40e-06 & 0.03 \\
+    \hline
+
+  \end{tabular}
+   
+\end{center}
 
 
 \section{Future Work}
