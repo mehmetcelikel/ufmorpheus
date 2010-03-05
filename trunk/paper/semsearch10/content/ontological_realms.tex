@@ -22,11 +22,11 @@ realm-specific document corpus.
 
 \subsection{Category Heterarchy} 
 
-To support our process, we map DBPedia categories into classes in our realm ontology with the \textit{superclass} and \textit{subclass} relationships built using the DBPedia properties \textit{broader} and \textit{narrower}. By using OWL, we can exploit the OWL API for matching SSQ ontologies that reference these realm ontologies.
+To support our process, we map DBPedia categories into classes in our realm ontology with the \textit{superclass} and \textit{subclass} relationships built using the DBPedia properties \textit{broader} and \textit{narrower}. This  semantic heterarchy can be easily represented using the OWL ontology and by using OWL, we can exploit the OWL API for matching SSQ ontologies that reference these realm ontologies.
 
 %Start with a collection of relevant categories 
 
-Once the semantic hierarchy is created, the next step is to create
+Once the semantic heterarchy is created, the next step is to create
 training data for the system. The task is then to grab the pages,
 build a corpus relating to a given category, and then compile the
 information in a meaningful way. The overall goal is to grab enough
