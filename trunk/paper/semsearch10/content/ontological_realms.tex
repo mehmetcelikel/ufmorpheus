@@ -2,16 +2,16 @@
 Two types of ontologies are used by our system:
 \begin{enumerate}
 \item Realm ontologies, comprising a heterarchy of categories that
-  characterize terms that can appear in queries.
-\item SSQ ontologies, used to describe the form of particular
+  characterize terms appearing in queries.
+\item SSQ ontologies, describing the form of particular
   realm-specific queries.
 \end{enumerate}
 For any particular ontological realm, the number of potential
 terms and their associated categories can be quite large.
 Construction of a realm ontology and the terms associated
 with its categories would be an extremely laborious task
-for any non-trivial realm. The realm of automobiles (which
-we use for illustration in this paper) contains, for example,
+for any non-trivial realm. For example, the realm of automobiles (which
+we use for illustration in this paper) contains 
 over XXXX categories and XXXX terms. We were unable to find
 an appropriate ontology for this realm, so we constructed it
 using categories from the DBPedia \cite{Auer07dbpedia:a}.
@@ -22,7 +22,7 @@ realm-specific document corpus.
 
 \subsection{Category Heterarchy} 
 
-To support our process, we map DBPedia categories into classes in our realm ontology with the \textit{superclass/subclass} relationships built using DBPedia properties \textit{broader/narrower}. By using OWL, we can exploit the OWL API for matching SSQ ontologies that reference these realm ontologies.
+To support our process, we map DBPedia categories into classes in our realm ontology with the \textit{superclass} and \textit{subclass} relationships built using the DBPedia properties \textit{broader} and \textit{narrower}. By using OWL, we can exploit the OWL API for matching SSQ ontologies that reference these realm ontologies.
 
 %Start with a collection of relevant categories 
 
@@ -33,12 +33,9 @@ information in a meaningful way. The overall goal is to grab enough
 information to properly characterize a category while limiting the
 amount of unnecessary content within the corpus. The problem with this
 approach is the page density varies greatly across the
-heterarchy. Each category within the DBpedia/ Wikipedia heterarchy
-contains a set of information pages, P, that correspond to concepts
-that share said category. Considering that the categorical structure
-is a directed acyclic graph \cite{Suchanek07yago:a}, we consider the
-use of a Markov Blanket \cite{Friedman97bayesiannetwork} in describing
-a particular category. The category's that The assumption is that a
+heterarchy. Each category within the DBpedia/Wikipedia heterarchy
+contains a set of information pages, P, corresponding to the concepts shared by the category. Since the categorical structure is a directed acyclic graph \cite{Suchanek07yago:a}, we use of a Markov Blanket \cite{Friedman97bayesiannetwork} to describe
+a particular category. Our assumption is that a
 node can be fully described by its ancestor, descendant, and spousal
 nodes (parent node of subcategory not equal to the category). While
 this does not completely solve the issue of a category residing in a
@@ -46,8 +43,8 @@ sparse area of the graph, the amount of information that can be
 obtained per blanket is usually more helpful than per category.
 
 
-The subcategories of the category Automobiles (… Driving, Traffic Law,
-Automobiles by Decade, Auto Racing …) can be seen as grabbing
+The subcategories of the category Automobiles (Driving, Traffic Law,
+Automobiles by Decade, and Auto Racing) can be seen as grabbing
 information specific to the category. The super categories (Road
 Vehicles) place the category in a higher perspective, abstractly
 describing basketball as a concept. The spousal categories
