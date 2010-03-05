@@ -1,7 +1,17 @@
 \begin{abstract}
-- It is difficult to answer questions that change over time
-- However, if the method of answering the question can be realized, the question can be easily answered
-- We are building a system that supports a learning how to answer particular questions
-- We can answer questions that are semantically similar to our store of questions
-- We do this by building a semantic library ...
+The Morpheus question answering system uses deep web search to answer
+user queries. Queries are represented as OWL ontologies that reference
+categories within specific ontological realms.
+The system answers questions by using methods identified in prior
+successful searches answering similar queries.
+Stored methods are ranked based on their ontological similarity to the
+question being answered.
+The similarity measure depends on finding the distance between
+ontological categories associated with their search terms.
+The DBpedia and Wikipedia provide information we use to identify the likely
+categories associated with those terms.
+Finally, we replay appropriately re-parameterized relevant prior searches
+to construct possible answers.
+The paper describes this entire process with emphasis on the matching of
+user queries to stored answering methods.
 \end{abstract}
