@@ -51,14 +51,13 @@ is defined as follows:
 \begin{equation}
 d_{class}(S, T) = \begin{cases}
 0 & if S.{Uri} \equiv T.{Uri}\\
-d(S, T) & if S \prec T\\
+d(S, T)/3h & if S \prec T\\
 1 & if T \prec S\\
-d(S,root) \\+ d(S,C) + d(T,C) & otherwise
+(d(S,root) + d(S,C) \\ \ \ \ \ + d(T,C))/3h & otherwise
 \end{cases}
 \end{equation}
 
-We normalize $d_{class}(S, T)$ by dividing by three times the height
-of the ontology tree.
+where $h$ is three times the height of the ontology tree.
 
 Note, if $S \prec T$ and $S \not\prec Q$ then $d_{class}(S,T) <
 d_{class}(S,Q)$, that is, the divergence of a source class to a target
@@ -97,12 +96,14 @@ divergence \textit{d(Automotive Industry, root)} is 32 that is calculated from t
 \subsection{SSQ Ontology Matching}
 \label{sec:oqom}
 
-We use class divergence to calculate the relevance between a new 
-SSQ and a SSQ associated with a QRM in the store.  Each SSQ will have four input classes, four output classes, and one realm.  We refer to the
+We use class divergence to calculate the relevance between a new SSQ
+and a SSQ associated with a QRM in the store.  Each SSQ will have four
+input classes, four output classes, and one realm.  We refer to the
 sequence of these classes $\langle \Upsilon_1, ..., \Upsilon_4,
 \Omega_1, ..., \Omega_4, R \rangle$ as the signature of an SSQ. If an
 input or output class is unspecified in the query, it is associated
-with the class $bottom$, which has no subclasses or individuals.
+with the class $\perp$, which is a subclass of every other class has
+no subclasses or individuals.
 
 The relevance of QRM $Q$ with signature $\langle \Upsilon_{Q_1}, ...,
 \Upsilon_{Q_4}, \\\Omega_{Q_1}, ... , \Omega_{Q_4}, R_Q\rangle$ to SSQ

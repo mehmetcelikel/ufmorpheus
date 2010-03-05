@@ -22,7 +22,13 @@ realm-specific document corpus.
 
 \subsection{Category Heterarchy} 
 
-To support our process, we map DBPedia categories into classes in our realm ontology with the \textit{superclass} and \textit{subclass} relationships built using the DBPedia properties \textit{broader} and \textit{narrower}. This  semantic heterarchy can be easily represented using the OWL ontology and by using OWL, we can exploit the OWL API for matching SSQ ontologies that reference these realm ontologies.
+To support our process, we map DBPedia categories into classes in our
+realm ontology with the \textit{superclass} and \textit{subclass}
+relationships built using the DBPedia properties \textit{broader} and
+\textit{narrower}. This semantic heterarchy can be easily represented
+using the OWL ontology and by using OWL, we can exploit the OWL API
+for matching SSQ ontologies that reference these realm ontologies.
+
 
 %Start with a collection of relevant categories 
 
@@ -34,13 +40,16 @@ information to properly characterize a category while limiting the
 amount of unnecessary content within the corpus. The problem with this
 approach is the page density varies greatly across the
 heterarchy. Each category within the DBpedia/Wikipedia heterarchy
-contains a set of information pages, P, corresponding to the concepts shared by the category. Since the categorical structure is a directed acyclic graph \cite{Suchanek07yago:a}, we use of a Markov Blanket \cite{Friedman97bayesiannetwork} to describe
-a particular category. Our assumption is that a
-node can be fully described by its ancestor, descendant, and spousal
-nodes (parent node of subcategory not equal to the category). While
-this does not completely solve the issue of a category residing in a
-sparse area of the graph, the amount of information that can be
-obtained per blanket is usually more helpful than per category.
+contains a set of information pages, P, corresponding to the concepts
+shared by the category. Since the categorical structure is a directed
+acyclic graph \cite{Suchanek07yago:a}, we use of a Markov Blanket
+\cite{Friedman97bayesiannetwork} to describe a particular
+category. Our assumption is that a node can be fully described by its
+ancestor, descendant, and spousal nodes (parent node of subcategory
+not equal to the category). While this does not completely solve the
+issue of a category residing in a sparse area of the graph, the amount
+of information that can be obtained per blanket is usually more
+helpful than per category.
 
 
 The subcategories of the category Automobiles (Driving, Traffic Law,
@@ -93,6 +102,7 @@ def PlusOneMechanism(category, level):
 
 
 \subsection{Associating Terms with Categories}
+\label{sec:terms}
 %joir-dan
 
 The overall mechanism does not take into account the amount of

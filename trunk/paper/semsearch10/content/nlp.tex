@@ -1,9 +1,36 @@
+\section{Natuarl Language Queries}
 % Joir-dan stuff
+The first step in answering a user query is to determine what, in
+fact, is being asked.  Any system that supports user queries places
+some constraints on the required input.  These constraints can be
+relatively minimal (``Users must type their input on a keyboard in
+French.'') or quite constrained (``Users must constuct fully
+categorized semi-structured queries employing only those terms and
+categories supplied by our database.'')  Our initial goal in Morpheus
+is two-fold:
 
-When we have completed our Wikipedia corpora from all the blankets in the category hierarchy, our system needs to make sense of the data for execution. The learning process involves the calculation of two n-gram frequency distributions: an n-gram/vocabulary distribution and an n-gram/category distribution. The first value is the count of the individual n-grams in the combined vocabulary of all corpora. The second value is the count of the individual n-grams within a category's blanket. The categories corpora reflect one long context per category, instead of breaking up sentences into different contexts. The idea behind this is that Wikipedia pages are already grouped into categories, that we can assume are related to the topics of each sentence within the corpus. We store distributions, rather than priors, primarily because if at anytime a blanket vocabulary seems inadequate, we can append terms from other sources to both distribution types and recalculate our values. We can simply calculate probabilities and store these separately for the execution of our natural language query engine. 
+\begin{enumerate}
+\item Implement an initial natural language interface that allows
+  users to make queries in a loosely constrained English language
+  subset.
+\item Provide a framework that can support a robust
+  interface that employs statistical language processing
+  methods.  
+\end{enumerate}
 
-Our goal is to choose that category for use in the SSQ structure. This process requires the tagging and parsing of our natural language query, the extraction of key parts of speech, such as adjectives and nouns, and then using n-gram priors to calculate the appropriate category associated with each term. 
+At present, we can process English language questions posed in answer
+form.  This requires minimal structural transformation in order to
+represent the semantic information contained within the question.  We
+translate these questions into semi-structured queries that associate
+English language terms and modifier phrases with contexts (\emph{who,
+  what, when, where})
 
-Picking out these terms requires knowledge of the structure of the queThe ideal situation would be that we could recognize question patterns, and decide where key information is within the question based upon a given pattern.stion being passed to the system.  Currently, we only work with questions in an answer form, which means there is little to no transformation of the structure, to go from a question to an answer.
-
-Consider the example question: "A 1997 Toyota Corolla needs what size tires?" The answer is: "A 1997 Toyota Corolla needs 17 inch tires."
+Input contexts of such a semi-structured query are generally given as
+terms (particular dates, names of cars, etc.) while output contexts
+are given as categories (tire type, tire size). Thus the inputs of the
+user SSQ are uncategorized, while their outputs are categorized.  The
+SSQs associated with a QRM are fully categorized (as will be discussed
+in section \ref{sec:qrr}). To match a user SSQ to existing QRMs, we
+must be able to match their SSQ input and output contexts.  This
+requires matching the input terms to their categories, a process we
+discuss in section \ref{sec:terms}.

@@ -2,16 +2,29 @@
 \label{sec:qrr}
 % Chris
 Answering a question using the deep web requires one to navigate
-through a sequence of one or more web pages. Many of the accesses involve clicks through web forms or links to resulting pages.  We have developed a model that represents the various actions a user may carry out during this process.
+through a sequence of one or more web pages. Many of the accesses
+involve clicks through web forms or links to resulting pages.  We have
+developed a model that represents the various actions a user may carry
+out during this process.
 
 Web interactions can be broken down into three types:
 \begin{enumerate}
 \item The user fills in and submits a web form.
 \item The user clicks a link.
-\item The user highlights text that is needed in the query or forms part of the answer. 
+\item The user highlights text that is needed in the query or forms
+  part of the answer.
 \end{enumerate}
 
-When a users submit a web form they are prompted for the classes of each of the form inputs. Here, class refers to categorization of data, e.g. name, date, etc. These classes allow the QRR to map the user's input SSQ tokens (which are also categorized) to their usage in a given form. For a clicked link, the QRR simply records the target url and nothing more. Finally, during the answer retrieval process when a user discovers all or part of the desired information on a web page, she highlights the text in question. This highlight allows the QRR to record the source of the query's answer. All information gathered during the recording process is saved in our data store. 
+When a users submit a web form they are prompted for the classes of
+each of the form inputs. Here, class refers to categorization of data,
+e.g. name, date, etc. These classes allow the QRR to map the user's
+input SSQ tokens (which are also categorized) to their usage in a
+given form. For a clicked link, the QRR simply records the target url
+and nothing more. Finally, during the answer retrieval process when a
+user discovers all or part of the desired information on a web page,
+she highlights the text in question. This highlight allows the QRR to
+record the source of the query's answer. All information gathered
+during the recording process is saved in our data store.
 
 Any query answering process consists of a sequence of these transactions.
 Additionally, data collected for inputs and outputs may be found
@@ -20,27 +33,50 @@ collected during one stage of an extraction may be the input to a
 subsequent stage in the extraction.  The QRR builds the completed user
 collection process into a QRM.  
 
-Conceptually, a QRM is the data structure that models the question answering process.  Each QRM contains an ontilogical realm, an SSQ, and information to support the query answering process.  The realm may be one or more descriptive categories and is used for classification of the QRMs.  The SSQ describes the set of possible input and output categories from the associated natural language query.  The possible set of phrase inputs and outputs are grouped into contextual bins labeled \emph{who}, \emph{what}, \emph{when} and \emph{where}.  The ontilogical realm and the SSQ parameters act as a signature for the QRM object, analogous to a function signature.   The ontological representation of the SSQ is described in section {{XXX}}.  
+Conceptually, a QRM is the data structure that models the question
+answering process.  Each QRM contains an ontilogical realm, an SSQ,
+and information to support the query answering process.  The realm may
+be one or more descriptive categories and is used for classification
+of the QRMs.  The SSQ describes the set of possible input and output
+categories from the associated natural language query.  The possible
+set of phrase inputs and outputs are grouped into contextual bins
+labeled \emph{who}, \emph{what}, \emph{when} and \emph{where}.  The
+ontilogical realm and the SSQ parameters act as a signature for the
+QRM object, analogous to a function signature.  The ontological
+representation of the SSQ is described in section \ref{sec:ssq}.
 
-Additionally, the QRM contains representations for every page visited and the order of visitation.  For each page, we store the list of inputs to the URL such as form inputs and the possible outputs (highlighted portions of the webpage).  There is a mapping between the SSQ inputs and outputs used on any page to the specific page input.  Finally, there is a structure with mappings to the user inputs or outputs that are displayed to the user as answers.
+Additionally, the QRM contains representations for every page visited
+and the order of visitation.  For each page, we store the list of
+inputs to the URL such as form inputs and the possible outputs
+(highlighted portions of the webpage).  There is a mapping between the
+SSQ inputs and outputs used on any page to the specific page input.
+Finally, there is a structure with mappings to the user inputs or
+outputs that are displayed to the user as answers.
 
-The following is a mathematical description of the information collected for user web interactions.
+The following is a mathematical description of the information
+collected for user web interactions.
 
-A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ \footnote{It is important to not that both $\Upsilon$ and $\Omega$ make up the SSQ structure.} such that:
+A QRM is a 4-tuple $Z = \left< \Sigma, P, M, A
+\right>$ with the following structure:
 
 \begin{enumerate}
 %%%%%%%%%%%%%%% Separate the first 2 points as descriptions of the SSQ. --------------
-\item $\Upsilon$ is the sequence of input categories $\left<
-  \Upsilon_{1}, \Upsilon_{2}, \Upsilon_{3}, \Upsilon_{4} \right>$
-  where $\Upsilon_{1}$ represents the \emph{who} context of the
-  associated query, $\Upsilon_{2}$ represents the \emph{what} context,
-  $\Upsilon_{3}$ represents the \emph{when} context, and
+
+\item $\Sigma = ( R, \Upsilon, \Omega )$ is the SSQ associated with the QRM.
+
+  $R$ is the ontological realm associated with the QRM. 
+
+  $\Upsilon$ is the sequence of input categories drawn from $R$
+  $\left< \Upsilon_{1}, \Upsilon_{2}, \Upsilon_{3}, \Upsilon_{4}
+  \right>$ where $\Upsilon_{1}$ represents the \emph{who} context of
+  the associated query, $\Upsilon_{2}$ represents the \emph{what}
+  context, $\Upsilon_{3}$ represents the \emph{when} context, and
   $\Upsilon_{4}$ represents the \emph{where} context.
 
-\item $\Omega$ is the sequence of output categories $\left<\Omega_{1},
-  \Omega_{2}, \Omega_{3}, \Omega_{4}\right>$ where $\Omega_{1}$
-  represents the \emph{who} context of the associated query,
-  $\Omega_{2}$ represents the \emph{what} context, $\Omega_{3}$
+  $\Omega$ is the sequence of output categories drawn from $R$
+  $\left<\Omega_{1}, \Omega_{2}, \Omega_{3}, \Omega_{4}\right>$ where
+  $\Omega_{1}$ represents the \emph{who} context of the associated
+  query, $\Omega_{2}$ represents the \emph{what} context, $\Omega_{3}$
   represents the \emph{when} context, and $\Omega_{4}$ represents the
   \emph{where} context.
 
@@ -70,8 +106,6 @@ A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ \footnote{I
 
 \item $M$ is a map between $\Upsilon$, $K$, $\Omega$ to page list inputs $I_h$.
 
-\item $R$ is an ontological realm. 
-
 \item $A$ is the sequence of outputs from $\Upsilon$, $K$, and
   $\Omega$ representing the answer.
 
@@ -81,20 +115,28 @@ A QRM is a 5-tuple $Z = \left< \Upsilon, \Omega, P, M, R, A \right>$ \footnote{I
 
 %\subsection{Generalization}
 % Christan
+
 The response pages created by querying web forms are dynamically
-generated with a templated structure. This generalization per page is
-done using the GenPath algorithm developed by Badica et
-al. \cite{Badica06}. Additionally, the community may be able to answer
-a particular SSQ using many different page interactions. Therefore, we
-use a method of generalizing extraction path to a result across
-pages. This method removes unnecessary page interactions and finds the
-shortest path to the result pages.
+generated with a template structure. This template structure contains
+XPath [!!!!!need reference] selectors to access particular web page
+elements.  One could employ XPath selectors that exactly match the
+selection paths to the web page elements accessed by the guide during
+query recording, however, using such specific paths fails to provide
+robust performance because web sites are highly susceptible to
+structural changes \cite{TanZMG07}.  To overcome this difficulty, we
+generalize these XPaths using the \emph{GenPath algorithm} developed by
+Badica et al. \cite{Badica06}.
 
-Websites wrapped by a system such as this are highly susceptible to
-structural changes \cite{TanZMG07}. Generalizing the extraction paths
-helps overcome small structural changes. If a website changes to the
-point where a QRM is no longer useful, the QRM is not considered
-fresh. User ratings of QRM freshness can be employed in the SSQ matching
-process detailed in Section \ref{sec:ssq}.
+Generalizing the extraction paths helps overcome small structural
+changes. However, If a website changes to the point where a QRM is no
+longer useful, the QRM is not considered fresh. User ratings of QRM
+freshness can be employed in the SSQ matching process detailed in
+Section \ref{sec:oqom}.
 
+In many cases, the same information may be found by a number of guides
+from the same deep web source, but by a different navigation path.
+Therefore, we also employ a method of generalizing extraction paths
+across page interactions. By doing this, one can remove unnecessary
+page interactions and finds the most effective navigation path
+necessary to produce a result.
 %-------------------------------------------------------------------------------

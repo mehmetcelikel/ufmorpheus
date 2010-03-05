@@ -3,26 +3,63 @@
 
 \section{Future Work}
 
-The greatest limitation to our current work is the diversity of the QRR.  In order to efficiently answer new user questions the systems needs a large amount of user annotated queries.  However, a significant number of user interactions is required to understand the answer retrieval process.  By continuing to study the methods of user data collection we plan to develop a model to support an unsupervised question resolution process.  This will increase the scalability and efficiency of the system.
+The greatest limitation to our current work is the diversity of the
+QRR.  In order to efficiently answer new user questions the systems
+needs a large amount of user annotated queries.  However, a
+significant number of user interactions is required to understand the
+answer retrieval process.  By continuing to study the methods of user
+data collection we plan to develop a model to support an unsupervised
+question resolution process.  This will increase the scalability and
+efficiency of the system.
 
-Because each QRM may be treated as a function, we plan on leveraging previous work to allow new questions to be solved by connecting together several QRMs \cite{morpheus1, transformscout}.  This method would expand the types of queries that are answerable by the system.
+Because each QRM may be treated as a function, we plan on leveraging
+previous work to allow new questions to be solved by connecting
+together several QRMs \cite{morpheus1, transformscout}.  This method
+would expand the types of queries that are answerable by the system.
 
-Currently, the category heterarchy generated from the DBpedia categories and our SSQ ontologies is stored in separate XML files. We are in the process of moving these ontologies into an efficient ontology database. Similarly, employing user input brings about the likelihood that redundant SSQ ontological elements will be inserted into our ontology store. We are working on merging the similar SSQs [\ref{sec:ssq}] based on the SSQ realms and other ontological structural information so that we can remove the redundancy in the database.
+Currently, the category heterarchy generated from the DBpedia
+categories and our SSQ ontologies is stored in separate XML files. We
+are in the process of moving these ontologies into an efficient
+ontology database. Similarly, employing user input brings about the
+likelihood that redundant SSQ ontological elements will be inserted
+into our ontology store. We are working on merging the similar SSQs
+[\ref{sec:ssq}] based on the SSQ realms and other ontological
+structural information so that we can remove the redundancy in the
+database.
 
-In addition, we cannot fully depend on the DBpedia categories, since the relevant data available in DBpedia store is insufficient to represent the real world queries belonging to all realms. [e.g. musical bands]. We are planning to define new categories from the deep web [or find out new sources to fill those \textit{weak} realms] in our ontology hierarchy.      
+We cannot rely on the DBpedia categories and the associated Wikipedia
+pages to provide corpora for all our realms.  The categories in
+DBpedia store and documents in the Wikipedia are insufficient to
+characterize the linguistic space of queries belonging to many
+different realms.  Reasonable prior probabilities for the names of
+musical groups within the category \emph{musical groups}, for example,
+will be significantly different from what would be manufactured by
+simply finding n-gram frequency within the related Wikipedia
+documents. We are investigating methods to identify categories within
+the deep web and to find new sources to construct \textit{weak} realms
+in our ontology hierarchy.
 
 
 %% I may have misstated the statistics that are unique/repeats
 % need to clarify the statistics 
 %% Add language about how we 
-Researchers have stated 39, 57, and 63 percent of web queries are unique \cite{1277770,331405,621942}.  We believe that a large percentage of the stated unique queries are in-fact related and parameterizable, meaning, several subsets of unique queries may be all related and may be answered using a single QRM.  It is difficult to discover this property between queries.  Previous work suggest techniques to find related queries but it will take new efficient methods to discover parameterizable queries.
+Researchers have stated that somewhere from 39 to 63 percent of web
+queries are unique \cite{1277770,331405,621942}.  We believe that a
+large percentage of the stated unique queries are in-fact related and
+parameterizable, meaning, several subsets of unique queries may be all
+related and may be answered using a single QRM.  It is difficult to
+discover this property between queries.  Previous work suggest
+techniques to find related queries but it will take new efficient
+methods to discover parameterizable queries.
 
 % Sort classes based on the prior 
 
 \section{Conclusion}
 
-In this paper we provide a discussion on a new type of question answering system that uses previously answered user questions.  We described our method of modeling a users question answering process and how we are able to discover semantically similar queries.
+In this paper we provide a discussion on a new type of question
+answering system that uses previously answered user questions.  We
+described our method of modeling a users question answering process
+and how we are able to discover semantically similar queries.
 
-MORE
 
 \section{Acknowledgements}
