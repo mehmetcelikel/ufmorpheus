@@ -19,7 +19,7 @@ When a users submit a web form they are prompted for the classes of
 each of the form inputs. Here, class refers to categorization of data,
 e.g. name, date, etc. These classes allow the QRR to map the user's
 input SSQ tokens (which are also categorized) to their usage in a
-given form. For a clicked link, the QRR simply records the target url
+given form. For a clicked link, the QRR simply records the target URL
 and nothing more. Finally, during the answer retrieval process when a
 user discovers all or part of the desired information on a web page,
 she highlights the text in question. This highlight allows the QRR to
@@ -60,7 +60,6 @@ A QRM is a 4-tuple $Z = \left< \Sigma, P, M, A
 \right>$ with the following structure:
 
 \begin{enumerate}
-%%%%%%%%%%%%%%% Separate the first 2 points as descriptions of the SSQ. --------------
 
 \item $\Sigma = ( R, \Upsilon, \Omega )$ is the SSQ associated with the QRM.
 
@@ -116,10 +115,9 @@ A QRM is a 4-tuple $Z = \left< \Sigma, P, M, A
 %\subsection{Generalization}
 % Christan
 
-The response pages created by querying web forms are dynamically
-generated with a template structure. This template structure contains
-XPath [!!!!!need reference] selectors to access particular web page
-elements.  One could employ XPath selectors that exactly match the
+After executing web forms, several result pages are dynamically created but oftentimes has a fixed structure.
+Using the fixed structure property,  XPath allow simple selection of the resulting page element \cite{xpath_leashed}.
+One could employ XPath selectors that exactly match the
 selection paths to the web page elements accessed by the guide during
 query recording, however, using such specific paths fails to provide
 robust performance because web sites are highly susceptible to
