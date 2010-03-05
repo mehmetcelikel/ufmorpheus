@@ -1,15 +1,18 @@
-\section{Results}
+\section{Sample Execution}
 % Walk through of example query
 
 % Results: figure 1  
 \begin{figure}[t]
 \centering
 \includegraphics[width=85mm]{screen_intro.eps}
-\caption{Introductory screen}
+\caption{Morpheus input screen}
 \label{fig:screen_intro}
 \end{figure}
 
-Initially, the user enters a query of interest, much as one would ask a question. When the user submits the query, the query is broken down into constituent parts of who, what when, and where. From there, a relevant answer is produced to respond to the requested information.
+Figure \ref{fig:screen_intro} shows the Morpheus input screen, which
+allows a user to ask a question.  The user enters a natural language
+question and the system follows the question answering process outlined
+in this document.
 
 % Results: figure 2  
 \begin{figure}[t]
@@ -20,25 +23,29 @@ Initially, the user enters a query of interest, much as one would ask a question
 \end{figure}
 
 
-After execution, the user is presented with a list of relevant answers and a depiction of how the query was parsed. In the above example, the query about tire size was executed and the most relevant result has been returned and displayed. 
-Furthermore, the sequence of pages visited during execution are displayed as well. 
+Figure \ref{fig:screen_result} shows the results of answering the question ``A 1997 Toyota Camry V6 needs what size tire?''
+In response to this question, the user is presented with a list of relevant answers and a depiction of how the query was parsed. In the above example, the query about tire size was executed and the most relevant result has been returned and displayed. 
+Furthermore, the sequence of pages visited during execution is displayed as well. 
 
-
-\begin{center}
+Categories are assigned to the query's SSQ contexts using the method described in section \ref{sec:terms}. The prior probabilities for a variety of categories
+together with the likelihood and posterior probabilities for the term \emph{Camry}, e.g. $p(Camry | Automobiles)$ and $p(Automobiles | Camry )$, are as
+shown in Table \ref{tab:prob}.
+The QRM used to answer this query is selected based on the SSQ matching
+process described in section \ref{sec:oqom}.
+\begin{table}
   \begin{tabular}{ | l | l | c | r | }
     \hline
     Category & Prior & Likelihood & Posterior \\ \hline
-    Automobiles & 0.59 & 3.76e-06 & 0.01 \\ 
-    Motorcycles & 0.13 & 4.30e-05 & 0.95 \\
-    Internet search engines & 0.16 & 6.29e-07 & 0.003 \\ 
-    Lists of countries & 0.06 & 3.08e-06 & 0.01 \\
-    Tires & 0.05 & 5.40e-06 & 0.03 \\
+    Automobiles & 0.59 & 3.48e-05 & 0.96 \\ 
+    Motorcycles & 0.13 & 2.26e-06 & 0.01 \\
+    Internet search engines & 0.16 & 6.29e-07 & 0.004 \\ 
+    Lists of countries & 0.06 & 1.50e-06 & 0.01 \\
+    Tires & 0.05 & 3.60e-06 & 0.02 \\
     \hline
-
   \end{tabular}
-   
-\end{center}
-
+\caption{Term/Category Probabilities}
+\label{tab:prob}
+\end{table}
 
 \section{Future Work}
 
