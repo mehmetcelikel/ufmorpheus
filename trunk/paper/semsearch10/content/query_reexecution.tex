@@ -8,14 +8,18 @@ human browsing the web, that is, clicking buttons to follow links,
 submitting forms, highlighting data, cutting and pasting text, and
 constructing an answer in the form of a text string.
 
-At present, the GET form submission method is used.  There is greater
-complexity in dealing with web forms than with links. For a given
-form, there may be text fields, drop-down boxes, and among other components.
+There is greater complexity in dealing with web forms than with links.
+At present, the GET form submission method is used. This means that in preparation to 
+submit a form, the Morpheus System builds a querystring consisting of name-value pairs.
+For a given form, there may be text fields, drop-down boxes, and among other components.
 In order to support form submission in such circumstances, the QRE performs
 different actions based upon the input type. For text fields, simply
 adding a key/value pair to the query string suffices. For a drop-down
 box, the QRE extracts the form element to find the appropriate value to
-include in the query string.
+include in the query string. It does this by examine each option in the drop-down and 
+matching the user's input to the text field in the option. The value attribute of the option
+is then added to the querystring. The value and text attributes of a drop-down option might 
+be the same, but they are not guaranteed to be. 
 
 All input data are kept in an internal table. The QRM script contains
 keys that allow the QRE to map SSQ inputs from the table to the
