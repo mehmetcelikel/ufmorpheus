@@ -17,7 +17,7 @@ __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
 __code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
 
-def main(argv):
+def run(ssq, id):
 	
 	"""Run the Executor script
 	
@@ -34,7 +34,6 @@ def main(argv):
 	Initialize state with the created data structures
 	Call state.run()
 	"""
-	id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
 
 	try:
 		connection = psycopg2.connect(__connect_string % __connect_params)
@@ -86,7 +85,7 @@ def main(argv):
 					action_list.append(ActionObject.FormAction(ao))
 
 	#parse the ssq to populate the value hashes with the user input	
-	txt = sys.argv[-2]
+	txt = ssq
 	if read_ssq_text(txt,kv_hash,kclass_hash, kcontext_hash, kt_hash) == False:	
 		return
 	
@@ -142,7 +141,9 @@ def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 	return found
 
 if __name__ == '__main__':
-
-	main(sys.argv)
+	
+	id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
+	ssq = sys.argv[-2] #this is the ssq string
+	run(ssq,id)
 	pass
 

@@ -83,7 +83,7 @@ def getSelection(highlightid):
 	#parses the dom to extract the highlighted text
 	getSelectionHelper(tree, html, textList, tree.xpath(sxpath)[0], tree.xpath(expath)[0], h.startOffset, h.endOffset)
 
-	return '\n'.join(textList)
+	return ''.join(textList)
 
 def getSelectionHelper(tree, node, textList, startNode, endNode, startIndex, endIndex):
 
