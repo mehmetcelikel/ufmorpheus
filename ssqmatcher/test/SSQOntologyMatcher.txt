@@ -1,0 +1,11 @@
+
+UNIT TEST CASE 
+--------------------------
+structural measure:
+1 http://zion.cise.ufl.edu/ontology/ssq/347.xml http://zion.cise.ufl.edu/ontology/ssq/412.xml 1
+
+class divergence:
+2 http://zion.cise.ufl.edu/ontology/ssq/347.xml http://zion.cise.ufl.edu/ontology/ssq/412.xml
+2 http://zion.cise.ufl.edu/ontology/ssq/347.xml http://zion.cise.ufl.edu/ontology/ssq/347.xml
+
+2 http://zion.cise.ufl.edu/ontology/ssq/476.xml http://zion.cise.ufl.edu/ontology/ssq/476.xml

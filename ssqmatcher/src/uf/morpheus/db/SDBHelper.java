@@ -1,0 +1,291 @@
+package uf.morpheus.db;
+
+
+import java.util.ArrayList;
+
+import uf.morpheus.meta.Constants;
+import uf.morpheus.meta.MessageLogger;
+
+import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sdb.SDBFactory;
+import com.hp.hpl.jena.sdb.Store;
+import com.hp.hpl.jena.sdb.StoreDesc;
+import com.hp.hpl.jena.sdb.sql.JDBC;
+import com.hp.hpl.jena.sdb.sql.SDBConnection;
+import com.hp.hpl.jena.sdb.store.DatabaseType;
+import com.hp.hpl.jena.sdb.store.LayoutType;
+
+
+/** Connect to a store using API calls. */ 
+
+public class SDBHelper
+{
+
+	private static StoreDesc storeDesc = new StoreDesc(LayoutType.LayoutTripleNodesIndex, DatabaseType.PostgreSQL) ;
+	private static SDBConnection connection = null;
+	private static Store dbstore = null; 
+	private static MessageLogger msg = MessageLogger.getInstance();
+	
+	
+    // Database connection parameters, with defaults
+	// For local db 
+    private static String s_dbURL = Constants.TEST_SDB_URL;
+    private static String s_dbUser = Constants.TEST_DB_USERNAME;
+    private static String s_dbPw = Constants.TEST_DB_PWD;
+    private static String s_dbCreate = "0";
+    private static String s_dbClean = "0";
+    /*
+    // For babylon 
+    private static String s_dbURL = Constants.SDB_URL;
+    private static String s_dbUser = Constants.DB_USERNAME;
+    private static String s_dbPw = Constants.DB_PWD;
+	*/
+	
+	/**
+	 * Gets the store object (create a new one if it has none)
+	 * 
+	 */ 
+	public static synchronized Store getStore() {
+		
+		if (dbstore != null) {
+			if (!dbstore.isClosed())
+				return dbstore;
+		}
+
+		try {
+			JDBC.loadDriverPGSQL();
+			// connection = new SDBConnection(Constants.SDB_URL, Constants.DB_USERNAME, Constants.DB_PWD); 
+			connection = new SDBConnection(s_dbURL, s_dbUser, s_dbPw); 
+			dbstore = SDBFactory.connectStore(connection, storeDesc);
+			return dbstore;
+		} catch (Exception e) {
+			msg.logger.severe("Problem opening database. " + e.toString());
+			System.exit(1);
+		}
+		
+		return null; 
+	}
+	
+	
+	/**
+	 * Gets the connection object (create a new one if it has none)
+	 * 
+	 */ 
+	public static synchronized SDBConnection getConnection() {
+		
+		if (connection != null) {
+			return connection;
+		}
+
+		try {
+			JDBC.loadDriverPGSQL();
+			// connection = new SDBConnection(Constants.SDB_URL, Constants.DB_USERNAME, Constants.DB_PWD); 
+			connection = new SDBConnection(s_dbURL, s_dbUser, s_dbPw);
+			return connection;
+		} catch (Exception e) {
+			msg.logger.severe("Problem opening database. " + e.toString());
+		}
+		
+		return null; 
+	}
+	
+	/**
+	 * Closes the store and its JDBC connection 
+	 * 
+	 */ 
+	public static synchronized void closeStore() {
+
+		if (dbstore != null) {
+			if (!dbstore.isClosed())
+				dbstore.close();
+			else 
+				msg.logger.severe("Problem closing store.");
+		}
+		
+		if (connection != null) {
+			connection.close();
+		}
+	}
+	
+	
+	/**
+	 * Create a store in the specified db 
+	 *  
+	 */ 
+	public static Store createStore()
+	{
+		Store store = getStore();
+        store.getTableFormatter().create(); // Creating the database 
+        store.getTableFormatter().truncate();  // Truncating all sdb tables 
+        return store;
+	}
+	
+	/**
+	 * Removes all the data in the store  
+	 *  
+	 */ 
+	public static void cleanStore()
+	{
+		Store store = getStore();
+        store.getTableFormatter().truncate();  // Truncating all sdb tables
+	}
+	
+	
+	/**
+	 * Gets a named named model 
+	 * Note: The triples will be stored in the quads table
+	 *  
+	 */ 
+	public static Model getDBModel(Store store, String modelName)
+	{
+        Model mdl = SDBFactory.connectNamedModel(store, modelName);    
+        return mdl; 
+	}
+	
+	/**
+	 * Gets the default model 
+	 * Note: the triples will be stored in the triples table.  
+	 *  
+	 */ 
+	public static Model getDBModel(Store store)
+	{
+        Model mdl = SDBFactory.connectDefaultModel(store);    
+        return mdl; 
+	}
+	
+	
+	/**
+	 * To execute the SPARQL queries on a named model 
+	 * Note: the triples will be stored in the triples table.  
+	 *  
+	 */ 
+	public static ResultSet execSelect(String queryString, Model model){
+	    
+        Query query = QueryFactory.create(queryString) ;
+        QueryExecution qe = QueryExecutionFactory.create(query, model);
+        
+        ResultSet rs = qe.execSelect();
+
+        return rs;
+	}
+	
+	
+	/**
+	 * To execute the SPARQL queries on the default model 
+	 * Note: the triples will be stored in the triples table.  
+	 *  
+	 */ 
+	public static ResultSet execSelect(String queryString, Store store){
+	    
+		Query query = QueryFactory.create(queryString);
+		Dataset ds = SDBFactory.connectDataset(store);
+
+		QueryExecution qe = QueryExecutionFactory.create(query, ds);
+		ResultSet rs = qe.execSelect();
+    
+		return rs;
+	}
+	
+	
+	public static boolean containsClass(String className, Model model) {
+
+		boolean ret = false;
+		String queryString = "SELECT * { <" + className + "> ?p ?o }";
+		Query query = QueryFactory.create(queryString);
+
+		QueryExecution qe = QueryExecutionFactory.create(query, model);
+
+		try {
+			ResultSet rs = qe.execSelect();
+
+			if (rs != null)
+				if (rs.hasNext())
+					ret = true;
+		} finally {
+			qe.close();
+		}
+
+		return ret;
+	}
+
+	public static boolean containsClass(String className, Store store) {
+		boolean ret = false;
+		String queryString = "SELECT * { <" + className + "> ?p ?o }";
+		Query query = QueryFactory.create(queryString);
+		Dataset ds = SDBFactory.connectDataset(store);
+
+		QueryExecution qe = QueryExecutionFactory.create(query, ds);
+		try {
+			ResultSet rs = qe.execSelect();
+
+			if (rs != null)
+				if (rs.hasNext())
+					ret = true;
+		} finally {
+			qe.close();
+		}
+
+		return ret;
+	}
+	
+	
+
+    /**
+     * Process any command line arguments
+     */
+    private static void processArgs( String[] args ) {
+        int i = 0;
+        while (i < args.length) {
+            String arg = args[i++];
+
+			if (arg.equals("--dbUser")) {
+				s_dbURL = args[i++];
+			} else if (arg.equals("--dbURL")) {
+				s_dbURL = args[i++];
+			} else if (arg.equals("--dbPasswd")) {
+				s_dbPw = args[i++];
+			} else if (arg.equals("--dbCreate")) {
+				s_dbCreate = args[i++];
+			} else if (arg.equals("--dbClean")) {
+				s_dbClean = args[i++];
+			}
+        }
+    }
+
+	public static ArrayList <String> getSuperClasses(String category, Store store) {
+
+		ArrayList <String> sc = new ArrayList<String>();
+		String queryString = "SELECT * WHERE { <" + category + "> <" + Constants.NS_RDFS + "subClassOf"	+ "> ?o }";
+		ResultSet rs = SDBHelper.execSelect(queryString, store);
+
+		for (; rs.hasNext();) {
+			QuerySolution soln = rs.nextSolution();
+			Resource r = soln.getResource("o") ;
+			sc.add(r.toString());
+		}
+		
+		return sc;
+	}
+	
+    static public void main(String...argv)
+    {
+    	// process arguments 
+    	processArgs(argv);
+    	
+    	if (s_dbCreate.equalsIgnoreCase("1"))
+    		createStore();
+    	else if (s_dbClean.equalsIgnoreCase("1"))
+    	 	cleanStore();
+    	
+    }
+  
+}
+
