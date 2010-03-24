@@ -1,0 +1,9 @@
+ 
+
+UNIT TEST CASE - class divergence algorithm 
+--------------------------
+
+DBPediaRoot City http://zion.cise.ufl.edu/ontology/classes/City.xml
+
+
+model make http://zion.cise.ufl.edu/ontology/classes/model,make,year,Size,Automotive.xml

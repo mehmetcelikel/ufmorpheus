@@ -1,0 +1,15 @@
+TEST CASES 
+-----------
+
+Class Hierarchy: 
+
+1 Basketball "file:/C://temp//Basketball.xml" "http://zion.cise.ufl.edu/ontology/classes/Basketball.xml" 10 2 1 
+1 Basketball "file:/C://temp//Basketball.xml" "http://zion.cise.ufl.edu/ontology/classes/Basketball" 5 1 1
+
+
+1 model,make,year,Size,Automotive "file:/C://temp//model,make,year,Size,Automotive.xml" "http://zion.cise.ufl.edu/ontology/classes/model,make,year,Size,Automotive.xml" 3 2 1 
+
+Blankets: 
+
+2 Basketball "file:/C://temp//BasketballBlanket.xml" "http://zion.cise.ufl.edu/ontology/blankets/BasketballBlanket.xml"
+
