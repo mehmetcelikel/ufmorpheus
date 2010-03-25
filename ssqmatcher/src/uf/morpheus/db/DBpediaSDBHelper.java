@@ -7,6 +7,7 @@ package uf.morpheus.db;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Stack;
 
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -115,7 +116,8 @@ public class DBpediaSDBHelper {
 			for (String category : categories){
 				if (bfs)
 					addBFSCategoryHierarchicalClasses(category, broadenLimit, addNarrowCategories);
-
+				else 
+					addDFSCategoryHierarchicalClasses(category, broadenLimit, addNarrowCategories);
 			}
 			// Adds the tree height 
 			addCategoryHierarchyHeight();
@@ -232,6 +234,80 @@ public class DBpediaSDBHelper {
 		}
 
 	}
+	
+	/**
+	 * Adds the DBpedia categories to the OWL Ontology   
+	 * 
+	 * @param category the category name  
+	 * @param broadenLimit limit to which the category 
+	 * 		  to be retrieved from DBpedia   
+	 */
+	private void addDFSCategoryHierarchicalClasses(
+			String category, 
+			int broadenLimit, 
+			boolean addNarrowCategories) {
+
+		// Firstly, add the category 
+		Resource categoryC = addCategory(category);
+		
+		// Adds the narrow categories
+		if (addNarrowCategories) {
+			msg.logger.info("Adding narrow categories for " + category + "\n");
+			
+			ArrayList<String> narrowCat = dbpC.getNarrowCategories(category);
+			Resource narrowC = null;
+
+			for (String cat : narrowCat) {
+				narrowC = addCategory(cat);
+				addSubClassProperty(narrowC, categoryC); // Adds the sub class axiom  
+			}
+		}
+		
+		// Forms the hierarchy 
+		msg.logger.info("\nAdding broader categories (DFS)\n");
+		
+		ArrayList <String> broaderCat = dbpC.getBroaderCategories(category);
+		Stack<BTNode> broaderS = new Stack<BTNode>();
+		for (String cat : broaderCat)
+			broaderS.add(new BTNode(categoryC, cat, 1));
+		
+		Resource broaderC = null;
+		BTNode broaderNode = null;
+		
+		while(!broaderS.isEmpty()){
+			broaderNode = broaderS.pop();
+			
+			if (broaderNode.BroaderLevel > broadenLimit){
+				treeHeight = broaderNode.BroaderLevel;
+				addSubClassProperty(broaderNode.Category, rootCategory); // Adds the sub class axiom  
+				continue;
+			}
+
+			// Checks whether there exists an 
+			if (isExists(broaderNode.BroaderCategory)){
+				broaderC = getCategory(broaderNode.BroaderCategory);
+			}
+			// Adds the broader category 
+			else {
+				broaderC = addCategory(broaderNode.BroaderCategory);
+				ArrayList <String> broaderCatSet = dbpC.getBroaderCategories(broaderNode.BroaderCategory);	
+				
+				if (broaderCatSet.size() == 0){
+					addSubClassProperty(broaderC, rootCategory); // Adds the sub class axiom  
+					if (treeHeight < broaderNode.BroaderLevel) // This code to find the maximum height of the tree
+						treeHeight = broaderNode.BroaderLevel;
+				}
+				else {
+					for (String broaderCatStr : broaderCatSet)
+						broaderS.add(new BTNode(broaderC, broaderCatStr, broaderNode.BroaderLevel + 1));
+				}
+			}
+			addSubClassProperty(broaderNode.Category, broaderC); // Adds the sub class axiom
+		}
+
+	}
+
+	
 	
 	/**
 	 * Adds resource to the RDF ontology
