@@ -36,18 +36,19 @@ public class SDBHelper
 	
 	
     // Database connection parameters, with defaults
+	/*
 	// For local db 
     private static String s_dbURL = Constants.TEST_SDB_URL;
     private static String s_dbUser = Constants.TEST_DB_USERNAME;
-    private static String s_dbPw = Constants.TEST_DB_PWD;
+    private static String s_dbPw = Constants.TEST_DB_PWD;*/
     private static String s_dbCreate = "0";
     private static String s_dbClean = "0";
-    /*
+    
     // For babylon 
     private static String s_dbURL = Constants.SDB_URL;
     private static String s_dbUser = Constants.DB_USERNAME;
     private static String s_dbPw = Constants.DB_PWD;
-	*/
+	
 	
 	/**
 	 * Gets the store object (create a new one if it has none)
@@ -62,7 +63,6 @@ public class SDBHelper
 
 		try {
 			JDBC.loadDriverPGSQL();
-			// connection = new SDBConnection(Constants.SDB_URL, Constants.DB_USERNAME, Constants.DB_PWD); 
 			connection = new SDBConnection(s_dbURL, s_dbUser, s_dbPw); 
 			dbstore = SDBFactory.connectStore(connection, storeDesc);
 			return dbstore;
@@ -87,7 +87,6 @@ public class SDBHelper
 
 		try {
 			JDBC.loadDriverPGSQL();
-			// connection = new SDBConnection(Constants.SDB_URL, Constants.DB_USERNAME, Constants.DB_PWD); 
 			connection = new SDBConnection(s_dbURL, s_dbUser, s_dbPw);
 			return connection;
 		} catch (Exception e) {

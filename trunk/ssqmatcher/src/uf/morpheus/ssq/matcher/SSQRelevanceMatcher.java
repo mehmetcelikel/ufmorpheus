@@ -533,7 +533,7 @@ public class SSQRelevanceMatcher
 		}
 		
 		String output = "";
-		output = "{'array':[SSQ-476, SSQ-473], 'id':" + args[0] + "}";
+		output = "{'array':['SSQ-476', 'SSQ-473'], 'id':'" + args[0] + "'}";
 		
 		System.out.println(output);
 		
