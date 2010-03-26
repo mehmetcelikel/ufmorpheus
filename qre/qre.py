@@ -141,9 +141,39 @@ def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 	return found
 
 if __name__ == '__main__':
+
+	if len(sys.argv) == 3:	
+		id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
+		ssq = sys.argv[-2] #this is the ssq string
+		run(ssq,id)
+	else:#Run dummy values for testing
+		id = 75
+		ssq = """
+<ssq>
+
+	<realm>Automotive</realm>
+	<query>What size tires should I get for a 1997 Toyota Camry V6?</query>
 	
-	id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
-	ssq = sys.argv[-2] #this is the ssq string
+	<input_list>
+		<input type="when" dataclass="year">
+		1997
+		</input>	
+		<input type="what" dataclass="make">
+		Toyota
+		</input>
+		<input type="what" dataclass="model">
+		Camry V6
+		</input>
+	</input_list>
+
+	<output_list>
+		<output type="what" dataclass="size">
+			<modifier value="tires"/>
+		</output>
+	</output_list>
+
+</ssq>
+		"""
 	run(ssq,id)
 	pass
 
