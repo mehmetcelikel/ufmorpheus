@@ -83,7 +83,9 @@ def getSelection(highlightid):
 	#parses the dom to extract the highlighted text
 	getSelectionHelper(tree, html, textList, tree.xpath(sxpath)[0], tree.xpath(expath)[0], h.startOffset, h.endOffset)
 
-	return ''.join(textList)
+	str = ''.join(textList)
+
+	return str.strip()
 
 def getSelectionHelper(tree, node, textList, startNode, endNode, startIndex, endIndex):
 
@@ -92,22 +94,36 @@ def getSelectionHelper(tree, node, textList, startNode, endNode, startIndex, end
 	path = tree.getpath(node)
 
 	#if we have just found the beginning
-	if startNode == node and len(textList) == 0:
+	if startNode == node and startNode == endNode and len(textList) == 0:
+		textList.append( node.text_content()[startIndex:endIndex] )
+		return True
+
+	elif startNode == node and len(textList) == 0:
 		textList.append(startText)
+
+	#if we have found the end, because the highlight direction was reversed
+	elif endNode == node and len(textList) == 0:
+		textList.append( node.text_content()[endIndex:] )
+
+	#if we have found the start because the direction was reversed
+	elif startNode == node and len(textList) > 0:
+		if startNode != endNode:
+			textList.append( node.text_content()[:startIndex] )
+		return True
 	elif endNode ==  node and len(textList) > 0:
 		if startNode != endNode:
 			textList.append(endText)
-		return False
+		return True
 			
 	#iterate over all the children for this node (we don't know how many there are)
 	for n in node.getchildren():
 
-		r = getSelectionHelper(tree, n, textList, startNode, endNode, startIndex, endIndex)					
+		done = getSelectionHelper(tree, n, textList, startNode, endNode, startIndex, endIndex)					
 
-		if r == False:
-			return False
+		if done:
+			return done
 	
-	return True
+	return False
 	
 		
 if __name__ == "__main__":
