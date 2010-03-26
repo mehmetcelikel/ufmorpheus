@@ -364,6 +364,40 @@ public class SDBHelper
 	}
 	
 	
+	/**
+	 * Checks whether the OWL class is there in the data base
+	 *  
+	 */
+	public static ArrayList<String> getReferencedClasses(
+			String classType,
+			Store store) {
+
+		String queryString = "SELECT * { ?s <" + TYPE + "> <" + classType
+				+ "> }";
+		Query query = QueryFactory.create(queryString);
+		Dataset ds = SDBFactory.connectDataset(store);
+		ArrayList<String> classes = new ArrayList<String>();
+
+		QueryExecution qe = QueryExecutionFactory.create(query, ds);
+		try {
+			ResultSet rs = qe.execSelect();
+
+			if (rs != null) {
+				while (rs.hasNext()) {
+					QuerySolution qs = rs.next();
+					Resource r = qs.getResource("s");
+					classes.add(r.toString());
+				}
+			}
+
+		} finally {
+			qe.close();
+		}
+
+		return classes;
+	}
+	
+	
 	
 	/**
      * Process any command line arguments
@@ -414,6 +448,8 @@ public class SDBHelper
     		createStore();
     	else if (s_dbClean.equalsIgnoreCase("1"))
     	 	cleanStore();
+    	
+    	// TEST
     	
     }
   

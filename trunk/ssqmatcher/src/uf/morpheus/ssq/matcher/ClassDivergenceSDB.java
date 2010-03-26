@@ -69,6 +69,22 @@ public class ClassDivergenceSDB {
 	
 	}
 	
+	/**
+	 * Constructor:   
+	 * */
+	public ClassDivergenceSDB(Store store)
+	{
+		
+		// Sets the default store 
+		this.store = store;
+		
+		// Calculates the tree height... 
+		ontologyTreeHeight = findOntologyTreeHeight();
+	
+	}
+	
+	
+	
 	public void closeConnections(){
 		SDBHelper.closeStore();
 	}
@@ -128,8 +144,8 @@ public class ClassDivergenceSDB {
 		String source = getClass(sourceClass); 
 		String target = getClass(targetClass); 
 		
-		if (source == null || target == null) {
-			msg.logger.log(Level.SEVERE, "ERROR: " + sourceClass + " or " 
+		if (source == "" || target == "") {
+			msg.logger.severe("ERROR: " + sourceClass + " or " 
 					+ targetClass + " are not find in the class repository.");
 
 			return Constants.DISSIMILARITY;
