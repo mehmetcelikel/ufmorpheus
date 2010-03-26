@@ -12,6 +12,5 @@
 	<classpathentry kind="lib" path="zehon_ftp_ssl-1.1/commons-vfs-2.0.jar"/>
 	<classpathentry kind="lib" path="zehon_ftp_ssl-1.1/jsch-0.1.41.jar"/>
 	<classpathentry kind="lib" path="zehon_ftp_ssl-1.1/zehon_file_transfer-1.1.6.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ssqmatcher"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
