@@ -34,6 +34,13 @@ public final class Constants {
 	
 	
 	public static final String NS_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
+	public static final String NS_CLASSES = "http://zion.cise.ufl.edu/ontology/classes#";
+	public static final String NS_PROPERTIES = "http://zion.cise.ufl.edu/ontology/properties#";
+	public static final String NS_SSQ = "http://zion.cise.ufl.edu/ontology/ssq#";
+	public static final String NS_OWL = "http://www.w3.org/2002/07/owl#";
+	public static final String NS_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+	
+	
 
 	/**
 	 * Different matching levels

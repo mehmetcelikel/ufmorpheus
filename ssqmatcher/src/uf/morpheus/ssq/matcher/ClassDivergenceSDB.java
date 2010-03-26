@@ -9,9 +9,6 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.logging.Level;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.sdb.Store;
 
 import uf.morpheus.db.SDBHelper;
@@ -51,9 +48,7 @@ public class ClassDivergenceSDB {
 	 * Variable declarations 
 	 * 
 	 */
-	private String ontoURI = "";
-	private String NS = "";
-	
+
 	private static double ontologyTreeHeight = 0.0;
 	private MessageLogger msg = MessageLogger.getInstance();
 	
@@ -63,11 +58,8 @@ public class ClassDivergenceSDB {
 	/**
 	 * Constructor:   
 	 * */
-	public ClassDivergenceSDB(String ontology)
+	public ClassDivergenceSDB()
 	{
-		
-		ontoURI = ontology;
-		NS = ontoURI + "#";
 		
 		// Gets the default store 
 		store = SDBHelper.getStore();
@@ -90,8 +82,8 @@ public class ClassDivergenceSDB {
 		
 		String cls = "";
 		
-		if (SDBHelper.containsClass(NS + name, store))
-			cls = NS + name;
+		if (SDBHelper.containsOWLClass(Constants.NS_CLASSES + name, store))
+			cls = Constants.NS_CLASSES + name;
 		
 		return cls;
 
@@ -193,16 +185,11 @@ public class ClassDivergenceSDB {
 			System.exit(0);
 		}
 		
-		String strTH = NS + Constants.DBPEDIA_PROPERTY_TREE_HEIGHT;
-
-		String queryString = "SELECT * WHERE { <" + cls + "> <" + strTH	+ "> ?o }";
-		ResultSet rs = SDBHelper.execSelect(queryString, store);
-
-		for (; rs.hasNext();) {
-			QuerySolution soln = rs.nextSolution();
-			Literal l = soln.getLiteral("o"); 
+		String strTH = Constants.NS_PROPERTIES + Constants.DBPEDIA_PROPERTY_TREE_HEIGHT;
+		String l = SDBHelper.getPropertyValue(cls, strTH, store);
+		
+		if (l != null && l != "")
 			return Double.parseDouble(l.toString());
-		}
 
 		return 0.0;
 	}
@@ -242,7 +229,7 @@ public class ClassDivergenceSDB {
 				
 			} else if ((hops < 0) || (ancestor.value + 1 < hops)){ // this heuristic needs to be improved 
 				
-				ArrayList<String> ancClasses =  SDBHelper.getSuperClasses(ancestor.oClass, store);
+				ArrayList<String> ancClasses =  SDBHelper.getOWLSuperClasses(ancestor.oClass, store);
 				
 				for (String anr : ancClasses)
 					aQueue.add(new TNode(anr, ancestor.value + 1));
@@ -283,7 +270,7 @@ public class ClassDivergenceSDB {
 					hops = ancestor.value;
 			} 
 			else if ((hops < 0) || ((ancestor.value + 1) < hops)){
-				ArrayList<String> anc =  SDBHelper.getSuperClasses(ancestor.oClass, store);
+				ArrayList<String> anc =  SDBHelper.getOWLSuperClasses(ancestor.oClass, store);
 				for (String anr : anc)
 					ancStack.add(new TNode(anr, ancestor.value + 1));
 			}
@@ -319,7 +306,7 @@ public class ClassDivergenceSDB {
 			if (ancestorClass.equals(ancestor)) {
 				return true;
 			} else {
-				ArrayList<String> anc =  SDBHelper.getSuperClasses(ancestor, store);
+				ArrayList<String> anc =  SDBHelper.getOWLSuperClasses(ancestor, store);
 				for (String anr : anc)
 					ancStack.add(anr);
 			}
@@ -335,16 +322,16 @@ public class ClassDivergenceSDB {
 	 * 
 	 * @param args
 	 * 
-	 * e.g. Road_vehicles Automobiles "http://zion.cise.ufl.edu/ontology/classes/Automobiles"
+	 * e.g. Road_vehicles Automobiles
 	 */
 	public static void main(String[] args) {
 
-		if (args.length < 3) {
+		if (args.length < 2) {
 			System.out.println("Invalid arguments");
 			System.exit(0);
 		}
 
-		ClassDivergenceSDB cd = new ClassDivergenceSDB(args[2]);
+		ClassDivergenceSDB cd = new ClassDivergenceSDB();
 
 		System.out.printf("\nThe class divergence between %s and %s : %6.4f\n",
 				args[0], args[1], cd.findClassDivergence(args[0], args[1], false));
