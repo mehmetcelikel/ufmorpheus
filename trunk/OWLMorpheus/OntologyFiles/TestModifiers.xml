@@ -1,0 +1,588 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY p1 "#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY owl2 "http://www.w3.org/2006/12/owl2#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY sample "http://morpheus.cise.ufl.edu/sample#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://morpheus.cise.ufl.edu/sample#"
+     xml:base="http://morpheus.cise.ufl.edu/sample"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:p1="#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl2="http://www.w3.org/2006/12/owl2#"
+     xmlns:sample="http://morpheus.cise.ufl.edu/sample#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- #ValueWithinContext -->
+
+    <owl:ObjectProperty rdf:about="#ValueWithinContext"/>
+    
+
+
+    <!-- #hasModifier -->
+
+    <owl:ObjectProperty rdf:about="#hasModifier"/>
+    
+
+
+    <!-- #hasModifierList -->
+
+    <owl:ObjectProperty rdf:about="#hasModifierList"/>
+    
+
+
+    <!-- #hasRank -->
+
+    <owl:ObjectProperty rdf:about="#hasRank"/>
+    
+
+
+    <!-- #hasRealm -->
+
+    <owl:ObjectProperty rdf:about="#hasRealm"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#How_input -->
+
+    <owl:ObjectProperty rdf:about="#How_input">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#How_output -->
+
+    <owl:ObjectProperty rdf:about="#How_output">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#What_input -->
+
+    <owl:ObjectProperty rdf:about="#What_input">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#What_output -->
+
+    <owl:ObjectProperty rdf:about="#What_output">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#When_input -->
+
+    <owl:ObjectProperty rdf:about="#When_input">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#When_output -->
+
+    <owl:ObjectProperty rdf:about="#When_output">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Where_input -->
+
+    <owl:ObjectProperty rdf:about="#Where_input">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Where_output -->
+
+    <owl:ObjectProperty rdf:about="#Where_output">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Who_input -->
+
+    <owl:ObjectProperty rdf:about="#Who_input">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Who_output -->
+
+    <owl:ObjectProperty rdf:about="#Who_output">
+        <rdfs:range rdf:resource="#Context"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#hasRealm -->
+
+    <owl:ObjectProperty rdf:about="#hasRealm">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:domain rdf:resource="#QueryClass"/>
+        <rdfs:range rdf:resource="&owl;Thing"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- #hasRank -->
+
+    <owl:DatatypeProperty rdf:about="#hasRank"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Anthropology -->
+
+    <owl:Class rdf:about="#Anthropology">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Art -->
+
+    <owl:Class rdf:about="#Art">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Band -->
+
+    <owl:Class rdf:about="#Band">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Best -->
+
+    <owl:Class rdf:about="#Best">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Cheapest -->
+
+    <owl:Class rdf:about="#Cheapest">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#City -->
+
+    <owl:Class rdf:about="#City">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#CityContext -->
+
+    <owl:Class rdf:about="#CityContext">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#ValueWithinContext"/>
+                <owl:allValuesFrom rdf:resource="#City"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#ValueWithinContext"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Context -->
+
+    <owl:Class rdf:about="#Context"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#ContextClass -->
+
+    <owl:Class rdf:about="#ContextClass"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Cooking -->
+
+    <owl:Class rdf:about="#Cooking">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Date -->
+
+    <owl:Class rdf:about="#Date">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Demographics -->
+
+    <owl:Class rdf:about="#Demographics">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Dining -->
+
+    <owl:Class rdf:about="#Dining">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Education -->
+
+    <owl:Class rdf:about="#Education">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Event -->
+
+    <owl:Class rdf:about="#Event">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Flight -->
+
+    <owl:Class rdf:about="#Flight">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Food -->
+
+    <owl:Class rdf:about="#Food">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Geography -->
+
+    <owl:Class rdf:about="#Geography">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Hotel -->
+
+    <owl:Class rdf:about="#Hotel">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#HotelContext -->
+
+    <owl:Class rdf:about="#HotelContext">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#ValueWithinContext"/>
+                <owl:allValuesFrom rdf:resource="#Hotel"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#ValueWithinContext"/>
+                <owl:maxCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:maxCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasModifierList"/>
+                <owl:allValuesFrom rdf:resource="#HotelContextModifierList"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#HotelContextModifierList -->
+
+    <owl:Class rdf:about="#HotelContextModifierList">
+        <rdfs:subClassOf rdf:resource="#ModifierList"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasModifier"/>
+                <owl:hasValue rdf:resource="#HotelContextModifier2"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasModifier"/>
+                <owl:hasValue rdf:resource="#HotelContextModifier1"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Modifier -->
+
+    <owl:Class rdf:about="#Modifier"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#ModifierList -->
+
+    <owl:Class rdf:about="#ModifierList"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Near -->
+
+    <owl:Class rdf:about="#Near">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Nightlife -->
+
+    <owl:Class rdf:about="#Nightlife">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Nightlight -->
+
+    <owl:Class rdf:about="#Nightlight">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#QueryClass -->
+
+    <owl:Class rdf:about="#QueryClass"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Realm -->
+
+    <owl:Class rdf:about="#Realm"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Recipe -->
+
+    <owl:Class rdf:about="#Recipe">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Restaurant -->
+
+    <owl:Class rdf:about="#Restaurant">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#SSQ -->
+
+    <owl:Class rdf:about="#SSQ"/>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#SSQ-0 -->
+
+    <owl:Class rdf:about="#SSQ-0">
+        <rdfs:subClassOf rdf:resource="#SSQ"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#hasRealm"/>
+                <owl:allValuesFrom rdf:resource="#Travel"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#What_output"/>
+                <owl:allValuesFrom rdf:resource="#HotelContext"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#Where_input"/>
+                <owl:allValuesFrom rdf:resource="#CityContext"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Sports -->
+
+    <owl:Class rdf:about="#Sports">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Sports_Team -->
+
+    <owl:Class rdf:about="#Sports_Team">
+        <rdfs:subClassOf rdf:resource="#ContextClass"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#Travel -->
+
+    <owl:Class rdf:about="#Travel">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#asdf -->
+
+    <owl:Class rdf:about="#asdf">
+        <rdfs:subClassOf rdf:resource="#Realm"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#cheapest -->
+
+    <owl:Class rdf:about="#cheapest">
+        <rdfs:subClassOf rdf:resource="#Modifier"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/sample#five-star -->
+
+    <owl:Class rdf:about="#five-star">
+        <rdfs:subClassOf rdf:resource="#Modifier"/>
+    </owl:Class>
+    
+
+
+    <!-- http://morpheus.cise.ufl.edu/samplehttp://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- #HotelContextModifier1 -->
+
+    <cheapest rdf:about="#HotelContextModifier1">
+        <p1:hasRank rdf:datatype="&xsd;integer">1</p1:hasRank>
+    </cheapest>
+    
+
+
+    <!-- #HotelContextModifier2 -->
+
+    <five-star rdf:about="#HotelContextModifier2">
+        <p1:hasRank rdf:datatype="&xsd;integer">2</p1:hasRank>
+    </five-star>
+</rdf:RDF>
