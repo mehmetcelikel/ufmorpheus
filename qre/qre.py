@@ -16,8 +16,33 @@ import urllib
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
 __code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
+id_test = 75
+ssq_test = """<ssq>
 
-def run(ssq, id):
+        <realm>Automotive</realm>
+        <query>What size tires should I get for a 1997 Toyota Camry V6?</query>
+
+        <input_list>
+                <input type="when" dataclass="year">
+                1997
+                </input>
+                <input type="what" dataclass="make">
+                Toyota
+                </input>
+                <input type="what" dataclass="model">
+                Camry V6
+                </input>
+        </input_list>
+
+        <output_list>
+                <output type="what" dataclass="size">
+                        <modifier value="tires"/>
+                </output>
+        </output_list>
+
+</ssq>
+	"""
+def run(ssq=ssq_test, id=id_test):
 	
 	"""Run the Executor script
 	
@@ -147,33 +172,6 @@ if __name__ == '__main__':
 		ssq = sys.argv[-2] #this is the ssq string
 		run(ssq,id)
 	else:#Run dummy values for testing
-		id = 75
-		ssq = """
-<ssq>
-
-	<realm>Automotive</realm>
-	<query>What size tires should I get for a 1997 Toyota Camry V6?</query>
-	
-	<input_list>
-		<input type="when" dataclass="year">
-		1997
-		</input>	
-		<input type="what" dataclass="make">
-		Toyota
-		</input>
-		<input type="what" dataclass="model">
-		Camry V6
-		</input>
-	</input_list>
-
-	<output_list>
-		<output type="what" dataclass="size">
-			<modifier value="tires"/>
-		</output>
-	</output_list>
-
-</ssq>
-		"""
-	run(ssq,id)
+		run(ssq_test,id_test)
 	pass
 
