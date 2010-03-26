@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY p1 "#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY owl2 "http://www.w3.org/2006/12/owl2#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ssq "http://zion.cise.ufl.edu/ontology/ssq/#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY City "http://zion.cise.ufl.edu/ontology/classes/City.xml#" >
+    <!ENTITY Hotel "http://zion.cise.ufl.edu/ontology/classes/Hotel.xml#" >
+    <!ENTITY OWLClasses "http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml#" >
+    <!ENTITY Automotive3 "http://zion.cise.ufl.edu/ontology/classes/Automotive3.1.xml#" >
+    <!ENTITY OWLProperties "http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#" >
+]>
+
+
+<rdf:RDF xmlns="http://zion.cise.ufl.edu/ontology/ssq/"
+     xml:base="http://zion.cise.ufl.edu/ontology/ssq/"
+     xmlns:p1="#"
+     xmlns:OWLProperties="http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#"
+     xmlns:Hotel="http://zion.cise.ufl.edu/ontology/classes/Hotel.xml#"
+     xmlns:owl2="http://www.w3.org/2006/12/owl2#"
+     xmlns:City="http://zion.cise.ufl.edu/ontology/classes/City.xml#"
+     xmlns:Automotive3="http://zion.cise.ufl.edu/ontology/classes/Automotive3.1.xml#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:ssq="http://zion.cise.ufl.edu/ontology/ssq/#"
+     xmlns:OWLClasses="http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#What_output -->
+
+    <owl:ObjectProperty rdf:about="&OWLProperties;What_output"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#Where_input -->
+
+    <owl:ObjectProperty rdf:about="&OWLProperties;Where_input"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#belongsToClass -->
+
+    <owl:ObjectProperty rdf:about="&OWLProperties;belongsToClass"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#hasModifier -->
+
+    <owl:ObjectProperty rdf:about="&OWLProperties;hasModifier"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#hasModifierList -->
+
+    <owl:ObjectProperty rdf:about="&OWLProperties;hasModifierList"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml#hasRealm -->
+
+    <owl:ObjectProperty rdf:about="&OWLProperties;hasRealm"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- #hasQueryID -->
+
+    <owl:DatatypeProperty rdf:about="#hasQueryID"/>
+    
+
+
+    <!-- #hasRank -->
+
+    <owl:DatatypeProperty rdf:about="#hasRank"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/Automotive3.1.xml#Travel -->
+
+    <owl:Class rdf:about="&Automotive3;Travel"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/City.xml#City -->
+
+    <owl:Class rdf:about="&City;City"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/Hotel.xml#Hotel -->
+
+    <owl:Class rdf:about="&Hotel;Hotel"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml#Context -->
+
+    <owl:Class rdf:about="&OWLClasses;Context"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml#Modifier -->
+
+    <owl:Class rdf:about="&OWLClasses;Modifier"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml#ModifierList -->
+
+    <owl:Class rdf:about="&OWLClasses;ModifierList"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml#SSQ -->
+
+    <owl:Class rdf:about="&OWLClasses;SSQ"/>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/ssq/#cheapest -->
+
+    <owl:Class rdf:about="#cheapest">
+        <rdfs:subClassOf rdf:resource="&OWLClasses;Modifier"/>
+    </owl:Class>
+    
+
+
+    <!-- http://zion.cise.ufl.edu/ontology/ssq/#five-star -->
+
+    <owl:Class rdf:about="#five-star">
+        <rdfs:subClassOf rdf:resource="&OWLClasses;Modifier"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- #City -->
+
+    <City:City rdf:about="#City"/>
+    
+
+
+    <!-- #Hotel -->
+
+    <Hotel:Hotel rdf:about="#Hotel"/>
+    
+
+
+    <!-- #SSQ-0 -->
+
+    <OWLClasses:SSQ rdf:about="#SSQ-0">
+        <p1:hasQueryID rdf:datatype="&xsd;integer">347</p1:hasQueryID>
+        <OWLProperties:hasRealm rdf:resource="#Travel"/>
+        <OWLProperties:What_output rdf:resource="#What_output_hotel"/>
+        <OWLProperties:Where_input rdf:resource="#Where_input_zurich"/>
+    </OWLClasses:SSQ>
+    
+
+
+    <!-- #Travel -->
+
+    <Automotive3:Travel rdf:about="#Travel"/>
+    
+
+
+    <!-- #What_output_hotel -->
+
+    <OWLClasses:Context rdf:about="#What_output_hotel">
+        <OWLProperties:belongsToClass rdf:resource="#Hotel"/>
+        <OWLProperties:hasModifierList rdf:resource="#What_output_hotel_Modifier_List"/>
+    </OWLClasses:Context>
+    
+
+
+    <!-- #What_output_hotel_Modifier_1 -->
+
+    <ssq:cheapest rdf:about="#What_output_hotel_Modifier_1">
+        <p1:hasRank rdf:datatype="&xsd;integer">1</p1:hasRank>
+    </ssq:cheapest>
+    
+
+
+    <!-- #What_output_hotel_Modifier_2 -->
+
+    <ssq:five-star rdf:about="#What_output_hotel_Modifier_2">
+        <p1:hasRank rdf:datatype="&xsd;integer">2</p1:hasRank>
+    </ssq:five-star>
+    
+
+
+    <!-- #What_output_hotel_Modifier_List -->
+
+    <OWLClasses:ModifierList rdf:about="#What_output_hotel_Modifier_List">
+        <OWLProperties:hasModifier rdf:resource="#What_output_hotel_Modifier_1"/>
+        <OWLProperties:hasModifier rdf:resource="#What_output_hotel_Modifier_2"/>
+    </OWLClasses:ModifierList>
+    
+
+
+    <!-- #Where_input_zurich -->
+
+    <OWLClasses:Context rdf:about="#Where_input_zurich">
+        <OWLProperties:belongsToClass rdf:resource="#City"/>
+    </OWLClasses:Context>
+</rdf:RDF>
