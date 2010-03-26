@@ -13,6 +13,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sdb.SDBFactory;
@@ -28,8 +29,13 @@ import com.hp.hpl.jena.sdb.store.LayoutType;
 
 public class SDBHelper
 {
-
-	private static StoreDesc storeDesc = new StoreDesc(LayoutType.LayoutTripleNodesIndex, DatabaseType.PostgreSQL) ;
+    public static final String TYPE = Constants.NS_RDF + "type";
+    public static final String OWL_CLASS = Constants.NS_OWL + "Class";   
+    public static final String SUB_CLASS_OF = Constants.NS_RDFS + "subClassOf";
+	
+	private static StoreDesc storeDesc = new StoreDesc(
+			LayoutType.LayoutTripleNodesIndex, 
+			DatabaseType.PostgreSQL) ;
 	private static SDBConnection connection = null;
 	private static Store dbstore = null; 
 	private static MessageLogger msg = MessageLogger.getInstance();
@@ -193,11 +199,19 @@ public class SDBHelper
 		return rs;
 	}
 	
+	/**
+	 * Checks whether the OWL class is there in the data base 
+	 *  
+	 * Note: 1. Always append the prefix Constants.NS_CLASSES with className  
+	 *		 2. If the database is big it not recommend to use this method   
+	 *  
+	 */ 
 	
 	public static boolean containsClass(String className, Model model) {
 
 		boolean ret = false;
-		String queryString = "SELECT * { <" + className + "> ?p ?o }";
+		String queryString = "SELECT * { <" + className 
+		+ "> <" + TYPE + "> ?o }";
 		Query query = QueryFactory.create(queryString);
 
 		QueryExecution qe = QueryExecutionFactory.create(query, model);
@@ -205,9 +219,14 @@ public class SDBHelper
 		try {
 			ResultSet rs = qe.execSelect();
 
-			if (rs != null)
-				if (rs.hasNext())
-					ret = true;
+			if (rs != null){
+				if (rs.hasNext()){
+					QuerySolution qs = rs.next();
+					Resource r = qs.getResource("o");
+					if (r.toString().equals(OWL_CLASS))
+						return true;
+				}
+			}
 		} finally {
 			qe.close();
 		}
@@ -215,9 +234,51 @@ public class SDBHelper
 		return ret;
 	}
 
-	public static boolean containsClass(String className, Store store) {
+	
+	/**
+	 * Checks whether the OWL class is there in the data base 
+	 *  
+	 * Note: Always append the prefix Constants.NS_CLASSES with className   
+	 *  
+	 */ 
+	
+	public static boolean containsOWLClass(String className, Store store) {
 		boolean ret = false;
-		String queryString = "SELECT * { <" + className + "> ?p ?o }";
+		String queryString = "SELECT * { <" + className 
+		+ "> <" + TYPE + "> ?o }";
+		Query query = QueryFactory.create(queryString);
+		Dataset ds = SDBFactory.connectDataset(store);
+
+		QueryExecution qe = QueryExecutionFactory.create(query, ds);
+		try {
+			ResultSet rs = qe.execSelect();
+
+			if (rs != null){
+				if (rs.hasNext()){
+					QuerySolution qs = rs.next();
+					Resource r = qs.getResource("o");
+					if (r.toString().equals(OWL_CLASS))
+						return true;
+				}
+			}
+		} finally {
+			qe.close();
+		}
+
+		return ret;
+	}
+	
+	/**
+	 * Checks whether the OWL class is there in the data base 
+	 *  
+	 * Note: Always append the prefix Constants.NS_CLASSES with className   
+	 *  
+	 */ 
+	
+	public static String getOWLClass(String className, Store store) {
+
+		String queryString = "SELECT * { <" + className
+				+ "> <" + TYPE + "> ?o }";
 		Query query = QueryFactory.create(queryString);
 		Dataset ds = SDBFactory.connectDataset(store);
 
@@ -226,18 +287,85 @@ public class SDBHelper
 			ResultSet rs = qe.execSelect();
 
 			if (rs != null)
-				if (rs.hasNext())
-					ret = true;
+				if (rs.hasNext()) {
+					QuerySolution qs = rs.next();
+					Resource r = qs.getResource("o");
+					if (r.toString().equals(OWL_CLASS))
+						return className;
+				}
 		} finally {
 			qe.close();
 		}
 
-		return ret;
+		return null;
 	}
 	
 	
+	/**
+	 * Gets the property value  
+	 *  
+	 * Note: Always append the prefix Constants.NS_CLASSES with className   
+	 *  
+	 */ 
+	
+	public static String getPropertyValue(String className, String property, Store store) {
 
-    /**
+		String queryString = "SELECT * { <" + className + "> <" + property + "> ?o }";
+		Query query = QueryFactory.create(queryString);
+		Dataset ds = SDBFactory.connectDataset(store);
+
+		QueryExecution qe = QueryExecutionFactory.create(query, ds);
+		try {
+			ResultSet rs = qe.execSelect();
+
+			if (rs != null)
+				if (rs.hasNext()) {
+					QuerySolution qs = rs.next();
+					Literal r = qs.getLiteral("o");
+					return r.toString();
+				}
+		} finally {
+			qe.close();
+		}
+
+		return null;
+	}
+	
+	
+	/**
+	 * Checks whether the OWL class is there in the data base 
+	 *  
+	 * Note: Always append the prefix Constants.NS_CLASSES with className and classType    
+	 *  
+	 */ 
+	public static boolean isATypeOf(String className, String classType, Store store) {
+
+		String queryString = "SELECT * { <" + className + "> <" + TYPE + "> ?o }";
+		Query query = QueryFactory.create(queryString);
+		Dataset ds = SDBFactory.connectDataset(store);
+
+		QueryExecution qe = QueryExecutionFactory.create(query, ds);
+		try {
+			ResultSet rs = qe.execSelect();
+
+			if (rs != null)
+				if (rs.hasNext()) {
+					QuerySolution qs = rs.next();
+					Resource r = qs.getResource("o");
+					
+					if (r.toString().equals(classType))
+						return true;
+				}
+		} finally {
+			qe.close();
+		}
+
+		return false;
+	}
+	
+	
+	
+	/**
      * Process any command line arguments
      */
     private static void processArgs( String[] args ) {
@@ -259,18 +387,21 @@ public class SDBHelper
         }
     }
 
-	public static ArrayList <String> getSuperClasses(String category, Store store) {
+	public static ArrayList<String> getOWLSuperClasses(String category, Store store) {
 
-		ArrayList <String> sc = new ArrayList<String>();
-		String queryString = "SELECT * WHERE { <" + category + "> <" + Constants.NS_RDFS + "subClassOf"	+ "> ?o }";
+		ArrayList<String> sc = new ArrayList<String>();
+		
+		String queryString = "SELECT * WHERE { <" + category + "> <"
+				+ SUB_CLASS_OF + "> ?o }";
+		
 		ResultSet rs = SDBHelper.execSelect(queryString, store);
 
 		for (; rs.hasNext();) {
 			QuerySolution soln = rs.nextSolution();
-			Resource r = soln.getResource("o") ;
+			Resource r = soln.getResource("o");
 			sc.add(r.toString());
 		}
-		
+
 		return sc;
 	}
 	

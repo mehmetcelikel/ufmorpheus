@@ -29,11 +29,11 @@ import uf.morpheus.meta.MessageLogger;
 public class DBpediaSDBHelper {
 
 	/**
-	 * Sub class to handle the broader nodes in the DBpedia 
-	 *
+	 * Sub class to handle the broader nodes in the DBpedia
+	 * 
 	 */
-	public class BTNode implements Comparable<BTNode>{
-		
+	public class BTNode implements Comparable<BTNode> {
+
 		public Resource Category = null;
 		public String BroaderCategory = null;
 		public int BroaderLevel = 0;
@@ -52,25 +52,24 @@ public class DBpediaSDBHelper {
 	}
 
 	// Class members 
-
-	private String ontologyURI = "";
-	private String NS = "";
-
 	private int categoryClassCount = 0;
 	private int axiomsCount = 0;
-
 	private MessageLogger msg = MessageLogger.getInstance();
 	private long treeHeight = 0; // This should be set to zero in every hierarchy creation 
 	
 	private Model model = null; 
 	private Property subClassPty = null;
+	private Property typePty = null; 
+	private Resource owlClass = null; 
 	private Resource rootCategory = null;
 	private DBpediaConnector dbpC = null;
 	private Store store = null;
 
-	
-	
 
+	/**
+	 * Constructor 
+	 */
+	
 	public DBpediaSDBHelper(){
 		dbpC = new DBpediaConnector();
 	}
@@ -85,21 +84,18 @@ public class DBpediaSDBHelper {
 	 * 		  to be retrieved from DBpedia   
 	 */
 	public void createCategoryHierarchy(
-			String ontoURI,
 			ArrayList <String> categories, 
 			int broadenLimit, 
 			boolean bfs, 
 			boolean addNarrowCategories) 
 	{
 		
-		ontologyURI = ontoURI;
-		NS = ontologyURI + "#";
-		
 		try {
 			long starttime = System.currentTimeMillis();
 
 			// Gets the SDB store 
 			store = SDBHelper.getStore();
+			
 			// Gets the default model 
 			// Note: the triples will be stored in the triples db 
 	    	model = SDBHelper.getDBModel(store);
@@ -109,8 +105,10 @@ public class DBpediaSDBHelper {
 			treeHeight = 0;
 			
 			// Adds the root category 
-			rootCategory = addCategory(Constants.DBPEDIA_ROOT_CLASS_NAME);
 			subClassPty = model.createProperty(Constants.NS_RDFS, "subClassOf");
+			typePty = model.createProperty(Constants.NS_RDF, "type"); // Creates the type  
+			owlClass = model.createResource(Constants.NS_OWL + "Class"); // Creates the OWL class rs  
+			rootCategory = addCategory(Constants.DBPEDIA_ROOT_CLASS_NAME);
 			
 			
 			for (String category : categories){
@@ -119,6 +117,7 @@ public class DBpediaSDBHelper {
 				else 
 					addDFSCategoryHierarchicalClasses(category, broadenLimit, addNarrowCategories);
 			}
+
 			// Adds the tree height 
 			addCategoryHierarchyHeight();
 
@@ -147,14 +146,13 @@ public class DBpediaSDBHelper {
 	 * @throws OWLOntologyChangeException 
 	 * 
 	 */
-	private void addCategoryHierarchyHeight()
-	{
-		Property th = model.createProperty(NS,
+	private void addCategoryHierarchyHeight() {
+		Property th = model.createProperty(Constants.NS_PROPERTIES,
 				Constants.DBPEDIA_PROPERTY_TREE_HEIGHT);
 
 		// Adds the tree Height to the root class
 		rootCategory.addProperty(th, String.valueOf(treeHeight));
-		
+
 		axiomsCount++;
 
 		msg.logger.info("Added the ontology tree height:" + treeHeight);
@@ -178,7 +176,7 @@ public class DBpediaSDBHelper {
 		// Firstly, add the category 
 		Resource categoryC = addCategory(category);
 		
-		// Adds the narrow categories
+		// Adds narrow categories
 		if (addNarrowCategories) {
 			msg.logger.info("Adding narrow categories for " + category + "\n");
 			
@@ -191,7 +189,7 @@ public class DBpediaSDBHelper {
 			}
 		}
 		
-		// Forms the hierarchy 
+		// Forms hierarchy 
 		msg.logger.info("\nAdding broader categories (BFS)\n");
 		
 		ArrayList <String> broaderCat = dbpC.getBroaderCategories(category);
@@ -250,7 +248,7 @@ public class DBpediaSDBHelper {
 		// Firstly, add the category 
 		Resource categoryC = addCategory(category);
 		
-		// Adds the narrow categories
+		// Adds narrow categories
 		if (addNarrowCategories) {
 			msg.logger.info("Adding narrow categories for " + category + "\n");
 			
@@ -316,12 +314,18 @@ public class DBpediaSDBHelper {
 	 *            resource name
 	 */
 	private Resource addCategory(String name) {
+
 		Resource oClass = null;
+
 		try {
-			oClass = model.createResource(NS + name);
+
+			oClass = model.createResource(Constants.NS_CLASSES + name);
+			oClass.addProperty(typePty, owlClass); // Adds the triple for the
+													// type OWLClass
 			categoryClassCount++;
-			msg.logger.info("Added the category: "
-					+ name + "\n");
+
+			msg.logger.info("Added the category: " + name + "\n");
+
 		} catch (Exception e) {
 
 			msg.logger.severe("Exception in adding a new category : "
@@ -339,9 +343,12 @@ public class DBpediaSDBHelper {
 	private void addSubClassProperty(Resource category, Resource superCategory){
 		
 		try {
+			
 			category.addProperty(subClassPty, superCategory); // Adds the sub class axiom
 			axiomsCount++;
+			
 			msg.logger.info("Added the axiom: " + category + " <-- " + superCategory);
+		
 		} catch (Exception e) {
 			msg.logger.severe("Exception in adding sub class property: " + e.getMessage());
 			System.exit(1);
@@ -357,7 +364,7 @@ public class DBpediaSDBHelper {
 	 */
 	private Resource getCategory(String name){
 		Resource oClass = null;
-		oClass = model.getResource(NS + name);
+		oClass = model.getResource(Constants.NS_CLASSES + name);
 		return oClass;
 	}
 	
@@ -368,11 +375,11 @@ public class DBpediaSDBHelper {
 	 */
 	private boolean isExists(String name){
 		
-		return SDBHelper.containsClass(NS + name, store);
+		return SDBHelper.containsOWLClass(Constants.NS_CLASSES + name, store);
 		
 		// Note if we use the named model the method 
 		// containsClass(className, model) should be called 
-		// return SDBHelper.containsClass(NS + name, mdl);
+		// return SDBHelper.containsClass(Constants.NS_CLASSES + name, mdl);
 		
 	}
 
@@ -383,16 +390,15 @@ public class DBpediaSDBHelper {
 	 * Function main - This is code is written to 
 	 * test the creation of DBpedia category library 
 	 * 
-	 * @param category name
-	 * @param ontology URI
+	 * @param categories in a comma separated format 
 	 * @param broaden limit (for option hierarchy)
 	 * @param BFS(1) or DFS(2) (for option hierarchy)
 	 * @param add narrow categories (1) and do not add (2) (for option hierarchy) 
-	 * 		  e.g. Basketball "http://zion.cise.ufl.edu/ontology/classes/Basketball" 2 1 1 
+	 * 		  e.g. Basketball 2 1 1 
 	 */
 	public static void main(String args[]) 
 	{
-		if (args.length < 5) {
+		if (args.length < 4) {
 			System.out.println("Invalid user input!");
 			System.exit(0);
 		} 
@@ -406,10 +412,10 @@ public class DBpediaSDBHelper {
 
 		System.out.println("Total categories: " + categories.size());
 
-		cl.createCategoryHierarchy(args[1], categories, 
-				Integer.parseInt(args[2]), // broaden limit 
-				(args[3].equalsIgnoreCase("1")) ? true : false,  // BFS or DFS 
-				(args[4].equalsIgnoreCase("1")) ? true : false); // add narrow cat or not 
+		cl.createCategoryHierarchy(categories, 
+				Integer.parseInt(args[1]), // broaden limit 
+				(args[2].equalsIgnoreCase("1")) ? true : false,  // BFS or DFS 
+				(args[3].equalsIgnoreCase("1")) ? true : false); // add narrow cat or not 
 	
 	} 
 
