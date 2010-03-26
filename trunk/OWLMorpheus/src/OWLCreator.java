@@ -178,7 +178,9 @@ public class OWLCreator {
 			//Importing current class and creating an instance of it
 			instanceClass = factory.getOWLIndividual(URI.create("#"+individual[x].getContextclass()));			
 			//Getting the class from zion 
-			String sClass = filesystem.ClassSearch.SearchClass(individual[x].getContextclass(), query.getRealm().getRealm());			
+			//String sClass = filesystem.ClassSearch.SearchClass(individual[x].getContextclass(), query.getRealm().getRealm());
+			//String sClass = db.SearchClass.Search(individual[x].getContextclass());
+			String sClass = "http://zion.cise.ufl.edu/ontology/classes#"+individual[x].getContextclass();
 			//Will return the class location
 			currentClass = factory.getOWLClass(URI.create(sClass));			
 			t = factory.getOWLClassAssertionAxiom(instanceClass, currentClass) ;					
@@ -255,7 +257,9 @@ public class OWLCreator {
 		//Adding realm to the ontology
 		OWLIndividual realm = factory.getOWLIndividual(URI.create("#"+query.getRealm().getRealm())); //New instance of realm		
 		//Getting the class from zion 
-		String sClass = filesystem.ClassSearch.SearchClass(query.getRealm().getRealm(), query.getRealm().getRealm());			
+		//String sClass = filesystem.ClassSearch.SearchClass(query.getRealm().getRealm(), query.getRealm().getRealm());
+		//String sClass = db.SearchClass.Search(query.getRealm().getRealm());
+		String sClass = "http://zion.cise.ufl.edu/ontology/classes#"+query.getRealm().getRealm();
 		//Will return the class location
 		OWLClass realmClass = factory.getOWLClass(URI.create(sClass));	
 		//Create the instance of the class realm
@@ -364,14 +368,14 @@ public class OWLCreator {
 		queryID = new Integer(args[0]);		
 		//Path to save the ontology	locally			
 		//String file = "file:/Users/Guillermo/workspace/OWLMorpheus/OntologyFiles/ssq"+args[0]+".xml";
-		String file = "file:/C://temp//ontology//ssq"+args[0]+".xml";
+		String file = "file:/C://temp//ontology//SSQ-"+args[0]+".xml";
 		
 		//Path to get the ontology locally
 		//String uploadFile = "C:\\Users\\Guillermo\\workspace\\OWLMorpheus\\OntologyFiles\\ssq"+args[0]+".xml";
-		String uploadFile = "C:\\temp\\ontology\\ssq"+args[0]+".xml";
+		String uploadFile = "C:\\temp\\ontology\\SSQ-"+args[0]+".xml";
 		
 		//String url = "http://zion.cise.ufl.edu/ontology/ssq/"+args[0]+".xml";
-		String url = "http://zion.cise.ufl.edu/ontology/ssq";
+		String url = "http://zion.cise.ufl.edu/ontology/SSQ-";
 		try {
 			OWLCreator owl = new OWLCreator(url, file, queryID);	
         

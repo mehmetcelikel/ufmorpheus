@@ -43,7 +43,7 @@ public class OWLProperties {
 		
 		uri = "http://zion.cise.ufl.edu/ontology/properties.xml";
 		//file = "http://zion.cise.ufl.edu/ontology/Properties/OWLProperties.xml";
-		file = "file:/Users/Guillermo/workspace/OWLMorpheus/OntologyFiles/OWLProperties.xml";
+		file = "file:/C://temp//ontology//properties.xml";
 		manager = OWLManager.createOWLOntologyManager();		
 		ontologyURI = URI.create(uri);
 		URI physicalURI = URI.create(file);
@@ -67,6 +67,18 @@ public class OWLProperties {
 		
 			manager.saveOntology(ontology);
 			System.out.println("Ontology classes Created");
+			
+			String uploadFile = "C:\\temp\\ontology\\properties.xml";
+			
+			//String url = "http://zion.cise.ufl.edu/ontology/ssq/"+args[0]+".xml";
+			String url = "http://zion.cise.ufl.edu/ontology/properties.xml";
+						
+	        
+				//Upload file to the server
+				filesystem.FTPUploadFile.transferZion(uploadFile, "/var/www/ontology/");
+				
+				System.out.println(url);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,7 +160,7 @@ public class OWLProperties {
 		public void importClassesOntology() throws OWLOntologyCreationException {
 			 classManager = OWLManager.createOWLOntologyManager(); // Manager for Class ontology
 			 //physicalURI = URI.create("http://www.co-ode.org/ontologies/pizza/2007/02/12/pizza.owl");
-			 physicalURI = URI.create("http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml");
+			 physicalURI = URI.create("http://zion.cise.ufl.edu/ontology/classes.xml");
 			 //manager.lo
 			 classOntology = classManager.loadOntologyFromPhysicalURI(physicalURI);
 			 

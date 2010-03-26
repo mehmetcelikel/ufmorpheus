@@ -32,8 +32,8 @@ public class OWLClasses {
 	}
 	
 	public void createClasses() {
-		uri = "http://zion.cise.ufl.edu/ontology/classes/OWLClasses.xml";
-		file = "file:/Users/Guillermo/workspace/OWLMorpheus/OntologyFiles/OWLClasses.xml";
+		uri = "http://zion.cise.ufl.edu/ontology/classes.xml";
+		file = "file:/C://temp//ontology//classes.xml";
 		manager = OWLManager.createOWLOntologyManager();		
 		ontologyURI = URI.create(uri);
 		URI physicalURI = URI.create(file);
@@ -52,10 +52,27 @@ public class OWLClasses {
 			
 			addDefaultClasses();// Adding default classes to the ontology
 			//addAllTableClasses(); // Add the classes from the class table on the database
-			addRealms();// Add the realms from the table ream
-		
+			//addRealms();// Add the realms from the table ream
+			
 			manager.saveOntology(ontology);
 			System.out.println("Ontology classes Created");
+			
+			String uploadFile = "C:\\temp\\ontology\\classes.xml";
+			
+			//String url = "http://zion.cise.ufl.edu/ontology/ssq/"+args[0]+".xml";
+			String url = "http://zion.cise.ufl.edu/ontology/classes.xml";
+			try {				
+	        
+				//Upload file to the server
+				filesystem.FTPUploadFile.transferZion(uploadFile, "/var/www/ontology/");
+				
+				System.out.println(url);
+			}
+			catch(Exception e) {
+				//System.out.println("Error creating Ontology\n" + e);
+			}	
+		
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();
