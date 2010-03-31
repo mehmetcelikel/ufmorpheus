@@ -26,6 +26,7 @@ import org.semanticweb.owl.util.SimpleURIMapper;
 
 
 import db.*; 
+import filesystem.TempFolder;
 
 public class OWLCreator {
 	
@@ -365,18 +366,26 @@ public class OWLCreator {
 			System.exit(0);
 		}
 		
+		TempFolder folder = new TempFolder();
+		
 		queryID = new Integer(args[0]);		
 		//Path to save the ontology	locally			
 		//String file = "file:/Users/Guillermo/workspace/OWLMorpheus/OntologyFiles/ssq"+args[0]+".xml";
-		String file = "file:/C://temp//ontology//SSQ-"+args[0]+".xml";
+		//String file = "file:/C://temp//ontology//SSQ-"+args[0]+".xml";
+		String file = folder.getOntologyPath()+"SSQ-"+args[0]+".xml";
+		//String file = "file:/"+"C:/Users/GUILLE~1/AppData/Local/Temp/"+"SSQ-"+args[0]+".xml";
+		
+		
 		
 		//Path to get the ontology locally
 		//String uploadFile = "C:\\Users\\Guillermo\\workspace\\OWLMorpheus\\OntologyFiles\\ssq"+args[0]+".xml";
-		String uploadFile = "C:\\temp\\ontology\\SSQ-"+args[0]+".xml";
+		//String uploadFile = "C:\\temp\\ontology\\SSQ-"+args[0]+".xml";
+		String uploadFile = folder.getUploadPath()+"SSQ-"+args[0]+".xml";
 		
 		//String url = "http://zion.cise.ufl.edu/ontology/ssq/"+args[0]+".xml";
 		String url = "http://zion.cise.ufl.edu/ontology/SSQ-";
 		try {
+			
 			OWLCreator owl = new OWLCreator(url, file, queryID);	
         
 			//Upload file to the server
@@ -385,7 +394,7 @@ public class OWLCreator {
 			System.out.println(url+args[0]+".xml");
 		}
 		catch(Exception e) {
-			//System.out.println("Error creating Ontology\n" + e);
+			System.out.println("Error creating Ontology\n" + e);
 		}		
 	}
 	
