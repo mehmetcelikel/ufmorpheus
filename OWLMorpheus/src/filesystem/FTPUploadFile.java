@@ -19,7 +19,7 @@ import com.zehon.sftp.SFTP;
 		 */
 		public static void transferZion(String file, String destination) {
 			
-			
+			/*
 			//Disable Printing to the screen
 			PrintStream printStreamOriginal=System.out; //Standard output
 			PrintStream printStreamError=System.err;	//Standard error
@@ -31,7 +31,7 @@ import com.zehon.sftp.SFTP;
 	        	public void write(int b) {
 				}
 			}));
-				
+			*/
 			
 			String host = "zion.cise.ufl.edu";
 			String username = "researcher";
@@ -50,15 +50,24 @@ import com.zehon.sftp.SFTP;
 				e.printStackTrace();
 			}
 			
+			/*
 			//Enabling printing to the screen again
 			System.setOut(printStreamOriginal);
 			System.setErr(printStreamError);
+			*/
 			
 		}
 		
 		public static void main(String[] args) {
+			/*
 			String file = "C:\\Users\\Guillermo\\workspace\\OWLMorpheus\\OntologyFiles\\412.xml";
-			String destination = "/var/www/ontology/SSQ";
+			String destination = "/var/www/ontology/test";
+			*/
+			TempFolder folder = new TempFolder();
+			String file = folder.getUploadPath()+"test.txt";
+			String destination = "/var/www/ontology/test";
+			
+			
 			
 			FTPUploadFile.transferZion(file, destination);
 
