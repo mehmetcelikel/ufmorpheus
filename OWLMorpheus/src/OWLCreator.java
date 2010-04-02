@@ -39,6 +39,7 @@ public class OWLCreator {
 	public static URI ontologyURI;
 	public static OWLAxiom axiom;
 	public static Query query;	
+	/* Removed to has all properties and classes in the same file
 	//Manager for classes
 	public static OWLOntologyManager classManager; //Manager for Class ontology
 	public static URI physicalURI; 
@@ -47,6 +48,7 @@ public class OWLCreator {
 	public static OWLOntologyManager propertyManager; //Manager for Class ontology
 	public static URI propertyPhysicalURI; 
 	public static OWLOntology propertyOntology;	
+	*/
 	// Hash table with context
 	public Hashtable htContext = new Hashtable();
 
@@ -72,14 +74,20 @@ public class OWLCreator {
 		
 		try {
 			
-			importClassesOntology();
+			//importClassesOntology();
 
-			importPropertiesOntology();
+			//importPropertiesOntology();
 			//System.out.println("properties imported succ");
+			
+
 		
 			ontology = manager.createOntology(ontologyURI);
 			factory = manager.getOWLDataFactory();
 						
+			addDefaultClasses();// Adding default classes to the ontology
+			addContextProperties(); // Add the properties from the context table on the database
+			addDefaultProperties();//Add all properties
+			
 			//addClassContext();//This will add the class Context for the query
 			
 			addContext();// Method to add context of the query as instances of classes
@@ -98,12 +106,75 @@ public class OWLCreator {
 			
 		}
 	}
-	
+	private void addDefaultClasses() throws OWLOntologyChangeException {
+		//Creating Classes
+		addClass("#QueryClass");
+		addClass("#SSQ");			
+		addClass("#Context");
+		addClass("#ContextClass");
+		addClass("#Realm");
+		addClass("#Modifier");
+		addClass("#ModifierList");
+	}
+	private void addContextProperties() throws OWLOntologyChangeException {
+		Context[] contexts = DBReader.getContexts();
+		OWLObjectProperty property;
+		
+		
+		//Add contextProperties with domain and range
+		for (int x = 0; x < contexts.length; x++) {
+			property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#" + contexts[x].getContextName() + "_input"));
+			addAxiom(factory.getOWLDeclarationAxiom(property));			
+			addAxiom(factory.getOWLObjectPropertyDomainAxiom(property, getImportedClass("QueryClass")));			
+			addAxiom(factory.getOWLObjectPropertyRangeAxiom(property, getImportedClass("Context")));
+			
+			property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#" + contexts[x].getContextName() + "_output"));
+			addAxiom(factory.getOWLDeclarationAxiom(property));			
+			addAxiom(factory.getOWLObjectPropertyDomainAxiom(property, getImportedClass("QueryClass")));			
+			addAxiom(factory.getOWLObjectPropertyRangeAxiom(property, getImportedClass("Context")));
+
+		}
+	}
+	private void addDefaultProperties() throws OWLOntologyChangeException {
+		OWLObjectProperty property;
+		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#ValueWithinContext"));
+		addAxiom(factory.getOWLDeclarationAxiom(property));	
+		
+		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasRank"));
+		addAxiom(factory.getOWLDeclarationAxiom(property));
+		
+		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasModifier"));
+		addAxiom(factory.getOWLDeclarationAxiom(property));
+		
+		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasModifierList"));
+		addAxiom(factory.getOWLDeclarationAxiom(property));
+		
+		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#belongsToClass"));
+		addAxiom(factory.getOWLDeclarationAxiom(property));
+		
+		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasQueryID"));
+		addAxiom(factory.getOWLDeclarationAxiom(property));
+		
+		OWLClass oClass = factory.getOWLClass(URI.create("http://www.w3.org/2002/07/owl#Thing"));
+		OWLAxiom axiom = factory.getOWLDeclarationAxiom(oClass);
+		addAxiom(axiom);
+		
+		// Adding realm
+		OWLObjectProperty hasRealmProp = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasRealm"));
+		addAxiom(factory.getOWLDeclarationAxiom(hasRealmProp));
+		addAxiom(factory.getOWLFunctionalObjectPropertyAxiom(hasRealmProp));
+		addAxiom(factory.getOWLSymmetricObjectPropertyAxiom(hasRealmProp));
+		addAxiom(factory.getOWLTransitiveObjectPropertyAxiom(hasRealmProp));
+		addAxiom(factory.getOWLObjectPropertyDomainAxiom(hasRealmProp, getImportedClass("QueryClass")));
+		addAxiom(factory.getOWLObjectPropertyRangeAxiom(hasRealmProp,  oClass));	
+		 
+		
+	}
 	private void addAxiom(OWLAxiom axiom) throws OWLOntologyChangeException {
 		AddAxiom addAxiom = new AddAxiom(ontology, axiom);
 		manager.applyChange(addAxiom);
 	}
-	private OWLClass addClass(String name) throws OWLOntologyChangeException {
+	private OWLClass addClass(String name) throws OWLOntologyChangeException {		
 		OWLClass oClass = factory.getOWLClass(URI.create(ontologyURI + name));
 		OWLAxiom axiom = factory.getOWLDeclarationAxiom(oClass);
 		addAxiom(axiom);		
@@ -127,7 +198,7 @@ public class OWLCreator {
 	*/
 	private OWLClass getImportedClass(String name) {
 		OWLClass owlClass = null;
-		
+		/*
 		// This for loop will look on the ontology for the class given by name
         for(OWLClass cls : classOntology.getReferencedClasses()) {        	
         	if (cls.toString().compareTo(name) == 0) {        		
@@ -137,11 +208,15 @@ public class OWLCreator {
         	}
             
         }
+        */
+		owlClass = factory.getOWLClass(URI.create(ontologyURI+name));
+		
         return owlClass;
 	}
 	private OWLObjectProperty getImportedProperty(String name ){		
 		OWLObjectProperty oproperty = null;
 		
+		/*
 		// This for loop will look on the ontology for the property given by name
         for(OWLObjectProperty prop : propertyOntology.getReferencedObjectProperties()) {
         	//System.out.println("Property is: " +prop);
@@ -152,6 +227,8 @@ public class OWLCreator {
         	}
             
         }
+        */
+		oproperty = factory.getOWLObjectProperty(URI.create(ontologyURI+name));
         return oproperty;
 	}
 	/**
@@ -282,7 +359,7 @@ public class OWLCreator {
         manager.applyChange(addAxiomChange);
         
 		//Adding Query id		
-		OWLDataProperty hasQueryID = factory.getOWLDataProperty(URI.create("#hasQueryID"));	            
+		OWLDataProperty hasQueryID = factory.getOWLDataProperty(URI.create(ontologyURI+"#hasQueryID"));	            
 		OWLDataPropertyAssertionAxiom dataAssertion= factory.getOWLDataPropertyAssertionAxiom(SSQ, hasQueryID, query.getQueryid()) ;            
         addAxiomChange = new AddAxiom(ontology, dataAssertion);
         manager.applyChange(addAxiomChange);
@@ -308,27 +385,31 @@ public class OWLCreator {
         }
 		
 	}
+	
 	/**
 	 * Import classes from the classes ontology file by creating a new manager
 	 * @throws OWLOntologyCreationException
 	 */
-	
+	/*
 	public void importClassesOntology() throws OWLOntologyCreationException {
 		 classManager = OWLManager.createOWLOntologyManager(); // Manager for Class ontology		 
 		 physicalURI = URI.create("http://zion.cise.ufl.edu/ontology/classes.xml");		 
 		 classOntology = classManager.loadOntologyFromPhysicalURI(physicalURI);		 
 		 
 	}
+	*/
 	/**
 	 * Imports the properties from the property ontology file by creating a new manager
 	 * @throws OWLOntologyCreationException
 	 */
+	/*
 	public void importPropertiesOntology() throws OWLOntologyCreationException {
 		 propertyManager = OWLManager.createOWLOntologyManager(); // Manager for Class ontology
 		 propertyPhysicalURI = URI.create("http://zion.cise.ufl.edu/ontology/properties.xml");		 
 		 propertyOntology = propertyManager.loadOntologyFromPhysicalURI(propertyPhysicalURI);
 		 		 
 	}
+	*/
 	/**
 	 * Will insert the next available index for this name and return the new name for the context
 	 * @param name
@@ -383,7 +464,7 @@ public class OWLCreator {
 		String uploadFile = folder.getUploadPath()+"SSQ-"+args[0]+".xml";
 		
 		//String url = "http://zion.cise.ufl.edu/ontology/ssq/"+args[0]+".xml";
-		String url = "http://zion.cise.ufl.edu/ontology/SSQ-";
+		String url = "http://zion.cise.ufl.edu/ontology/";
 		try {
 			
 			OWLCreator owl = new OWLCreator(url, file, queryID);	
@@ -391,7 +472,7 @@ public class OWLCreator {
 			//Upload file to the server
 			filesystem.FTPUploadFile.transferZion(uploadFile, "/var/www/ontology/");
 			
-			System.out.println(url+args[0]+".xml");
+			System.out.println(url+"SSQ-"+args[0]+".xml");
 		}
 		catch(Exception e) {
 			System.out.println("Error creating Ontology\n" + e);
