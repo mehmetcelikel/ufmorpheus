@@ -37,6 +37,8 @@ public class OWLCreator {
 	public static OWLOntology ontology;
 	public static OWLDataFactory factory;
 	public static URI ontologyURI;
+	public static URI propertiesURI;
+	public static URI classesURI;
 	public static OWLAxiom axiom;
 	public static Query query;	
 	/* Removed to has all properties and classes in the same file
@@ -68,6 +70,8 @@ public class OWLCreator {
 		
 		manager = OWLManager.createOWLOntologyManager();		
 		ontologyURI = URI.create(uri);
+		propertiesURI = URI.create(uri+"properties");
+		classesURI = URI.create(uri+"classes");
 		URI physicalURI = URI.create(file);
 		SimpleURIMapper mapper = new SimpleURIMapper(ontologyURI, physicalURI);
 		manager.addURIMapper(mapper);
@@ -88,7 +92,7 @@ public class OWLCreator {
 			addContextProperties(); // Add the properties from the context table on the database
 			addDefaultProperties();//Add all properties
 			
-			//addClassContext();//This will add the class Context for the query
+			
 			
 			addContext();// Method to add context of the query as instances of classes
 
@@ -123,12 +127,14 @@ public class OWLCreator {
 		
 		//Add contextProperties with domain and range
 		for (int x = 0; x < contexts.length; x++) {
-			property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#" + contexts[x].getContextName() + "_input"));
+			
+			
+			property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#" + contexts[x].getContextName() + "_input"));
 			addAxiom(factory.getOWLDeclarationAxiom(property));			
 			addAxiom(factory.getOWLObjectPropertyDomainAxiom(property, getImportedClass("QueryClass")));			
 			addAxiom(factory.getOWLObjectPropertyRangeAxiom(property, getImportedClass("Context")));
 			
-			property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#" + contexts[x].getContextName() + "_output"));
+			property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#" + contexts[x].getContextName() + "_output"));
 			addAxiom(factory.getOWLDeclarationAxiom(property));			
 			addAxiom(factory.getOWLObjectPropertyDomainAxiom(property, getImportedClass("QueryClass")));			
 			addAxiom(factory.getOWLObjectPropertyRangeAxiom(property, getImportedClass("Context")));
@@ -137,22 +143,23 @@ public class OWLCreator {
 	}
 	private void addDefaultProperties() throws OWLOntologyChangeException {
 		OWLObjectProperty property;
-		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#ValueWithinContext"));
+		
+		property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#ValueWithinContext"));
 		addAxiom(factory.getOWLDeclarationAxiom(property));	
 		
-		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasRank"));
+		property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#hasRank"));
 		addAxiom(factory.getOWLDeclarationAxiom(property));
 		
-		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasModifier"));
+		property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#hasModifier"));
 		addAxiom(factory.getOWLDeclarationAxiom(property));
 		
-		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasModifierList"));
+		property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#hasModifierList"));
 		addAxiom(factory.getOWLDeclarationAxiom(property));
 		
-		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#belongsToClass"));
+		property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#belongsToClass"));
 		addAxiom(factory.getOWLDeclarationAxiom(property));
 		
-		property = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasQueryID"));
+		property = factory.getOWLObjectProperty(URI.create(propertiesURI + "#hasQueryID"));
 		addAxiom(factory.getOWLDeclarationAxiom(property));
 		
 		OWLClass oClass = factory.getOWLClass(URI.create("http://www.w3.org/2002/07/owl#Thing"));
@@ -160,7 +167,7 @@ public class OWLCreator {
 		addAxiom(axiom);
 		
 		// Adding realm
-		OWLObjectProperty hasRealmProp = factory.getOWLObjectProperty(URI.create(ontologyURI + "#hasRealm"));
+		OWLObjectProperty hasRealmProp = factory.getOWLObjectProperty(URI.create(propertiesURI + "#hasRealm"));
 		addAxiom(factory.getOWLDeclarationAxiom(hasRealmProp));
 		addAxiom(factory.getOWLFunctionalObjectPropertyAxiom(hasRealmProp));
 		addAxiom(factory.getOWLSymmetricObjectPropertyAxiom(hasRealmProp));
@@ -175,7 +182,7 @@ public class OWLCreator {
 		manager.applyChange(addAxiom);
 	}
 	private OWLClass addClass(String name) throws OWLOntologyChangeException {		
-		OWLClass oClass = factory.getOWLClass(URI.create(ontologyURI + name));
+		OWLClass oClass = factory.getOWLClass(URI.create(classesURI+name));
 		OWLAxiom axiom = factory.getOWLDeclarationAxiom(oClass);
 		addAxiom(axiom);		
 		return oClass;
@@ -209,7 +216,7 @@ public class OWLCreator {
             
         }
         */
-		owlClass = factory.getOWLClass(URI.create(ontologyURI+name));
+		owlClass = factory.getOWLClass(URI.create(classesURI+"#"+name));
 		
         return owlClass;
 	}
@@ -228,7 +235,7 @@ public class OWLCreator {
             
         }
         */
-		oproperty = factory.getOWLObjectProperty(URI.create(ontologyURI+name));
+		oproperty = factory.getOWLObjectProperty(URI.create(propertiesURI+"#"+name));
         return oproperty;
 	}
 	/**
@@ -359,7 +366,7 @@ public class OWLCreator {
         manager.applyChange(addAxiomChange);
         
 		//Adding Query id		
-		OWLDataProperty hasQueryID = factory.getOWLDataProperty(URI.create(ontologyURI+"#hasQueryID"));	            
+		OWLDataProperty hasQueryID = factory.getOWLDataProperty(URI.create(propertiesURI+"#hasQueryID"));	            
 		OWLDataPropertyAssertionAxiom dataAssertion= factory.getOWLDataPropertyAssertionAxiom(SSQ, hasQueryID, query.getQueryid()) ;            
         addAxiomChange = new AddAxiom(ontology, dataAssertion);
         manager.applyChange(addAxiomChange);
