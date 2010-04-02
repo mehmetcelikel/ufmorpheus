@@ -13,9 +13,25 @@ public class TempFolder {
 		// Get the temporary directory and print it.
 		
 		String tempDir = System.getProperty(property);
-				
-		uploadPath = tempDir;
-		ontologyPath = "file:/"+tempDir.replace("\\","/");
+		
+		if (tempDir.startsWith("/")) {
+			/* for linux */
+			//System.out.println("Inside Linux");
+			uploadPath = tempDir+"/";
+			ontologyPath = "file:"+tempDir+"/";
+		}
+		else {
+			/* For Windows */
+			uploadPath = tempDir;
+			ontologyPath = "file:/"+tempDir.replace("\\","/");	
+		}
+
+		
+		
+		
+		
+		
+		
 		
 	}
 	public static void main(String[] args)
