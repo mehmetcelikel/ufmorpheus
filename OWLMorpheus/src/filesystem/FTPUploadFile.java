@@ -63,8 +63,10 @@ import com.zehon.sftp.SFTP;
 			String file = "C:\\Users\\Guillermo\\workspace\\OWLMorpheus\\OntologyFiles\\412.xml";
 			String destination = "/var/www/ontology/test";
 			*/
+			
 			TempFolder folder = new TempFolder();
-			String file = folder.getUploadPath()+"test.txt";
+			String file = folder.getUploadPath()+"SSQ-473.xml";
+			//String file = "/tmp/"+"SSQ-473.xml";
 			String destination = "/var/www/ontology/test";
 			
 			
