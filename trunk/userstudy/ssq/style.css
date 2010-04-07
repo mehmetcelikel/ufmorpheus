@@ -1,0 +1,21 @@
+#demo {
+	height: 100px;
+	width: 100px;
+	border: 1px solid black;
+	background-color: #8DD5E7;
+	cursor: move;
+}
+
+#inputcanvas{
+	position: relative;
+	float: left;	
+	background-color: #8DD5E7;
+	border: 1px solid black;
+}
+
+#outputcanvas{
+	position: relative;
+	float: right;	
+	background-color: #CDCDCD;
+	border: 1px solid black;
+}
