@@ -75,7 +75,7 @@ namespace DobsonLibrary.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT classid,name FROM class.
+        ///   Looks up a localized string similar to SELECT id,lex FROM nodes WHERE lex LIKE &apos;%/classes#%&apos;.
         /// </summary>
         internal static string getAllContextClassesQuery {
             get {

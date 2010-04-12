@@ -13,7 +13,8 @@ namespace DobsonLibrary.DataAccess
 
         private static String debugPath = "";
 
-        private static DatabaseConnection databaseConnection = new DatabaseConnection();
+        private static DatabaseConnection databaseConnection = new DatabaseConnection(DatabaseConnection.DBName.Morpheus3DB);
+        private static DatabaseConnection sdbConnection = new DatabaseConnection(DatabaseConnection.DBName.sdb);
         private static bool hasNewConnection = true;
 
         //sets the database connection to the parameter
@@ -45,31 +46,36 @@ namespace DobsonLibrary.DataAccess
         private NpgsqlConnection conn = null;
 
         //gets the newest connection needed
-        private NpgsqlConnection Connection
+        private NpgsqlConnection getConnection(DatabaseConnection.DBName name)
         {
-            get
-            {
-                //if a new connection is needed and one is already made then the old one needs to be closed
-                if (hasNewConnection && conn != null)
-                {
-                    conn.Close();
-                    conn = null;
-                }
-                hasNewConnection = false;
-                //If there is no connection then this makes the connection and opens it
-                if (conn == null)
-                {
-                    conn = NpgsqlConnectionFactory.createOpenConnection(databaseConnection);
-                }
-                return conn;
-            }
-        }
 
+            //if a new connection is needed and one is already made then the old one needs to be closed
+            if (hasNewConnection && conn != null)
+            {
+                conn.Close();
+                conn = null;
+            }
+            hasNewConnection = false;
+            //If there is no connection then this makes the connection and opens it
+            if (conn == null)
+            {
+                if (name == DatabaseConnection.DBName.Morpheus3DB)
+                    conn = NpgsqlConnectionFactory.createOpenConnection(databaseConnection);
+                else
+                    conn = NpgsqlConnectionFactory.createOpenConnection(sdbConnection);
+            }
+            return conn;
+        }
         //makes a postgres command out of the information given
         private NpgsqlCommand makeCommand(string query)
         {
             //printQuery(query);
-            return new NpgsqlCommand(query, Connection);
+            return new NpgsqlCommand(query, getConnection(DatabaseConnection.DBName.Morpheus3DB));
+        }
+        private NpgsqlCommand makeCommand(string query, DatabaseConnection.DBName name)
+        {
+            //printQuery(query);
+            return new NpgsqlCommand(query, getConnection(name));
         }
 
         //performs a query where no result is needed.  ex. insert into table.
@@ -94,13 +100,19 @@ namespace DobsonLibrary.DataAccess
 
             return command.ExecuteNonQuery();
         }
-
         //performs a query where a result is needed.   ex. select * from table
         protected NpgsqlDataReader performQuery(string query)
         {
             //printQuery(query);
 
             return makeCommand(query).ExecuteReader();
+        }
+        //performs a query where a result is needed.   ex. select * from table
+        protected NpgsqlDataReader performQuery(string query, DatabaseConnection.DBName name)
+        {
+            //printQuery(query);
+
+            return makeCommand(query,name).ExecuteReader();
         }
 
         //performs a query where a result is needed.   ex. select * from table
@@ -140,11 +152,11 @@ namespace DobsonLibrary.DataAccess
             return command.ExecuteScalar();
         }
 
-        //closes down the connection
+        ////closes down the connection
         public virtual void Dispose()
         {
             if (conn != null)
-                Connection.Close();
+                conn.Close();
         }
 
         /*prints the query for debuging purposes into the databaseDebug.txt, appending the new query every time
@@ -161,7 +173,7 @@ namespace DobsonLibrary.DataAccess
         {
             try
             {
-                NpgsqlConnection thisConnection = Connection;
+                NpgsqlConnection thisConnection = getConnection(DatabaseConnection.DBName.Morpheus3DB);
                 return true;
             }
             catch ( Exception)

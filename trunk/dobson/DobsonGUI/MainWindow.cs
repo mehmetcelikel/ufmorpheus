@@ -574,22 +574,22 @@ namespace DobsonGUI
 
                     case "class":
 
-                        if (iterator.Current.Value != "" && !contextClasses.ContainsKey(iterator.Current.Value))
-                        {
+                        //if (iterator.Current.Value != "" && !contextClasses.ContainsKey(iterator.Current.Value))
+                        //{
 
-                            int id = getMaxContextClassID();
+                        //    int id = getMaxContextClassID();
 
-                            ContextClass newClass = new ContextClass(++id, 1, iterator.Current.Value);
+                        //    ContextClass newClass = new ContextClass(++id, 1, iterator.Current.Value);
 
-                            ContextClassBL.insertContextClass(newClass);
+                        //    ContextClassBL.insertContextClass(newClass);
 
-                            contextClasses[iterator.Current.Value] = newClass;
+                        //    contextClasses[iterator.Current.Value] = newClass;
 
-                        }
+                        //}
 
-                        else if (iterator.Current.Value == "")
+                        //else if (iterator.Current.Value == "")
 
-                            throw new Exception("A highlight has an invalid context class, cannot insert query into database");
+                        //    throw new Exception("A highlight has an invalid context class, cannot insert query into database");
 
 
                         ContextClass c = (ContextClass)contextClasses[iterator.Current.Value];
@@ -984,22 +984,23 @@ namespace DobsonGUI
 
                 Int32 classId = 0;
 
-                if(contextClass == null)
-                {
+                //if(contextClass == null)
+                //{
 
-                    ContextClass newclass = new ContextClass(++maxContextClassid, 1, className);
+                //    ContextClass newclass = new ContextClass(++maxContextClassid, 1, className);
 
-                    ContextClassBL.insertContextClass(newclass);
+                //    ContextClassBL.insertContextClass(newclass);
 
-                    string formattedKey = Main.formatKey(className);
+                //    string formattedKey = Main.formatKey(className);
 
-                    contextClasses[formattedKey] = contextClass;
+                //    contextClasses[formattedKey] = contextClass;
 
-                    classId = maxContextClassid;
+                //    classId = maxContextClassid;
 
-                }
-                else 
-                    classId = contextClass.classId;
+                //}
+                //else 
+                    
+                classId = contextClass.classId;
 
                 //Get the input value from the pagesource
                 HtmlAgilityPack.HtmlNode parentNode = document.DocumentNode.SelectSingleNode(pref.formxpath.ToLower());
@@ -1498,16 +1499,16 @@ namespace DobsonGUI
 
                 ContextClass c = (ContextClass)contextClasses[formattedKey];
 
-                //if null then this is a new class, so we must insert it into the database 
-                if (c == null)
-                {
+                ////if null then this is a new class, so we must insert it into the database 
+                //if (c == null)
+                //{
 
-                    c = new ContextClass(++maxClassId, e.ElementContext.contextID, formattedKey);
+                //    c = new ContextClass(++maxClassId, e.ElementContext.contextID, formattedKey);
 
-                    ContextClassBL.insertContextClass(c);
+                //    ContextClassBL.insertContextClass(c);
 
-                    contextClasses[formattedKey] = c;
-                }
+                //    contextClasses[formattedKey] = c;
+                //}
 
                 if (e.ElementContext.contextID == -1)
                     bl.insertContext(e.ElementContext);

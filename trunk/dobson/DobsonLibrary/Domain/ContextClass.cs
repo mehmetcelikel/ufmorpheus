@@ -18,5 +18,14 @@ namespace DobsonLibrary.Domain
             this.contextclassId = contextclassId;
             this.name = name;
         }
+
+        internal static ContextClass parseClass(int id, string uri)
+        {
+            int i = uri.IndexOf("#");
+
+            string c = uri.Substring(i+1);
+
+            return new ContextClass(id, -1, c);
+        }
     }
 }
