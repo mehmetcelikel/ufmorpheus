@@ -13,10 +13,13 @@ namespace DobsonLibrary.DataAccess
         {
             List<ContextClass> results = new List<ContextClass>();
 
-            NpgsqlDataReader reader = performQuery(SQLQueries.getAllContextClassesQuery);
+            NpgsqlDataReader reader = performQuery(SQLQueries.getAllContextClassesQuery,DatabaseConnection.DBName.sdb);
 
             while (reader.Read() != false)
-                results.Add(new ContextClass(reader.GetInt32(0), -1, reader.GetString(1)));
+            {
+                ContextClass cc = ContextClass.parseClass(reader.GetInt32(0), reader.GetString(1));
+                results.Add(cc);
+            }
 
             reader.Close();
 

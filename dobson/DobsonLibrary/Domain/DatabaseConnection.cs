@@ -14,17 +14,21 @@ namespace DobsonLibrary.Domain
 
         public int port { get; set; }
 
+        public enum DBName { Morpheus3DB, sdb };
 
-        public DatabaseConnection()
+        public DatabaseConnection(DBName name)
         {
-            //server = "postgres.cise.ufl.edu";
-            //port = 5432;
             server = "babylon.cise.ufl.edu";
             port = 5432;
             username = "postgres";
             password = "gotct";
-            database = "Morpheus3DB";
 
+            if (name == DBName.Morpheus3DB)
+            {
+                database = "Morpheus3DB";
+            }
+            else
+                database = "sdb";
         }
 
         public string toString()

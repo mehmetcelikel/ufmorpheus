@@ -30,7 +30,7 @@ namespace DobsonGUI
             }
             else
             {
-                currentConnection = new DatabaseConnection();
+                currentConnection = new DatabaseConnection(DobsonLibrary.Domain.DatabaseConnection.DBName.Morpheus3DB);
             }
         }
 
