@@ -1,21 +1,126 @@
-#demo {
-	height: 100px;
-	width: 100px;
-	border: 1px solid black;
-	background-color: #8DD5E7;
-	cursor: move;
+.term{
+	float: left;
+	position: relative;
+	padding-left: .25em;
+	text-decoration: underline;
+	cursor: pointer;
+	
 }
 
-#inputcanvas{
-	position: relative;
-	float: left;	
-	background-color: #8DD5E7;
-	border: 1px solid black;
+.catbox{
+	font-size: 1em;
 }
 
-#outputcanvas{
-	position: relative;
-	float: right;	
-	background-color: #CDCDCD;
-	border: 1px solid black;
+.autocomplete {
+	background-color: white;
 }
+
+#drop-panels{
+	padding: 3em;
+	width: 100%;
+}
+
+#input-panel{
+	position: relative;
+	float: left;
+	height: 20em;
+	width: 20em;
+	background-color: blue;
+	border-style: dashed;
+	border-width: medium;
+	z-index:-1;
+}
+
+#output-panel{
+	position: relative;
+	float: left;
+	height: 20em;
+	width: 20em;
+	margin-left: 5em;
+	background-color: red;
+	border-style: dashed;
+	border-width: medium;
+	z-index:-1;
+}
+
+.clear{
+	height: 0;
+	font-size: 1px;
+	margin: 0;
+	padding: 0;
+	line-height: 0;
+	clear: both;
+}
+
+.panel-name{
+	text-align: center;
+	font-size: 2em;
+	color: yellow;
+}
+
+.activeDiv{
+	border-color: yellow;
+}
+
+#submitbutton{
+	position: center;
+	float: left;
+	font-size: 4em;
+	margin-left: 9em;
+}
+
+
+
+/****************************  Autocomplete stuff  ***************************/
+
+
+
+.ac_results {
+	padding: 0px;
+	border: 1px solid black;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
+}
+
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: default;
+	display: block;
+	/* 
+	if width will be 100% horizontal scrollbar will apear 
+	when scroll mode will be used
+	*/
+	/*width: 100%;*/
+	font: menu;
+	font-size: 1em;
+	/* 
+	it is very important, if line-height not setted or setted 
+	in relative units scroll will be broken in firefox
+	*/
+	line-height: 16px;
+	overflow: hidden;
+}
+
+.ac_loading {
+	background: white url('indicator.gif') right center no-repeat;
+}
+
+.ac_odd {
+	background-color: #eee;
+}
+
+.ac_over {
+	background-color: #0A246A;
+	color: white;
+}
+
