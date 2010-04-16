@@ -45,6 +45,10 @@
 				<div class="clear"></div>
 			</div>
 			<input type="submit" name="submitbutton" id="submitbutton" value="Next=>" />
+			<div class="clear"></div>
+			
+			<p> Note: double click on a term to add its category and double click to remove the category input box </p>
+			
 		</form>
 	</body>
 </html>
