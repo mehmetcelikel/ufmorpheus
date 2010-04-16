@@ -47,7 +47,10 @@
 			<input type="submit" name="submitbutton" id="submitbutton" value="Next=>" />
 			<div class="clear"></div>
 			
-			<p> Note: double click on a term to add its category and double click to remove the category input box </p>
+			<div class="helpbox">	
+				<p> Drag the term into what you see as an input or our put of the question </p>
+				<p> Note: Double click on a term to add its category and double click to remove the category input box </p>
+			</div>	
 			
 		</form>
 	</body>

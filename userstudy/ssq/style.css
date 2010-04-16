@@ -71,7 +71,9 @@
 	margin-left: 9em;
 }
 
-
+.helpbox > p{ 
+	color: grey;
+}
 
 
 /****************************  Autocomplete stuff  ***************************/
