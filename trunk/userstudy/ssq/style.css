@@ -25,7 +25,7 @@
 	float: left;
 	height: 20em;
 	width: 20em;
-	background-color: blue;
+	/*background-color: blue; */
 	border-style: dashed;
 	border-width: medium;
 	z-index:-1;
@@ -37,7 +37,7 @@
 	height: 20em;
 	width: 20em;
 	margin-left: 5em;
-	background-color: red;
+	/*background-color: red;*/
 	border-style: dashed;
 	border-width: medium;
 	z-index:-1;
@@ -55,12 +55,14 @@
 .panel-name{
 	text-align: center;
 	font-size: 2em;
-	color: yellow;
+	color: red;
 }
 
 .activeDiv{
 	border-color: yellow;
 }
+
+.extra_input{}
 
 #submitbutton{
 	position: center;
@@ -68,6 +70,7 @@
 	font-size: 4em;
 	margin-left: 9em;
 }
+
 
 
 

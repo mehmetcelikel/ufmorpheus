@@ -13,9 +13,11 @@
 	</head>
 	<body>
 		<form method="post">
-			<h3> Question 1 </h3>
+			
+			<h3> Question 1: What size tires does a 97 Toyota Camery need? </h3>
+			<h1>
 			<div id="question">
-				<h1>
+					<input type="hidden" name="questionid" value="1" />
 					<div index="0" class="term">What <input type="text" name="term0" size="10" class="catbox" /></div> 
 					<div index="1" class="term">size <input type="text" name="term1" size="10" class="catbox" /> </div> 
 					<div index="2" class="term">tires <input type="text" name="term2" size="10" class="catbox" /></div> 
@@ -25,8 +27,9 @@
 					<div index="6" class="term">Toyota <input type="text" name="term6" size="10" class="catbox" /></div> 
 					<div index="7" class="term">Camry <input type="text" name="term7" size="10" class="catbox" /></div> 
 					<div index="8" class="term">need? <input type="text" name="term8" size="10" class="catbox" /></div> 
-				</h1>
+				
 			</div>
+			</h1>
 		
 			<div id="drop-panels">
 		
