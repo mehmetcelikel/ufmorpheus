@@ -1,4 +1,4 @@
-#!/usr/local/bin/php
+<!-- #!/usr/local/bin/php -->
 <html>
 	<head>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>

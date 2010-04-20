@@ -6,7 +6,10 @@ function init(){
 	var acdata = 'Hello This is just some sample data so that I can let people use candom categories there are more automobiles and a ton of other categories for people to uses Automobiles Music Movies Airplanes Engines Car'.split(' ');
 	
 	// Give the input boxes auto complete power
-	$('.catbox').autocomplete(acdata);
+	//$('.catbox').autocomplete(acdata);
+	$("input.catbox").autocomplete("category.php", {
+		selectFirst: true
+	});
 	
 	// Hide input boxes by default
 	$('.catbox').hide();
