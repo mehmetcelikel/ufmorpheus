@@ -37,14 +37,23 @@ def New(meet, startxpath, endxpath, startos, endos, url, pagesrc, timestamp, cla
 	h.actionType = ActionType.Highlight
 	return h
 
-def getSelection(highlightid):
-
-	import Loader
-	import lxml.html
+def getSelectionFromTimestamp(timestamp, page):
+	
+	q = "SELECT * FROM Highlight WHERE timestamp = %d" % timestamp
+	
+	return runHighlightQuery(q,page)
+	
+	
+def getSelection(highlightid, page):
 
 	q = """SELECT * FROM Highlight WHERE highlightid = %d""" % highlightid
 
-	#execute the query to get the db row
+	return runHighlightQuery(q)
+
+def runHighlightQuery(q, page):
+	
+	import Loader
+
 	results = Loader.executeQuery(q)
 
 	if len(results) == 0:
@@ -54,15 +63,33 @@ def getSelection(highlightid):
 	#form a highlight out of the row
 	h = Loader.getHighlight(results[0])
 
-	#create a dom object
-	html = lxml.html.document_fromstring(h.pagesrc)
+	return getHighlightText(h, page)
+
+def removeTBodies(xpath):
+
+        parts = xpath.split("/")
+        plist = list()
+
+        for p in parts:
+                if p.startswith("tbody"):
+                        continue
+
+                plist.append(p)
+
+        return "/".join(plist)
+
+def getHighlightText(h, page):
 
 	#this list keeps all the extracted text so far
 	textList = list()
 
+	#fix xpaths first
+	h.startXpath = removeTBodies(h.startXpath)
+	h.endXpath = removeTBodies(h.endXpath)
+
 	#get the start and end nodes in the dom
-	start = html.xpath(h.startXpath)[0]
-	end = html.xpath(h.endXpath)[0]
+	start = page.xpath(h.startXpath)[0]
+	end = page.xpath(h.endXpath)[0]
 
 	#before we call the helper, we need to remove any text() functions
 	sxpath = ''
@@ -78,13 +105,15 @@ def getSelection(highlightid):
 	else: expath = h.endXpath
 
 	#get the tree for the html object
-	tree = html.getroottree()
+	tree = page.getroottree()
 
 	#parses the dom to extract the highlighted text
-	getSelectionHelper(tree, html, textList, tree.xpath(sxpath)[0], tree.xpath(expath)[0], h.startOffset, h.endOffset)
+	getSelectionHelper(tree, page, textList, tree.xpath(sxpath)[0], tree.xpath(expath)[0], h.startOffset, h.endOffset)
 
 	str = ''.join(textList)
-
+	str = str.replace("\r\n"," ")
+	str = str.replace("\n"," ")
+	str = str.replace("\t"," ")
 	return str.strip()
 
 def getSelectionHelper(tree, node, textList, startNode, endNode, startIndex, endIndex):
@@ -126,7 +155,6 @@ def getSelectionHelper(tree, node, textList, startNode, endNode, startIndex, end
 	return False
 	
 		
-if __name__ == "__main__":
-	print(getSelection(int(sys.argv[-1])))
+if __name__ == "__main__":	
 	pass
 	

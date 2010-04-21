@@ -13,6 +13,7 @@ import pdb
 import sys
 sys.path.append("../generalizer")
 import Loader
+import Highlight
 class ActionObject:
 	"""Base Class of all actions"""
 
@@ -33,7 +34,6 @@ class URLAction(ActionObject):
 		"""Does URLAction and returns the state"""
 
 		url = self.xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
-
 		state.page = parse(url).getroot()
 
 		"""
@@ -110,20 +110,14 @@ class HighlightAction(ActionObject):
 
 	def do(self, state):
 		"""Does the HighlightAction and returns the state"""
-		
-		#TODO: Fix so that it uses standard xpath
-		#get xpath	
-		xpath = Loader.getHiLiteXpath(self.xmlnode.get('id'))
 
-		xpath = removeTBodies(xpath.lower())
-		
-		#extract the page snippet
-		htmlSnippet = state.page.xpath(xpath)[0]
+		#get xpath	
+		txt = Highlight.getSelectionFromTimestamp(int(self.xmlnode.get('id')), state.page)
 
 		#get key and insert html into data hash
 		key = self.xmlnode.get('id')
 
-		state.kv_hash[key] = etree.tostring(htmlSnippet).strip()
+		state.kv_hash[key] = txt.strip()
 		
 		pass
 
