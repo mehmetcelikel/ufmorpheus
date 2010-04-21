@@ -1,5 +1,16 @@
 #!/usr/local/bin/php
-
+<?php
+	$question = "";
+	$questionid = -1;
+	if($_GET['question'] == null){
+		$question = "What|size|tires|does|a|97|Toyota|Camry|need|?";
+		$questionid = 1;
+	}
+	else{
+		$question = $_GET['question'];
+		$questionid = $_GET['questionid'];
+	}
+?>
 <html>
 	<head>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
@@ -10,28 +21,30 @@
 		<script>
 			$(document).ready(function(){
 				init();
+				var question = "<?php echo $question; ?>";
+				var questionid = <?php echo $questionid; ?>;
 			});
 		</script>
 	</head>
 	<body>
-		<form method="post">
-			
-			<h3> Question 1: What size tires does a 97 Toyota Camery need? </h3>
+		<form method="post" action="index.php">
+			<h3> 
+				Question <?php echo $questionid; ?>: <?php echo implode(' ', explode('|', $question)); ?> 
+			</h3>
 			<h1>
 				<div id="question">
-						<input type="hidden" name="questionid" value="1" />
-						<div index="0" class="term">What <input type="text" name="term0" size="10" class="catbox" /></div> 
-						<div index="1" class="term">size <input type="text" name="term1" size="10" class="catbox" /> </div> 
-						<div index="2" class="term">tires <input type="text" name="term2" size="10" class="catbox" /></div> 
-						<div index="3" class="term">does <input type="text" name="term3" size="10" class="catbox" /></div> 
-						<div index="4" class="term">a <input type="text" name="term4" size="10" class="catbox" /></div> 
-						<div index="5" class="term">97 <input type="text" name="term5" size="10" class="catbox" /></div> 
-						<div index="6" class="term">Toyota <input type="text" name="term6" size="10" class="catbox" /></div> 
-						<div index="7" class="term">Camry <input type="text" name="term7" size="10" class="catbox" /></div> 
-						<div index="8" class="term">need? <input type="text" name="term8" size="10" class="catbox" /></div> 
-				
+						<input type="hidden" name="question" value="<?php echo $question; ?>" />
+						<input type="hidden" name="questionid" value="<?php echo $questionid; ?>" />
+						<?php
+							$counter = 0;
+							foreach(explode('|', $question) as $term){
+								echo "<div index='$counter' class='term' val='$term'>$term <input type='text' name='term$counter' size='10' class='catbox' /></div>";
+								$counter += 1;
+							}
+						?>
 				</div>
 			</h1>
+			<input type="submit" value="Merge Terms" id="mergeterms" />
 		
 			<div id="drop-panels">
 		
@@ -48,10 +61,10 @@
 			<input type="submit" name="submitbutton" id="submitbutton" value="Next=>" />
 			<div class="clear"></div>
 			
-			<div class="helpbox">	
+			<div class="helpbox">
 				<p> Drag the term into what you see as an input or our put of the question </p>
 				<p> Note: Double click on a term to add its category and double click to remove the category input box </p>
-			</div>	
+			</div>
 			
 		</form>
 	</body>
