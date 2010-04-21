@@ -3,8 +3,6 @@
 */
 
 function init(){
-	var acdata = 'Hello This is just some sample data so that I can let people use candom categories there are more automobiles and a ton of other categories for people to uses Automobiles Music Movies Airplanes Engines Car'.split(' ');
-	
 	// Give the input boxes auto complete power
 	//$('.catbox').autocomplete(acdata);
 	$("input.catbox").autocomplete("category.php", {
@@ -14,8 +12,25 @@ function init(){
 	// Hide input boxes by default
 	$('.catbox').hide();
 	
+	// Toggle input box view on double click
 	$('.term').dblclick(function () {
 		$(this).find('.catbox').toggle();
+	});
+	
+	// On single click, highligh term
+	$('.term').click(function() {
+		$(this).toggleClass('highlight');
+	});
+	
+	// Merge terms when the button is clicked
+	$('#mergeterms').submit(function() {
+		try {
+			var new_terms = merge_terms();
+			$('input[name=question]').val(new_terms);
+			return true;
+		}catch(err){
+			alert(err.toString());
+		}
 	});
 	
 	// Originale container should be droppable
@@ -60,7 +75,6 @@ function init(){
 		alert($('form').serialize());
 		//return false; // <= Prevents refresh
 	});
-		
 }
 
 /**
@@ -75,4 +89,40 @@ function create_input(the_type, the_name, the_value){
 		});
 }
 
-
+/**
+* Combine adjacent terms into a single term.
+*/
+function merge_terms() {
+	var term_array = ""; // This is the new array for merged terms
+	var full_array = ""; // This is the new question
+	$('#question .term').each( function(ind) {
+		if( $(this).hasClass('highlight') ){
+			//term_array.push({index: $(this).attr('index'), val:$(this).attr('val')});
+			var val = $(this).attr('val');
+			term_array += " "+val;
+			term_array = $.trim(term_array);
+		}
+		else{
+			var val = $(this).attr('val');
+			if(term_array.length == 0){
+				full_array += "|"+val;
+			}
+			else{
+				// add all the elements of the term array to the full array
+				full_array += "|"+term_array;
+				// add this element to the current array
+				full_array += "|"+val;
+				term_array = "";
+			}
+		}
+	});
+	// Put the rest of the term array in the full array
+	if(term_array != ""){
+		full_array += "|"+term_array;
+	}
+	
+	full_array = full_array.substring(1);// remove the first |	
+	alert(full_array);
+	
+	return full_array;
+}

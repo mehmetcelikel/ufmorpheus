@@ -6,7 +6,6 @@
 	
 	if (!$conn) { 
 		echo "Connection failed";
-		
 		exit;
 	}
 	
@@ -25,8 +24,6 @@
 			$counter += 1;
 			if ($counter == MAX_RESULTS) break;
 		}
-
-		
 	}
 	else{
 		// Do nothing or return error
