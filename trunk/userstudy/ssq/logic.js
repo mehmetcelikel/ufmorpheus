@@ -23,14 +23,10 @@ function init(){
 	});
 	
 	// Merge terms when the button is clicked
-	$('#mergeterms').submit(function() {
-		try {
-			var new_terms = merge_terms();
-			$('input[name=question]').val(new_terms);
-			return true;
-		}catch(err){
-			alert(err.toString());
-		}
+	$('#mergeterms').click(function() {
+		var new_terms = merge_terms();
+		$('#questioninput').val(new_terms);
+		return true;
 	});
 	
 	// Originale container should be droppable
@@ -82,11 +78,11 @@ function init(){
 */
 function create_input(the_type, the_name, the_value){
 	return $("<input>", {
-  	type: the_type,
-  	name: the_name,
+		type: the_type,
+		name: the_name,
 		val: the_value,
-		class: 'extra_input',
-		});
+		class: 'extra_input'
+	});
 }
 
 /**
@@ -121,8 +117,6 @@ function merge_terms() {
 		full_array += "|"+term_array;
 	}
 	
-	full_array = full_array.substring(1);// remove the first |	
-	alert(full_array);
-	
+	full_array = full_array.substring(1);// remove the first |		
 	return full_array;
 }

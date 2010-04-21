@@ -27,13 +27,13 @@
 		</script>
 	</head>
 	<body>
-		<form method="post" action="index.php">
+		<form method="get" action="index.php">
 			<h3> 
 				Question <?php echo $questionid; ?>: <?php echo implode(' ', explode('|', $question)); ?> 
 			</h3>
 			<h1>
 				<div id="question">
-						<input type="hidden" name="question" value="<?php echo $question; ?>" />
+						<input type="hidden" name="question" id="questioninput" value="<?php echo $question; ?>" />
 						<input type="hidden" name="questionid" value="<?php echo $questionid; ?>" />
 						<?php
 							$counter = 0;
@@ -62,8 +62,12 @@
 			<div class="clear"></div>
 			
 			<div class="helpbox">
-				<p> Drag the term into what you see as an input or our put of the question </p>
-				<p> Note: Double click on a term to add its category and double click to remove the category input box </p>
+					<b>Directions:</b>
+					<ul>
+						<li>Combine words first.  Do this by single-clicking the adjacent wordsd you would like to combine.  And then click the 'Merge Terms' button. </li>
+						<li>Drag the term into what you see as an input or our put of the question.</li>
+						<li>Double click on a term to add its category and double click to remove the category input box.</li> 
+					</ul>
 			</div>
 			
 		</form>

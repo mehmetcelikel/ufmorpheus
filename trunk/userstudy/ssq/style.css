@@ -74,8 +74,9 @@
 	margin-left: 9em;
 }
 
-.helpbox > p{ 
+.helpbox{ 
 	color: grey;
+	width: 40%;
 }
 
 
