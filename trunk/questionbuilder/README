@@ -1,0 +1,6 @@
+This project produces all the plausible new questions from a a given QRM.  This is done in four steps.
+
+1) The orignal natural language question is broken down in to terms via a chunker.
+2) The terms from step 1 are mapped to the inputs of webforms in the QRM.
+3) The Terms in the questions are replaces with other possible choices that were used in the webform.
+4) These new questions are printed to standard out. 
