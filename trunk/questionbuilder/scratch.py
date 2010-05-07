@@ -2,7 +2,8 @@
 __author__ = ['Christan Grant']
 
 import lxml, nltk, psycopg2, urllib2
-from lxml import etree
+from lxml import etree, html
+
 
 def chunker(sentence):
 	"""Transform the sentence into a list of terms (chuncks) """
@@ -17,7 +18,7 @@ def query_map(terms, root):
 					[{ 2: 'Acura'}, {2: 'Honda', 3: 'Passenger'}]
 			
 	"""
-	pass
+	print lxml.html.tostring(root, pretty_print = True)
 
 
 
@@ -60,14 +61,24 @@ def fetch_query(qrmid):
 		assert(len(result) > 0 and len(result[0]) > 0)
 		
 		query_string, code = result[0][0], urllib2.unquote(result[0][1])
-		return [query_string, etree.fromstring(code)]
+		return [query_string, lxml.etree.fromstring(code)]
 
 	except Exception as error:
-		print 'Error found', error
+		print str(error), ' :: fetch_query'
 
 
 
 if __name__ == '__main__':
-	[sentence,qrm] =  fetch_query(75)	
-	sentence = chunker(sentence)
-	print sentence	
+	import sys
+	if len(sys.argv) > 1 and sys.argv[1].isdigit():
+		qrmidarray = [int(sys.argv[1])]
+	else:
+		qrmidarray = [59,60,75]
+	
+	for qid in qrmidarray:
+		sentence, qrm = fetch_query(qid)
+		sentence = chunker(sentence)
+		query_map(sentence, qrm)
+
+
+
