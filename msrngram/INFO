@@ -1,0 +1,16 @@
+WSDL:
+	http://web-ngram.research.microsoft.com/Lookup.svc/mex?wsdl
+
+Server Address:
+	http://web-ngram.research.microsoft.com/Lookup.svc
+
+SOAPAction: 
+	http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetModels
+
+	http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetProbability
+
+	http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetProbabilities
+
+	http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetConditionalProbability
+
+	http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetConditionalProbabilities
