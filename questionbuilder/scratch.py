@@ -1,5 +1,5 @@
 
-__author__ = ['Christan Grant']
+__author__ = ['"Christan Grant" <cgrant@cise.ufl.edu>' ]
 
 import lxml, nltk, psycopg2, urllib2
 from lxml import etree, html
