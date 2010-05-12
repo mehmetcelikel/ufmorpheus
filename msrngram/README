@@ -1,3 +1,12 @@
-
+Python Packaing of the Microsoft Research N-gram service
 
 Please read the Terms of use before using this library: http://web-ngram.research.microsoft.com/info/termsofuse.htm
+
+In order to use the functions of this file you need to request a GUID from microsoft research.  You can do this by emailing <webngram@microsoft.com>.
+
+By default this package assumes there is a local filed names guid.rc that contains only the guid.
+
+Currently you can do that following functions:
+	- GetModels
+	- GetProbability
+	- GetConditional Probability
