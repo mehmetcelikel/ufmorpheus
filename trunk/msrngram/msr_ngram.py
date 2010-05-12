@@ -18,11 +18,17 @@ def getguid(file_name='guid.rc'):
 
 
 _server = WSDL.Proxy(WSDLFILE)
-def getModels(param1, param2):
+def getModels(param1, param2='urn:ngram:bing-body:jun09:3'):
 	"""The get models thing"""
+	param1 = getguid()
 	results = _server.GetModels(param1, param2)
 
+
+def test():
+	print _server.methods.keys()
+
 if __name__ == '__main__':
-	import doctest
-	doctest.testmod()
+	#import doctest
+	#doctest.testmod()
+	test()
 	print getModels('Christan', 'Grant')
