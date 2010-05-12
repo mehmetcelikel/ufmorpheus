@@ -1,3 +1,10 @@
+# Main page:
+	http://web-ngram.research.microsoft.com/info/
+
+# Payload info:
+	http://web-ngram.research.microsoft.com/info/soap.html
+
+
 WSDL:
 	http://web-ngram.research.microsoft.com/Lookup.svc/mex?wsdl
 
