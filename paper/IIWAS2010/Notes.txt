@@ -1,5 +1,19 @@
 http://www.iiwas.org/conferences/iiwas2010/erpas.html
 
+
+
+Guidelines: 
+-------------
+The paper should not exceed 4 pages length, and should contain 
+
+1. a problem statement, 
+2. an overview of related work in the area, 
+3. research methodology, 
+4. current stage of the project 
+5. the expected contribution to the topics of interest supported by iiWAS2010 
+and MoMM2010 (more on mobile and multimedia track).
+
+
 Topics of interest:
 
 http://www.iiwas.org/conferences/iiwas2010/about.html 
@@ -21,20 +35,7 @@ Information and service integration
 	Web Semantics search, query, and visualization
 	
 	Ontology creation, searching, extraction, and evolution
-	
-	
 
-Guidelines: 
--------------
-The paper should not exceed 4 pages length, 
-and should contain 
-
-1. a problem statement, 
-2. an overview of related work in the area, 
-3. research methodology, 
-4. current stage of the project 
-5. the expected contribution to the topics of interest supported by iiWAS2010 
-and MoMM2010 (more on mobile and multimedia track).
 
 
 
