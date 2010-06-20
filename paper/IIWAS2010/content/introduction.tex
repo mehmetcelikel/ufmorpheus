@@ -13,8 +13,7 @@
 
 3. Realm based question answering 
 
-3. About the paper structure  
-
+3. About the paper structure 
 
 
 When traveling though a jungle to a destination, it is easy to get
@@ -28,9 +27,23 @@ context, one can exploit the fact that a similar search may have been
 performed already.  In one study, almost 40 percent of all queries
 were found to be repetitions of previous queries\cite{1277770}. This
 indicates the reuse of prior searches is a way to optimize the search
-process.  We have built a prototype system for answering questions
-using deep-web sources that employs previously answered questions to
-obtain new answers.  Using our analogy, the Morpheus question
-answering system follows path-finders to their destinations and not
-only marks the trail, but also provides a taxi service to take
+process.  Morpheus is a question answering system motivated by reuse of prior web search pathways to yield an answer a user query. Using our analogy, the Morpheus question answering system follows path-finders to their destinations and not only marks the trail, but also provides a taxi service to take
 followers to similar destinations.
+
+The Morpheus system employs two types of users. One type is called a
+\textit{guide user} who \textit{types} queries in the Morpheus web interface and
+searches for an answer to the query in an instrumented web browser that can
+track answer pathways for a given query. This web tracking tool stores the query
+and necessary information to revisit the pathways to the page where he or she
+finds the answer. It also provides users a mechanism to highlight the answers.
+The other type is a \textit{regular user}, who uses the Morpheus system much
+like a regular search engine with a natural language interface. He can type a
+question in a text box and receive a response from the system. The system
+exploits previously answered queries to answer new questions.
+
+To exploit the prior searches one should represent queries in an elegant way so
+that similar queries can be found efficiently and their stored search path
+revisited to produce answer to the user. Morpheus represents user-query details in a semi structured format called a Semi-Structured Query or \textit{SSQ}. It includes a user query in natural language format, relevant terms for the query, place holders for the term \textit{categories}. A category represents a \textit{topic} or \textit{class} that a term belongs. For example, the term \textit{tire} can be classified into the category \textit{Automotive Parts}. Morpheus assumes categories are come from a realm-based ontology and it defines  a similarity measure for categories based on the heterarchical structure of  category ontology. When a new user query comes the Morpheus system ranks the queries that are in the SSQ fomat based on the catgeory similarity. 
+
+
+This paper starts with disussing state-of-the-art systems in the area of question answering, ontology generation, and query ranking. In the section system architecture, we explain the Morpheus system and its implementations details. In the results section, we describe the available results and its interpretations. Finally, we concludes the paper by describing the global impacts of our approaches in QA systems, WWW page categorization, and ontology generators.   
