@@ -1,20 +1,15 @@
 \section{Introduction}
 
+% Outline 
+% ---------------------
 
-4. Motivation 
-
-1. What are we proposing?  
-
-2. Challenges
-
-  2.1 User query processing 
-
-  2.1 Need of an ontology 
-
-3. Realm based question answering 
-
-3. About the paper structure 
-
+% 1. Motivation 
+% 2. What are we proposing?  
+% 3. Challenges
+% 		3.1 User query processing 
+% 		3.1 Need of an ontology 
+% 4. Realm based question answering 
+% 5. About the paper structure 
 
 When traveling though a jungle to a destination, it is easy to get
 lost.  The first person to go somewhere may make a number of mistakes
@@ -27,11 +22,10 @@ context, one can exploit the fact that a similar search may have been
 performed already.  In one study, almost 40 percent of all queries
 were found to be repetitions of previous queries\cite{1277770}. This
 indicates the reuse of prior searches is a way to optimize the search
-process.  Morpheus is a question answering system motivated by reuse of prior web search pathways to yield an answer a user query. Using our analogy, the Morpheus question answering system follows path-finders to their destinations and not only marks the trail, but also provides a taxi service to take
-followers to similar destinations.
+process.  Morpheus is a question answering system motivated by reuse of prior web search pathways to yield an answer a user query. Using our analogy, Morpheus  follows path-finders to their destinations and not only marks the trail, but also provides a taxi service to take followers to similar destinations.
 
 The Morpheus system employs two types of users. One type is called a
-\textit{guide user} who \textit{types} queries in the Morpheus web interface and
+\textit{guide user} who types queries in the Morpheus web interface and
 searches for an answer to the query in an instrumented web browser that can
 track answer pathways for a given query. This web tracking tool stores the query
 and necessary information to revisit the pathways to the page where he or she
@@ -43,7 +37,8 @@ exploits previously answered queries to answer new questions.
 
 To exploit the prior searches one should represent queries in an elegant way so
 that similar queries can be found efficiently and their stored search path
-revisited to produce answer to the user. Morpheus represents user-query details in a semi structured format called a Semi-Structured Query or \textit{SSQ}. It includes a user query in natural language format, relevant terms for the query, place holders for the term \textit{categories}. A category represents a \textit{topic} or \textit{class} that a term belongs. For example, the term \textit{tire} can be classified into the category \textit{Automotive Parts}. Morpheus assumes categories are come from a realm-based ontology and it defines  a similarity measure for categories based on the heterarchical structure of  category ontology. When a new user query comes the Morpheus system ranks the queries that are in the SSQ fomat based on the catgeory similarity. 
+revisited to produce answer to the user. Morpheus represents user-query details in a semi structured format called a Semi-Structured Query or \textit{SSQ}. It includes a user query in natural language format, relevant terms for the query, place holders for the term \textit{categories}. A category represents a \textit{topic} or \textit{class} that a term belongs. For example, the term \textit{tire} can be classified into the category \textit{Automotive Parts}. 
 
+In addition, Morpheus assumes term categories are come from a \textit{consistent} realm-based ontology. By consistency, we mean it has a clean taxonomy of classes in the ontology class heterachy. This is important because, our proposed similarity measure for categories is based on the heterarchical structure of category ontology. Moreover, when a regular user enters a query, Morpheus ranks SSQs in the store based on this catgeory similarity. Suppose a regular user asks -\textit{ a 1997 Toyota Camry V6 needs what size tires?}. In this query, identifying \textit{Camry V6} as a subclass of \textit{Toyota} cars and a predecessor of \textit{automobile models} is important, because this will help us grouping stored queries. Similarly, a clean ontology-taxonomy can improve the recall of such queries by supporting transitivity and other types of inference like faceted browing \cite{Wu2008}.    
 
-This paper starts with disussing state-of-the-art systems in the area of question answering, ontology generation, and query ranking. In the section system architecture, we explain the Morpheus system and its implementations details. In the results section, we describe the available results and its interpretations. Finally, we concludes the paper by describing the global impacts of our approaches in QA systems, WWW page categorization, and ontology generators.   
+This paper starts with disussing state-of-the-art systems in the area of question answering, ontology generation, and query ranking. The section system architecture explains the Morpheus system and its implementations details. In the results section, we describe current results and its interpretations. Finally, we conclude the paper by describing the global impacts of our approaches in QA systems, WWW page categorization, and ontology generators. 

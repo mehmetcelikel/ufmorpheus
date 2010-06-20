@@ -1,5 +1,44 @@
 \section{Related Work}
+\label{sec:relatedwork}
 
-1. QA systems 
-2. Ontology generators 
-3. NLP interfaces 
+\subsection{Question Ansering Systems} 
+
+\subsection{Ontology generators} 
+
+An ontology formally models real world \textit{concepts} and their
+relationships. A concept or class in an ontology gives us an abstract and simplified view of the world\cite{Gruber1993} in a machine-readable and
+language-independent format. The relationships and attributes of an
+ontological concept are defined using \textit{properties} and \textit{property
+restrictions}. An ontology definition contains all of
+these: classes, properties, and restrictions. A class in an ontology can have
+multiple \textit{super classes} and \textit{sub-classes}. Finally, a \textit{knowledge base} represents an ontology together with 
+instances of its classes.      
+
+The DBpedia\footnote{http://dbpedia.org} project is based on extracting
+semantic information from the Wikipedia and making it available on the
+Web. Wikipedia semantics includes info-box templates, categorization
+information, images, Geo-coordinates, links to external Web pages,
+disambiguation pages, and redirects between pages in Wiki markup form
+\cite{Auer07dbpedia:a, Bizer2009}. 
+
+The extraction procedure is as follows: Wikipedia categories are represented
+using skos:concepts and category relations are represented using skos:broader
+\cite{Auer07dbpedia:a, Bizer2009}. In fact, DBpedia does not define any new
+relation between the Wikipedia categories. The Wikipedia categories are
+extracted directly from Wikipedia pages and there is no quality check on the
+resultant ontology. Similarly, DBpedia uses the info-box attributes and values
+as the ontological relations and its ranges.   
+
+YAGO is a partly automatically constructed ontology from Wikipedia and
+WordNet\cite{Suchanek2009phd}. The YAGO ontology uses an automated process to
+extract information from Wikipedia pages, info-boxes, and categories and to
+combine this information with the WordNet\footnote{http://wordnet.princeton.edu} synsets heterarchy. Since Wikipedia contains more individuals in the form of Wikipedia pages than in the man-made WordNet ontology, the Wikipedia page titles are used as the YAGO ontology individuals. YAGO concentrates mainly on the fields of people, cities, events, and movies\cite{Suchanek2009phd}. 
+
+In addition, YAGO uses Wikipedia categories as its ontology classes. The ontology's heterarchy is built using the \textit{hypernym} and \textit{hyponym} relations of the WordNet synsets. YAGO uses only the nouns from WordNet and ignores the WordNet verbs and adjectives. The connection between a WordNet synset and a Wikipedia category is achieved by parsing the category names and matching the parsed category components with the WordNet synsets\cite{Suchanek2009phd}. Those Wikipedia categories having no WordNet match are ignored in the YAGO ontology.  
+  
+Moreover, YAGO type extraction is mainly based on the assumption that
+each Wikipedia page has at least one tagged category, and the assigned Wikipedia
+categories are relevant to that Wikipedia page. The Wikipedia page category assignments are subjectively assigned by human editors and some Wiki pages could be left unassigned i.e., they have no category unintentionally. In addition, we cannot completely rely on the relevance of these assigned Wikipedia page categories. To overcome these issues, we propose an automatic Wikipedia page categorization or classification and recommendation using a machine learning technique, topic modeling. 
+
+
+\subsection{NLP Interfaces} 
