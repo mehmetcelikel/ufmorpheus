@@ -17,21 +17,16 @@ in trying to find the best path to their destination.  However, those
 who come later will find it easy to reach that destination if a
 well-marked trail has been created. Olsen and Malizia describe this
 idea as \emph{exploiting trails} \cite{5379671}.  Rather than treating
-a user's search as a unique entity and working without an example
+a user's discovery experience as a unique entity and working without an example
 context, one can exploit the fact that a similar search may have been
 performed already.  In one study, almost 40 percent of all queries
 were found to be repetitions of previous queries\cite{1277770}. This
 indicates the reuse of prior searches is a way to optimize the search
-process.  Morpheus is a question answering system motivated by reuse of prior web search pathways to yield an answer a user query. Using our analogy, Morpheus  follows path-finders to their destinations and not only marks the trail, but also provides a taxi service to take followers to similar destinations.
+process.  Morpheus is a question answering system motivated by reuse of prior web search pathways to yield an answer to a user query. Using our analogy, Morpheus follows path-finders to their destinations and not only marks the trail, but also provides a taxi service to take followers to similar destinations.
 
-The Morpheus system employs two types of users. One type is called a
-\textit{guide user} who types queries in the Morpheus web interface and
-searches for an answer to the query in an instrumented web browser that can
-track answer pathways for a given query. This web tracking tool stores the query
-and necessary information to revisit the pathways to the page where he or she
-finds the answer. It also provides users a mechanism to highlight the answers.
-The other type is a \textit{regular user}, who uses the Morpheus system much
-like a regular search engine with a natural language interface. He can type a
+The Morpheus system employs two types of users. The first user type, or \textit{guide user}, types queries into the Morpheus interface and subsequently searches for an answer to the query in an instrumented web browser.  This web browser is fitted with a browser plug-in that stores the query and collects information necessary to revisit the pathways to the answer. It also allows the user to highlight answers and other metadata.
+The second user, searches the Morpheus system much
+like a typical search engine with a natural language interface. She can type a
 question in a text box and receive a response from the system. The system
 exploits previously answered queries to answer new questions.
 
