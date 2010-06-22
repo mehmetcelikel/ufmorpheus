@@ -22,7 +22,11 @@ context, one can exploit the fact that a similar search may have been
 performed already.  In one study, almost 40 percent of all queries
 were found to be repetitions of previous queries\cite{1277770}. This
 indicates the reuse of prior searches is a way to optimize the search
-process.  Morpheus is a question answering system motivated by reuse of prior web search pathways to yield an answer to a user query. Using our analogy, Morpheus follows path-finders to their destinations and not only marks the trail, but also provides a taxi service to take followers to similar destinations.
+process.  Morpheus is a question answering system motivated by reuse of prior
+web search pathways to yield an answer to a user query. Using our analogy,
+Morpheus follows path-finders to their destinations and not only marks the
+trail, but also provides a taxi service to take followers to similar
+destinations.
 
 The Morpheus system employs two types of users. One type is called a
 \textit{guide user} who \textit{types} queries in the Morpheus web interface and
@@ -37,8 +41,38 @@ exploits previously answered queries to answer new questions.
 
 To exploit the prior searches one should represent queries in an elegant way so
 that similar queries can be found efficiently and their stored search path
-revisited to produce answer to the user. Morpheus represents user-query details in a semi structured format called a Semi-Structured Query or \textit{SSQ}. It includes a user query in natural-language format, relevant terms for the query, place holders for the term \textit{categories}. A \textit{category} represents a topic or class that a term belongs. For example, the term \textit{tire} can be classified into the category \textit{Automotive Parts}.
+revisited to produce answer to the user. Morpheus represents user-query details
+in a semi structured format called a Semi-Structured Query or \textit{SSQ}. It
+includes a user query in natural-language format, relevant terms for the query,
+place holders for the term \textit{categories}. A \textit{category} represents a
+topic or class that a term belongs. For example, the term \textit{tire} can be
+classified into the category \textit{Automotive Parts}.
 
-In addition, Morpheus assumes term categories are come from a \textit{consistent} realm-based ontology. By consistency, we mean it has a clean taxonomy of classes in the ontology class heterachy. This is important because, our proposed similarity measure for categories is based on the heterarchical structure of category ontology. Moreover, when a regular user enters a query, Morpheus ranks SSQs in the store based on this catgeory similarity. Suppose a regular user asks -\textit{ a 1997 Toyota Camry V6 needs what size tires?}. In this query, identifying \textit{Camry V6} as a subclass of \textit{Toyota} cars and a predecessor of \textit{automobile models} is important, because this will help us grouping stored queries. Similarly, a clean ontology-taxonomy can improve the recall of such queries by supporting transitivity and other types of inference like faceted browsing \cite{Wu2008}.    
+In addition, Morpheus assumes term categories are come from a
+\textit{consistent} realm-based ontology. By consistency we mean it has two
+properties: (i) singly-rooted heterarchy (acyclic digraph wiyh unique 
+ancestor of all nodes) (ii) the subclass/superclass relations have meaningful 
+semantic interpretations. This is important because, our proposed similarity 
+measure for categories is based on the heterarchically
+structured category ontologies. Moreover, when a regular user enters a query,
+Morpheus ranks SSQs in the store based on this catgeory similarity. Suppose a
+regular user asks -\textit{ a 1997 Toyota Camry V6 needs what size tires?}. In
+this query, identifying \textit{Camry V6} as a subclass of \textit{Toyota} cars
+and a predecessor of \textit{automobile models} is important, because this will
+help us grouping stored queries. Similarly, a clean ontology-taxonomy can
+improve the recall of such queries by supporting transitivity and other types of
+inference like faceted browsing \cite{Wu2008}.   
 
-This paper starts with discussing state-of-the-art systems in the area of question answering, ontology generation, and query ranking. The section system architecture explains the Morpheus system and its implementations details. In the results section, we describe current results and its interpretations. Finally, we conclude the paper by describing the global impacts of our approaches in QA systems, WWW page categorization, and ontology generators.
+[Need a paragraph for wiki page categorization and ontology construction]
+In this paper, we propose an automatic web page categorization or 
+classification and recommendation using a machine learning technique, topic modeling.
+In addition, we also describes how we can use the categorized pages for realm-ontology 
+creation.   
+
+This paper starts by discussing state-of-the-art systems in the area of
+question answering, ontology generation, and query ranking. The system
+architecture section explains the Morpheus system and its implementations
+details. In the results section, we describe current results and its
+interpretations. Finally, we conclude the paper by describing the global impacts
+of our approaches in QA systems, WWW page categorization, and ontology
+generators.
