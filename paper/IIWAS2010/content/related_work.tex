@@ -9,6 +9,7 @@ Several community QA systems have been developed, one of the most popular being 
 
 
 \subsection{Ontology generators} 
+\label{sec:ontology_generators}
 
 An ontology formally models real world \textit{concepts} and their
 relationships. A concept or class in an ontology gives us an abstract and
@@ -21,20 +22,17 @@ multiple \textit{super classes} and \textit{sub-classes}. Finally, a
 \textit{knowledge base} represents an ontology together with 
 instances of its classes.      
 
-The DBpedia\footnote{http://dbpedia.org} project is based on extracting
-semantic information from the Wikipedia and making it available on the
-Web. Wikipedia semantics includes info-box templates, categorization
-information, images, Geo-coordinates, links to external Web pages,
-disambiguation pages, and redirects between pages in Wiki markup form
-\cite{Auer07dbpedia:a, Bizer2009}. 
-
-The extraction procedure is as follows: Wikipedia categories are represented
-using skos:concepts and category relations are represented using skos:broader
-\cite{Auer07dbpedia:a, Bizer2009}. In fact, DBpedia does not define any new
-relations between the Wikipedia categories. The Wikipedia categories are
-extracted directly from Wikipedia pages and there is no quality check on the
-resultant ontology. Similarly, DBpedia uses the info-box attributes and values
-as the ontological relations and its ranges.   
+The DBpedia\footnote{http://dbpedia.org} project is based on extracting 
+semantic information from the Wikipedia and making it available on the Web. 
+Wikipedia semantics includes info-box templates, categorization information, 
+images, Geo-coordinates, links to external Web pages, disambiguation pages, 
+and redirects between pages in Wiki markup form \cite{Auer07dbpedia:a, Bizer2009}. 
+DBpedia represents the Wikipedia categories using skos:concepts and category 
+relations using skos:broader \cite{Auer07dbpedia:a, Bizer2009}. In fact, 
+DBpedia does not define any new relations between the Wikipedia categories. 
+The Wikipedia categories are extracted directly from Wikipedia pages, and there 
+is no quality check on the resultant ontology. Similarly, additional ontological 
+relations in DBpedia are generated from the info-box attributes and their values.
 
 YAGO is a semi-automatically constructed ontology from Wikipedia and
 WordNet\cite{Suchanek2009phd}. The YAGO ontology uses an automated process to
@@ -54,7 +52,7 @@ matching the parsed category components with the WordNet
 synsets\cite{Suchanek2009phd}. Those Wikipedia categories having no WordNet
 match are ignored in the YAGO ontology.  
   
-Moreover, YAGO type extraction is mainly based on the assumption that
+However, YAGO type extraction is mainly based on the assumption that
 each Wikipedia page has at least one tagged category, and the assigned Wikipedia
 categories are relevant to that Wikipedia page. The Wikipedia page category
 assignments are subjectively assigned by human editors and some Wiki pages are

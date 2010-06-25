@@ -5,9 +5,20 @@
 % Human made ontology 
 % Topic Models 
 
-As an initial step we created a man-made realm-ontology for the automotive realm  exploiting the Wikipedia pages, categories, and WordNet synsets. For each of the categories in the realm-ontolgy we built corpora by grabbing the corresponding Wikipedia pages. The following section describes question answering process for a user query ``a 1997 Toyota Camry V6 needs what size tires?''. 
+As an initial step we created a man-made realm-ontology for the automotive realm
+ exploiting the Wikipedia pages, categories, and WordNet synsets. For each of
+the categories in the realm-ontolgy we built corpora by grabbing the
+corresponding Wikipedia pages. The following section describes question
+answering process for a user query ``a 1997 Toyota Camry V6 needs what size
+tires?''. 
 
-The Morpheus NLP engine parses this query into the constructs: WH:what, Descriptive Information:1997 Toyota Camry V6, Asking For:size tires. From the descriptive info, we generate the N-grams or terms 1997, 1997 Toyota, 1997 Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6, Camry, Camry V6, and V6. For each of the terms, we determined relevant categories (non-increasing order of relevance) from the ontology corpora. The table \ref{tbl:term_categories} shows top categories and their probabilities for each of the query term: 
+The Morpheus NLP engine parses this query into the constructs: WH:what,
+Descriptive Information:1997 Toyota Camry V6, Asking For:size tires. From the
+descriptive info, we generate the N-grams or terms 1997, 1997 Toyota, 1997
+Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6, Camry, Camry V6, and V6. For
+each of the terms, we determined relevant categories (non-increasing order of
+relevance) from the ontology corpora. The table \ref{tbl:term_categories} shows
+top categories and their probabilities for each of the query term: 
 
 \begin{table}[h]\footnotesize
 
@@ -28,10 +39,45 @@ V6 & Sedans & 4.46e-08\\
 \caption{Terms' top categories and probabilities}
 \label{tbl:term_categories}   
 
+\end{table}
+
+We used this top category of each of the terms in the candidate SSQ and
+determined the category divergence with the qualified SSQ categories in the QRM
+store. We assumed that all of them belong to the same realm or domain (but, it
+is different in real time). In the end, we combine the divergence measure and
+ranked QRMs based on the relevance score. The table \ref{tbl:ranked_queries}
+shows the top ranked queries that belong to the QRMs in store for the above
+query.
+
+\begin{table}[h]\footnotesize
+
+\begin{tabular}{l | r}
+Query & Score\\
+\hline
+The tire size of a 1997 Toyota Camry V6 is what? & 0.11\\ 
+\hline
+\end{tabular}        
+
+\caption{Top ranked queries and their relevance score}
+\label{tbl:ranked_queries}   
 
 \end{table}
 
+
 \subsection{Discussion}
+This query matching strategy assumes that query terms are available in the
+category corpus. The candidate query's category annotation will fail if the
+query terms are not available in the corpus. We are working on improving this
+approach by using a probabilistic approach as used in the Topic
+Models\cite{Blei2003latentdirichlet}. Similarly, the Morpheus ontology building
+process needs categorized web pages. As explained in section
+\ref{sec:ontology_generators}, the Wikipedia page categories have some
+limitations for this purpose. Without a super vision, the page categorization is
+often a challenging problem, because topics in the pages that belong to a realm
+(e.g. automotive) usually overlap. So we are experimenting the applicability of
+probabilistic topic models into this web page categorization, and automatic
+generation of a realm-ontology based on the topics being extracted.            
+ 
 
 
 % 2. Current stage of the project 
