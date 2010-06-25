@@ -5,6 +5,31 @@
 % Human made ontology 
 % Topic Models 
 
+As an initial step we created a man-made realm-ontology for the automotive realm  exploiting the Wikipedia pages, categories, and WordNet synsets. For each of the categories in the realm-ontolgy we built corpora by grabbing the corresponding Wikipedia pages. The following section describes question answering process for a user query ``a 1997 Toyota Camry V6 needs what size tires?''. 
+
+The Morpheus NLP engine parses this query into the constructs: WH:what, Descriptive Information:1997 Toyota Camry V6, Asking For:size tires. From the descriptive info, we generate the N-grams or terms 1997, 1997 Toyota, 1997 Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6, Camry, Camry V6, and V6. For each of the terms, we determined relevant categories (non-increasing order of relevance) from the ontology corpora. The table \ref{tbl:term_categories} shows top categories and their probabilities for each of the query term: 
+
+\begin{table}[h]\footnotesize
+
+\begin{tabular}{l | l | r}
+Term & Category & $P(Category|Term)$ \\
+\hline
+1997 & Sedans & 4.04e-09\\
+1997 Toyota & Engines & 7.90e-14\\
+Toyota  & Sedans & 3.48e-08\\
+Toyota Camry & Sedans & 1.20e-10\\
+Toyota Camry V6 & Coupes & 1.38e-13\\
+Camry & Sedans & 3.12e-09\\
+Camry V6 & Coupes & 1.38e-13\\
+V6 & Sedans & 4.46e-08\\
+\hline
+\end{tabular}        
+
+\caption{Terms' top categories and probabilities}
+\label{tbl:term_categories}   
+
+
+\end{table}
 
 \subsection{Discussion}
 
