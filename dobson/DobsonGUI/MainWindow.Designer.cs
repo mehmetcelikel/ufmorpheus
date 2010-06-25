@@ -56,6 +56,7 @@
             this.inCancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outContextMenuDropDown = new System.Windows.Forms.ToolStripComboBox();
+            this.outClassMenuDropDown = new System.Windows.Forms.ToolStripComboBox();
             this.outputDoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outCancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifierItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,7 +106,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.optionsToolStripMenuItem.Text = "Connection";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -254,7 +255,7 @@
             this.outItem,
             this.modifierItem});
             this.selectionMenu.Name = "selectionMenu";
-            this.selectionMenu.Size = new System.Drawing.Size(122, 70);
+            this.selectionMenu.Size = new System.Drawing.Size(153, 92);
             // 
             // inItem
             // 
@@ -264,7 +265,7 @@
             this.inputDoneToolStripMenuItem,
             this.inCancelToolStripMenuItem});
             this.inItem.Name = "inItem";
-            this.inItem.Size = new System.Drawing.Size(121, 22);
+            this.inItem.Size = new System.Drawing.Size(152, 22);
             this.inItem.Text = "In";
             // 
             // contextMenuDropDown
@@ -272,7 +273,7 @@
             this.contextMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.contextMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.contextMenuDropDown.Name = "contextMenuDropDown";
-            this.contextMenuDropDown.Size = new System.Drawing.Size(121, 21);
+            this.contextMenuDropDown.Size = new System.Drawing.Size(121, 23);
             this.contextMenuDropDown.Text = "Context";
             // 
             // classMenuDropDown
@@ -280,7 +281,7 @@
             this.classMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.classMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.classMenuDropDown.Name = "classMenuDropDown";
-            this.classMenuDropDown.Size = new System.Drawing.Size(121, 21);
+            this.classMenuDropDown.Size = new System.Drawing.Size(121, 23);
             this.classMenuDropDown.Text = "Class";
             // 
             // inputDoneToolStripMenuItem
@@ -301,10 +302,11 @@
             // 
             this.outItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.outContextMenuDropDown,
+            this.outClassMenuDropDown,
             this.outputDoneToolStripMenuItem,
             this.outCancelToolStripMenuItem});
             this.outItem.Name = "outItem";
-            this.outItem.Size = new System.Drawing.Size(121, 22);
+            this.outItem.Size = new System.Drawing.Size(152, 22);
             this.outItem.Text = "Out";
             // 
             // outContextMenuDropDown
@@ -312,8 +314,16 @@
             this.outContextMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.outContextMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.outContextMenuDropDown.Name = "outContextMenuDropDown";
-            this.outContextMenuDropDown.Size = new System.Drawing.Size(121, 21);
+            this.outContextMenuDropDown.Size = new System.Drawing.Size(121, 23);
             this.outContextMenuDropDown.Text = "Context";
+            // 
+            // outClassMenuDropDown
+            // 
+            this.outClassMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.outClassMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.outClassMenuDropDown.Name = "outClassMenuDropDown";
+            this.outClassMenuDropDown.Size = new System.Drawing.Size(121, 23);
+            this.outClassMenuDropDown.Text = "Class";
             // 
             // outputDoneToolStripMenuItem
             // 
@@ -336,7 +346,7 @@
             this.modifierDoneToolStripMenuItem,
             this.modifierCancelToolStripMenuItem});
             this.modifierItem.Name = "modifierItem";
-            this.modifierItem.Size = new System.Drawing.Size(121, 22);
+            this.modifierItem.Size = new System.Drawing.Size(152, 22);
             this.modifierItem.Text = "Modifer";
             // 
             // subjectMenuDropDown
@@ -344,7 +354,7 @@
             this.subjectMenuDropDown.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.subjectMenuDropDown.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.subjectMenuDropDown.Name = "subjectMenuDropDown";
-            this.subjectMenuDropDown.Size = new System.Drawing.Size(121, 21);
+            this.subjectMenuDropDown.Size = new System.Drawing.Size(121, 23);
             this.subjectMenuDropDown.Text = "Subject";
             // 
             // modifierDoneToolStripMenuItem
@@ -441,6 +451,7 @@
         private System.Windows.Forms.ToolStripMenuItem outCancelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modifierCancelToolStripMenuItem;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.ToolStripComboBox outClassMenuDropDown;
     }
 }
 

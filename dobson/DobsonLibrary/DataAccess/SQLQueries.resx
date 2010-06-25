@@ -125,6 +125,9 @@
 FROM    Answer A
 ORDER BY a.answerid</value>
   </data>
+  <data name="getAllContextClassesMorpheus3DB" xml:space="preserve">
+    <value>SELECT classid,name FROM class</value>
+  </data>
   <data name="getAllContextClassesQuery" xml:space="preserve">
     <value>SELECT id,lex FROM nodes WHERE lex LIKE '%/classes#%'</value>
   </data>

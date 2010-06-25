@@ -184,6 +184,8 @@ namespace DobsonGUI
                 contextClasses.Add(c.name, c);
 
                 classMenuDropDown.Items.Add(c.name);
+
+                outClassMenuDropDown.Items.Add(c.name);
             }
 
         }
@@ -924,9 +926,9 @@ namespace DobsonGUI
 
             }
 
-            if (islink == false && thisPage.baseURL.Contains("www.google.com") && sequenceNumber == 0)
-                throw new Exception("Scraping from google is not supported at this time, please re-run this query " +
-                    "using a different site.");
+            //if (islink == false && thisPage.baseURL.Contains("www.google.com") && sequenceNumber == 0)
+            //    throw new Exception("Scraping from google is not supported at this time, please re-run this query " +
+            //        "using a different site.");
 
             //Insert the page object
 
@@ -1339,8 +1341,8 @@ namespace DobsonGUI
             foreach (Realm realmCheck in allRealms)
             {
 
-                if (realmCheck.realm == realmString)
-                {
+                if (realmCheck.realm == realmString) // TODO: Lowercaps checking to prevent unnecessary duplicates
+                {                                    // I.E. Automotive vs automotive... change this plz!!!
 
                     realmID = realmCheck.realmid;
 
@@ -1512,8 +1514,10 @@ namespace DobsonGUI
 
                 if (e.ElementContext.contextID == -1)
                     bl.insertContext(e.ElementContext);
-
-                Phrase phrase = new Phrase(e.Individual, e.ElementContext.contextID, c.classId);
+                int cls = -1;
+                if (c != null)
+                    cls = c.classId;
+                Phrase phrase = new Phrase(e.Individual, e.ElementContext.contextID, cls);
 
                 PhraseBL PhraseBl = new PhraseBL();
 
@@ -1668,6 +1672,11 @@ namespace DobsonGUI
 
         private void inputDoneToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (contextMenuDropDown.Text == "Context")
+            {
+                MessageBox.Show("Please select a context");
+                return;
+            }
             if (classMenuDropDown.Text == "Class")
             {
                 MessageBox.Show("Please select a class");
@@ -1717,22 +1726,38 @@ namespace DobsonGUI
                 return;
             }
 
+            if (outClassMenuDropDown.Text == "Class")
+            {
+                MessageBox.Show("Please select a class");
+                return;
+            }
+
             c = findContext(outContextMenuDropDown.SelectedIndex,context);                        
 
             if(c == null)
                 c = new Context(-1, context);
 
             //need to format valueText before searching the hashtable because all its keys follow a pattern
-            string formattedKey = Main.formatKey(this.currentTextSelection);
+            //string formattedKey = Main.formatKey(this.currentTextSelection);
 
-            ContextClass contextClass = (ContextClass)contextClasses[formattedKey];
+            //ContextClass contextClass = (ContextClass)contextClasses[formattedKey];
 
-            int tempId = -1;
+            //int tempId = -1;
 
-            if (contextClass != null)
-                tempId = contextClass.classId;
+            //if (contextClass != null)
+            //    tempId = contextClass.classId;
+            ContextClass contextClass = (ContextClass)contextClasses[outClassMenuDropDown.Text];
+
+            if (contextClass == null)
+            {
+                contextClass = new ContextClass(-1, -1, outClassMenuDropDown.Text);
+
+                contextClasses[outClassMenuDropDown.Text] = contextClass;
+            }
             
-            SsqElement elem = new SsqElement(this.currentTextSelection, tempId,-1, c);
+            //SsqElement elem = new SsqElement(this.currentTextSelection, tempId,-1, c);
+
+            SsqElement elem = new SsqElement(this.currentTextSelection, contextClass.classId, -1, c);
 
             if (containsAlready(elem, tempOutputList))
             {
@@ -1742,7 +1767,10 @@ namespace DobsonGUI
 
             tempOutputList.Add(elem);
 
-            outputListBox.Items.Add(outContextMenuDropDown.SelectedItem + ", " + this.currentTextSelection);
+            //outputListBox.Items.Add(outContextMenuDropDown.SelectedItem + ", " + this.currentTextSelection);
+
+            outputListBox.Items.Add(c.contextName + ", " + contextClass.name + ", " + this.currentTextSelection);
+
 
             updateSubjectList();
         }
