@@ -91,12 +91,14 @@ namespace DobsonLibrary.DataAccess
         {
             if (paramNames.Length != paramValues.Length) throw new ArgumentException("paramNames and paramValues must have same length");
             NpgsqlCommand command = makeCommand(query);
-
+            string str = "";
             for (int i = 0; i < paramNames.Length; i++)
             {
                 command.Parameters.Add(paramNames[i], paramValues[i]);
+                str += paramNames[i] + " " + paramValues[i] + "\n";
+                   
             }
-            //printQuery(command.CommandText);
+            printQuery(command.CommandText + str);
 
             return command.ExecuteNonQuery();
         }
@@ -159,7 +161,7 @@ namespace DobsonLibrary.DataAccess
                 conn.Close();
         }
 
-        /*prints the query for debuging purposes into the databaseDebug.txt, appending the new query every time
+        /*prints the query for debuging purposes into the databaseDebug.txt, appending the new query every time* */
         protected static void printQuery(string query)
         {
             StreamWriter s = new StreamWriter(debugPath + "\\databaseDebug.txt", true);
@@ -168,7 +170,7 @@ namespace DobsonLibrary.DataAccess
             s.WriteLine();
             s.Close();
         }
-         * */
+         
         protected bool testConnection()
         {
             try
