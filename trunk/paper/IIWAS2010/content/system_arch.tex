@@ -84,11 +84,6 @@ term is referring to a category.
 P (category | term) = \frac{P(term | category) P(category)}{P(term)}
 \end{equation}    
 
-\subsection{Topic Models and Dcoument Classification }
-\label{sec:topicmodels}
-
-
-
 
 
 \subsection{QRM Ranking Mechanism} 
@@ -104,9 +99,10 @@ terms and output terms, and their assigned categories or classes. The,
 similarity based on an ontology class heterarchy. 
 It is motivated by the concept of multiple
 dispatch in CLOS \cite{Steele1990} and Dylan programming \cite{Barrett1996} for
-generic function type matches. 
+generic function \emph{type} matches. 
 
-We use \emph{category divergence} to calculate the relevance between the candiate SSQ
+We consider the category match as a type match and we use \emph{category divergence} 
+to calculate the relevance between the candiate SSQ
 and a qualified SSQ. Each qualified SSQ will
 have input terms, output terms, and associated classes, and one realm. For the
 candidate SSQ, the relevant category for input terms are determined from the
@@ -115,7 +111,7 @@ of a qualified SSQ to the candidate SSQ is determined by
 aggregating the divergence measure of categories associated with them. In addition, 
 We order QRMs in the data store in order by descreasing relevance. 
 The order provides a ranking for the results to the user. 
-The following subsection \ref{sec:ctd} describe \emph{category divergence} in detail.
+The following subsection describes \emph{category divergence} in detail.
 
 \subsubsection{Catgeory Divergence}
 \label{sec:ctd}
