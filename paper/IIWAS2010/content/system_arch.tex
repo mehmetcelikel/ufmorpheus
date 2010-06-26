@@ -54,8 +54,8 @@ that belongs to that category.
 For ontology construction Morpheus uses the Wikipedia pages, categories,
 and the WordNet synset heterarchy. This approch is motivated from
 YAGO\cite{Suchanek2009phd}. For a given realm, we first find a mapping category 
-from the DBpedia categories\cite{Auer07dbpedia:a} (these are extracted from 
-the Wikipedia pages). Then we grab all the neighboring categories
+from the DBpedia categories, which are extracted from 
+the Wikipedia pages\cite{Bizer2009}. Then we grab all the neighboring categories
 using a \textit{Markov Blanket} \cite{PRIS}. In fact, we grab 
 the category's parents, its children, and its 
 children's other parents using the DBpedia ontology properties \textit{broader}
@@ -70,7 +70,7 @@ realm ontology.
 
 To build a corpus for each of the leaf nodes in the ontology, 
 we extract \emph{n-grams} or \emph{terms} from the Wikipedia pages associated with the 
-the DBpedia categories \cite{Auer07dbpedia:a}. From this category-term corpora, 
+the DBpedia categories\cite{Bizer2009}. From this category-term corpora, 
 we can find out the likelihood that a term belongs to a particular category, 
 which is useful in categorizing the terms in a \emph{regular user's} query [section \ref{sec:qrm_ranking}].    
 This likelihood is determined by the probability of a category given a term 
@@ -98,41 +98,38 @@ terms and output terms, and their assigned categories or classes. The,
 \textit{category divergence} of two categories characteristics their 
 similarity based on an ontology class heterarchy. 
 It is motivated by the concept of multiple
-dispatch in CLOS \cite{Steele1990} and Dylan programming \cite{Barrett1996} for
-generic function \emph{type} matches. 
+dispatch in CLOS and Dylan programming for generic function \emph{type} matches. 
 
-We consider the category match as a type match and we use \emph{category divergence} 
-to calculate the relevance between the candiate SSQ
-and a qualified SSQ. Each qualified SSQ will
-have input terms, output terms, and associated classes, and one realm. For the
-candidate SSQ, the relevant category for input terms are determined from the
-ontology corpora [section \ref{sec:ontology_corpora}]. The relevance 
-of a qualified SSQ to the candidate SSQ is determined by
-aggregating the divergence measure of categories associated with them. In addition, 
-We order QRMs in the data store in order by descreasing relevance. 
-The order provides a ranking for the results to the user. 
-The following subsection describes \emph{category divergence} in detail.
+We consider the category match as a type match and we use 
+\emph{category divergence} to calculate the relevance between 
+the candiate SSQ and a qualified SSQ. Each qualified SSQ will 
+have input terms, output terms, and associated classes, and one realm. 
+For the candidate SSQ, the relevant category for input terms 
+are determined from the ontology corpora [section \ref{sec:ontology_corpora}]. The relevance of a qualified SSQ to the candidate SSQ is 
+determined by aggregating the divergence measure of categories 
+associated with them. In addition, we order QRMs in the data store 
+by descreasing relevance. The order provides a ranking for the results 
+to the user. The following subsection describes \emph{category divergence} 
+in detail.
 
 \subsubsection{Catgeory Divergence}
 \label{sec:ctd}
 
 We employ a quasimetric, \textit{category
-divergence},
+divergence (cd)},
 between a source category and a target category using the \textit{topological
 structure} of the categories in an ontology. We write $S \prec T$ for the
 reflexive
 transitive closure of the supercategory relation. Let $d(P,Q)$ represent the hop
 distance in the directed ontology inheritance graph from $P$ to $Q$. The
 divergence between a source and target category ranges from zero (for identical
-categories) to one (for incompatible categories). Let $S$ be the source
+categories) to one (for type incompatible categories). Let $S$ be the source
 category, $T$ be
-the target category, and let $C$ be a least common ancestor category of $S$ and
-$T$
-minimizing $d(S,C) + d(T,C)$. The category divergence between $S$ and $T$ is
-defined given by:
+the target category, and $C$ be a least common ancestor category of $S$ and
+$T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The category divergence between $S$ and $T$ is defined given by:
 
 \begin{equation}
-d_{cat}(S, T) = \begin{cases}
+cd(S, T) = \begin{cases}
 0 & S.{Uri} \equiv T.{Uri}\\
 d(S, T)/(3h) & S \prec T\\
 1 & T \prec S\\
@@ -142,33 +139,29 @@ d(S, T)/(3h) & S \prec T\\
 
 \noindent where $h$ is the height of the ontology tree.
 
-Note, if $S \prec T$ and $S \not\prec Q$ then $d_{cat}(S,T) <
-d_{cat}(S,Q)$, that is, the divergence of a source category to a target
+Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) <
+cd(S,Q)$, that is, the divergence of a source category to a target
 ancestor category is smaller than the divergence of a source category to any
 category that is not an ancestor. This is an important property in
-determining the compatibility of category for answering queries.  If a
+determining the compatibility of categories for answering queries.  If a
 SSQ answers queries concerning an ancestor category, it is more relevant
 that a SSQ that answers queries from any non-ancestral category.
 
 % Algorithm 1: figure  
 \begin{figure}[t]
 \centering
-\includegraphics[width=90mm]{img/automotive_ontology.eps}
-\caption{An abbreviated graphical representation of an automotive
-ontology: This is a manually created ontology, from the Wikipedia category
-hierarchy and pages. The edges represent inheritance relationships between the
-category in a topology.}
+\includegraphics[width=85mm]{img/automotive_ontology.eps}
+\caption{An abbreviated man-made automotive ontology: Arrows represent inheritance relationships between the ontological classes.}
 \label{fig:automotive_ontology}
 \end{figure}
 
-Suppose we want to find the category divergence between \textit{Toyota Camry}
-and \textit{Coupes} [Figure \ref{fig:automotive_ontology}]. 
-\textit{Toyota Camry} is the subcategory of \textit{Sedans}, and \textit{Coupes}
-is the subcategory of \textit{Cars}. Therefore, the least common ancestor ($C$)
-for these two categories is \textit{Cars}. In addition, the tree height is $5$.
-So, the normalized divergence $d_{cat}$\textit{(Toyota Camry, Coupes)} is $7/15$
-that is calculated from \textit{d(Toyota Camry, Root)} is 5, \textit{d(Toyota
-Camry, Cars)} is two, and \textit{d(Coupes, Cars)} is one.
+Suppose we want to find the category divergence between \textit{Sedans}
+and \textit{Trucks} [Figure \ref{fig:automotive_ontology}]. 
+\textit{Sedans} is the subcategory of \textit{Cars}, and \textit{Trucks}
+is the subcategory of \textit{Automobiles}. Therefore, the least common ancestor ($C$)
+for these two categories is \textit{Automobiles}. In addition, the tree height \textit{h = 4}.
+So, the normalized divergence $cd$\textit{(Sedans, Trucks)} is \textit{7/12}
+that is calculated from \textit{d(Sedans, Root) = 4}, \textit{d(Sedans, Automobiles) = 2}, and \textit{d(Trucks, Automobiles) = 1}.
 
 
 \subsection{Query Resolution Execution} 
