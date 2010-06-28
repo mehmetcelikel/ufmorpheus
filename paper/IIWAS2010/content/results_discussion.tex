@@ -9,30 +9,30 @@ As an initial step we created a man-made realm-ontology for the automotive realm
  exploiting the Wikipedia pages, categories, and WordNet synsets. For each of
 the categories in the realm-ontolgy we built corpora by grabbing the
 corresponding Wikipedia pages. The following section describes question
-answering process for a user query ``a 1997 Toyota Camry V6 needs what size
-tires?''. 
+answering process for a user query, ``A 1997 Toyota Camry V6 needs what size
+tires?''
 
 The Morpheus NLP engine parses this query into the constructs: WH:what,
 Descriptive Information:1997 Toyota Camry V6, Asking For:size tires. From the
 descriptive info, we generate the N-grams or terms 1997, 1997 Toyota, 1997
 Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6, Camry, Camry V6, and V6. For
 each of the terms, we determined relevant categories (non-increasing order of
-relevance) from the ontology corpora. The table \ref{tbl:term_categories} shows
-top categories and their probabilities for each of the query term: 
+relevance) from the ontology corpora. Table \ref{tbl:term_categories} shows
+the top categories and their probabilities for each of the query term: 
 
 \begin{table}[h]\footnotesize
 
 \begin{tabular}{l | l | r}
 Term & Category & $P(Category|Term)$ \\
 \hline
-1997 & Sedans & 4.04e-09\\
+1997 & Sedans & 404132.77e-14\\
 1997 Toyota & Engines & 7.90e-14\\
-Toyota  & Sedans & 3.48e-08\\
-Toyota Camry & Sedans & 1.20e-10\\
-Toyota Camry V6 & Coupes & 1.38e-13\\
-Camry & Sedans & 3.12e-09\\
-Camry V6 & Coupes & 1.38e-13\\
-V6 & Sedans & 4.46e-08\\
+Toyota  & Sedans & 3486670.15e-14\\
+Toyota Camry & Sedans & 12147.23e-14\\
+Toyota Camry V6 & Coupes & 13.80e-14\\
+Camry & Sedans & 312034.20e-14\\
+Camry V6 & Coupes & 13.80e-14\\
+V6 & Sedans & 4464535.40e-14\\
 \hline
 \end{tabular}        
 
@@ -44,8 +44,8 @@ V6 & Sedans & 4.46e-08\\
 We used this top category of each of the terms in the candidate SSQ and
 determined the category divergence with the qualified SSQ categories in the QRM
 store. We assumed that all of them belong to the same realm or domain (but, it
-is different in real time). In the end, we combine the divergence measure and
-ranked QRMs based on the relevance score. The table \ref{tbl:ranked_queries}
+is different in real time). In the end, we combined the divergence measure and
+ranked QRMs based on the relevance score. Table \ref{tbl:ranked_queries}
 shows the top ranked queries that belong to the QRMs in store for the above
 query.
 
@@ -54,7 +54,9 @@ query.
 \begin{tabular}{l | r}
 Query & Score\\
 \hline
-The tire size of a 1997 Toyota Camry V6 is what? & 0.11\\ 
+A 1997 Toyota Camry V6 needs what size tires? & 0.91\\ 
+What is the tire size for a 1998 Sienna XLE Van? & 0.72\\ 
+What is the tire size for a 1996 Infiniti I30 Sedan? & 0.88\\ 
 \hline
 \end{tabular}        
 
@@ -66,17 +68,19 @@ The tire size of a 1997 Toyota Camry V6 is what? & 0.11\\
 
 %\subsection{Discussion}
 \section{Conclusion}
-This query matching strategy assumes that query terms are available in the
-category corpus. The candidate query's category annotation will fail if the
-query terms are not available in the corpus. We are working on improving this
-approach by using a probabilistic approach as used in the Topic
-Models\cite{Blei2003latentdirichlet}. Similarly, the Morpheus ontology building
+
+In this paper, we proposed a novel question answering method based on a realm-based ontology. [How do we calculate relam for a candidate query? and NLP]. This query matching strategy assumes that candidate query terms are available in the category corpus. The candidate query's category annotation will fail if the
+query terms are not available in the corpus. In addition, classification of a term or n-gram into a category is based on the term frequency distributions in a classified web document. We are working on improving this
+approach by using a probabilistic generative approach as used in the Topic
+Models\cite{Blei2003latentdirichlet}. 
+
+Similarly, the Morpheus ontology building
 process needs categorized web pages. As explained in section
 \ref{sec:ontology_generators}, the Wikipedia page categories have some
-limitations for this purpose. Without a super vision, the page categorization is
+limitations for this purpose. Without supervision, the page categorization is
 often a challenging problem, because topics in the pages that belong to a realm
-(e.g. automotive) usually overlap. So we are experimenting the applicability of
-probabilistic topic models into this web page categorization, and automatic
+(e.g. automotive) usually overlap. So we are evaluating the applicability of
+probabilistic topic models to web page categorization, and automatic
 generation of a realm-ontology based on the topics being extracted.            
  
 
