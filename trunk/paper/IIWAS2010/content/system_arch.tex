@@ -30,7 +30,6 @@ P (category | term) = \frac{P(term | category) P(category)}{P(term)}
 In addition, we evaluate Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all  terms in the corpus.  For example, for the Wikipedia pages, the latent topics reflect the thematic structure of the pages. Thus, LDA can discover relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Additionally, given a text document, using LDA we could tag related documents by matching the similarity over the estimated topic proportions, which is useful in the ontology and corpora building.  Due to its fully generative semantics, even at the level of documents, LDA could address the drawbacks (such as dimensionality and failure in finding the discriminative set of words for a document) of frequency based approaches such as TF-IDF, LSI, and pLSI.
 
 
-
 \subsection{ Recording}
 \label{sec:query_processing}
   
@@ -168,8 +167,4 @@ information required to re-run this procedure.Once we have
 relevant QRMs through QRM ranking for a given user query, we can  
 get answers by re-running the pathways with help of 
 the \emph{Query Resolution Engine} (QRE) of Morpheus. 
-
-
-  
-
 
