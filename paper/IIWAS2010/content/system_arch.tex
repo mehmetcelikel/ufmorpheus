@@ -1,16 +1,43 @@
 \section{System Architecure}
 \label{sec:systemarch}
 
-This section presents the core elements of the Morpheus system and its 
-role in the \textit{automated question answering} process. 
+This section presents ontology and copora, query processing, ranking queries, and query executing.
 
-\subsection{Query Processing}
+\subsection{Using Ontology and Corpora} 
+\label{sec:ontology_corpora}
+
+Morpheus uses an ontology that contains categories of a particular realm of interest. Every leaf node in the ontology is associated with a corpus of words belonging to a category.  For example, we have constructed an automotive ontology containing categories relevant to the automotive realm. This ontology provides a structure for reference in the following sections.
+
+Morpheus uses the DBpedia categories, Wikipedia pages and the WordNet synset heterarchy to construct ontologies. This approch is motivated by YAGO \cite{Suchanek2009phd}. First a realm is mapped to a DBpedia category \cite{Bizer2009}. 
+Then a \emph{Markov Blanket} \cite{PRIS} is created covering all neighboring categories and using the DBpedia ontology properties \emph{broader} and \emph{narrower}. From here, the system recursively includes all categories up to the root.  
+
+Once we have the categories belonging to a particular realm, we associate them with WordNet synsets using an approach similar to YAGO\cite{Suchanek2009phd}. We determine a \emph{head noun} in the category name and search for it in the WordNet synsets. DBpedia categories having no WordNet synset match are excluded from our ontology. 
+
+To build a corpus for each of the leaf nodes in the ontology, 
+we extract \emph{terms} from the Wikipedia pages associated with the 
+the DBpedia categories. From this term corpus, 
+we can find the likelihood of a term belonging to a particular category. This assists in categorizing terms in a \emph{path-follower} query.
+The likelihood is determined by the probability of a category given a term 
+using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can 
+easily obtain the term-category and term-corpus probabilities as 
+relative frequencies. 
+
+\begin{equation}
+\label{eq:bayesrule}
+P (category | term) = \frac{P(term | category) P(category)}{P(term)}
+\end{equation}    
+
+In addition, we evaluate Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all  terms in the corpus.  For example, for the Wikipedia pages, the latent topics reflect the thematic structure of the pages. Thus, LDA can discover relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Additionally, given a text document, using LDA we could tag related documents by matching the similarity over the estimated topic proportions, which is useful in the ontology and corpora building.  Due to its fully generative semantics, even at the level of documents, LDA could address the drawbacks (such as dimensionality and failure in finding the discriminative set of words for a document) of frequency based approaches such as TF-IDF, LSI, and pLSI.
+
+
+
+\subsection{ Recording}
 \label{sec:query_processing}
   
-The \emph{Query Resolution Recorder} or QRR is an instrumented web browser
-used to track the search pathways to an answer for a \textit{guide's} query. It
+The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser
+used to track the search pathways to an answer for a \textit{path-finders} query. It
 also helps guide to identify categories (optional) for the query terms. 
-Morpheus has two types of categories: \emph{intput categories} and \emph{output categories}.
+Morpheus has two types of categories: \emph{input categories} and \emph{output categories}.
 Input categories annotates the query terms into a class or category, which are 
 useful in finding similar queries. On the other hand, output categories give hints
 to the expected answer of a user query. Morpheus captures all
@@ -23,7 +50,7 @@ In addition, guide can log the search pathways to an answer (e.g. P215/60R16)
 to this query and select the query \emph{realm} as automotive.      
 
 
-The \emph{Query Resolution Method} or QRM is a data structure that models the
+The \emph{Query Resolution Method} (QRM) is a data structure that models the
 question answering process. A QRM is usually constructed by a \emph{guide} with
 the help of the QRR. Each QRM contains an \emph{ontological realm}, an SSQ, and
 information to support the query answering process. QRMs are associated with an
@@ -37,76 +64,23 @@ the possible referrence outputs (highlighted portions of the web page).
 % NLP arch. 
 % Joir-dan
 
-Rather than working blindly, forming all possible ngrams from the query 
+Rather than working blindly, forming all possible n-grams from the query 
 and running probabilities, it seemed to be a better approach to identify 
 important noun phrases within the query, and work with those. Using our 
 query parser, we proceed to tokenize, parse, and chunk our candidate query, 
 extracting verb groups, answer classes, and descriptive info from each query. 
 In the example query "What is the tire size of a 1997 Toyota Camry?," 
 the verb group is the verb "is," the answer class is "tire size," and descriptive 
-info is "of a 1997 Toyota Camry." The next step is to create ngrams from these chunks. 
-Using these ngrams, we will query our database for frequencies associated with 
-each ngram: overall frequency and categorical frequency, alongside category 
+info is "of a 1997 Toyota Camry." The next step is to create n-grams from these chunks. 
+Using these n-grams, we will query our database for frequencies associated with 
+each n-gram: overall frequency and categorical frequency, alongside category 
 term count and overall term count, to calculate categorical probabilities 
 and establish a realm for the candidate query, choosing realm with highest probability.
 
 
-\subsection{Morpheus Ontology and Corpora} 
-\label{sec:ontology_corpora}
 
-Morpheus requires a realm-based ontology that contains categories of a
-particular realm of interest. For example, the realm-ontology \textit{Automotive}
-contains categories that are relevant to the automotive realm. In
-addition, every leaf node in the category ontology is associated with a corpus of words
-that belongs to that category. 
 
-For ontology construction Morpheus uses the Wikipedia pages, categories,
-and the WordNet synset heterarchy. This approch is motivated from
-YAGO\cite{Suchanek2009phd}. For a given realm, we first find a mapping category 
-from the DBpedia categories\cite{Bizer2009}. Then we grab all the neighboring 
-categories using a \textit{Markov Blanket} \cite{PRIS}. In fact, we grab 
-the category's parents, its children, and its 
-children's other parents using the DBpedia ontology properties \textit{broader}
-and \textit{narrower}. Once the blanket is ready, it grabs all parent categories
-of the categories in the blanket till it reaches root. Once we have the
-categories belongs to a particular domain, we associate them with WordNet synsets
-using an algorithm similar to YAGO\cite{Suchanek2009phd}. We determine head noun in the
-category name and search for it in the WordNet synsets.
-Those Wikipedia categories having no WordNet match are ignored in the our realm
-ontology. In addition, we uses the WordNet synset heterarchy relationships for building the ontologcial structure. 
-
-To build a corpus for each of the leaf nodes in the ontology, 
-we extract \emph{n-grams} or \emph{terms} from the Wikipedia pages associated with the 
-the DBpedia categories\cite{Bizer2009}. From this category-term corpora, 
-we can find out the likelihood that a term belongs to a particular category, 
-which is useful in categorizing the terms in a \emph{regular user's} query [section \ref{sec:qrm_ranking}].    
-This likelihood is determined by the probability of a category given a term 
-using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can 
-easily obtain the term-category and term-corpus probabilities as 
-relative frequencies. The higher the probability, the more likely a 
-term is referring to a category. 
-
-\begin{equation}
-\label{eq:bayesrule}
-P (category | term) = \frac{P(term | category) P(category)}{P(term)}
-\end{equation}    
-
-Alternately, we are evaluating Latent Dirichlet Allocation (LDA), a probabilistic graphic model, for
-representing latent topics of the documents in a text corpus\cite{Blei2003latentdirichlet}.
-Due to its fully generative semantics, even at 
-the level of documents, LDA could address the drawbacks 
-(such as dimensionality and failure in finding the discriminative set of 
-words for a document) of frequency based approaches such as TF-IDF, LSI, and pLSI. In
-this Bayesian model, LDA represents a document in the corpus by
-distributions over topics, and a topic itself is a distribution over all 
-terms in the corpus.  For example, for the Wikipedia pages, the latent
-topics reflect the thematic structure of the pages. Thus, LDA
-can find out relevant topic proportions in a document using posterior inference
-\cite{Blei2003latentdirichlet}. Additionally, given a text document, using LDA
-we could tag related documents by matching the similarity over the estimated
-topic proportions, which is useful in the ontology and corpora building.   
-
-\subsection{QRM Ranking Mechanism} 
+\subsection{Ranking} 
 \label{sec:qrm_ranking}
 
 To answer a user's query, a \textit{candidate
@@ -125,7 +99,7 @@ the candiate SSQ and a qualified SSQ. Each qualified SSQ will
 have input terms, output terms, and associated classes, and one realm (from QRM). 
 For the candidate SSQ, the relevant categories for terms 
 are determined from the NLP engine and corpora. The calculation of a realm 
-for a candidate query is done using the ngrams found within said query 
+for a candidate query is done using the n-grams found within said query 
 and the probabilities (if any) found using frequencies within the database.
 We match QRMs that belong to the same \emph{realm} of the candidate SSQ. 
 The relevance of a qualified SSQ to the candidate SSQ is 
@@ -182,21 +156,18 @@ Suppose we want to find the category divergence between \textit{Sedans}
 and \textit{Trucks} (Figure \ref{fig:automotive_ontology}). 
 \textit{Sedans} is the subcategory of \textit{Cars}, and \textit{Trucks}
 is the subcategory of \textit{Automobiles}. Therefore, the least common ancestor ($C$)
-for these two categories is \textit{Automobiles}. In addition, the tree height \textit{h = 4}.
+for these twoThis section presents ontology and copora, Query processing, ranking queries, and the query resolution mechanism. categories is \textit{Automobiles}. In addition, the tree height \textit{h = 4}.
 So, the normalized divergence $cd$\textit{(Sedans, Trucks)} is \textit{7/12}
 that is calculated from \textit{d(Sedans, Root) = 4}, \textit{d(Sedans, Automobiles) = 2}, and \textit{d(Trucks, Automobiles) = 1}.
 
 
-\subsection{Query Resolution Execution} 
+\subsection{Executing} 
 
-Usually, answering a question using the 
-deep web requires one to navigate through a sequence of one or 
-more web pages. Many of the accesses involve clicks through 
-web forms or links to resulting pages. QRM contains the necessary  
-information required to re-run this procedure. Once we have 
+QRM contains the necessary  
+information required to re-run this procedure.Once we have 
 relevant QRMs through QRM ranking for a given user query, we can  
 get answers by re-running the pathways with help of 
-the Query Resolution Engine or QRE of Morpheus. 
+the \emph{Query Resolution Engine} (QRE) of Morpheus. 
 
 
   
