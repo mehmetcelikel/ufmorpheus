@@ -3,37 +3,27 @@
 
 \subsection{Question Ansering Systems} 
 
-Question Answering (QA) is an old field and there has been a recent influx of QA work. The earliest question answering systems include BASEBALL \cite{Green1961} and Lunar \cite{woods1973} were both \emph{closed domain} and \emph{closed corpus}.  Closed domain QA systems are those in which the possible meanings of the questions given are finite. We define closed corpus sytems as those in which the sources used to answer questions are finite.  QA systems that treat the web as a document collection are open corpus systems.  The morpheus system is considered an open corpus system.  It goes beyond current state of the art QA systems by examining deep web sources.
+The earliest question answering systems such as BASEBALL \cite{Green1961} and Lunar \cite{woods1973} had \emph{closed domains} and \emph{closed corpora}, that is, they supported finitely many questions on copora containing a fixed set of documents.
+Morpheus uses the web as its dynamic, open corpus and examines deep web sources 
+to answer questions.
 
-Several community QA systems have been developed, one of the most popular being Yahoo! Answers \cite{yahooanswers2008}.  These sites enlist a community of users to answer question posed by other users.  This idea has evolved to invent socially integrated QA systems such as Aardvark \cite{vark2010}. In addition to having questions answered by users, Aardvark is able to contact potential question answerers through several media beyond webpages (e.g. instant messages, mobile phones).  This allows for possibly faster answers to questions.  The morpheus system relies on both user interface and the property of similar question being answered by a community of users to give a fast reliable answer.
+Several community QA systems have been developed, such as Yahoo! Answers \cite{yahooanswers2008}. These sites enlist a community of users to answer questions posed by other users.  This idea has led to socially integrated QA systems such as Aardvark \cite{vark2010}. In addition to having questions answered by users, Aardvark can contact potential question answerers through media beyond webpages (e.g. instant messages, mobile phones).  This allows for faster responses to questions.  Morpheus relies on both its user interface and previous similar questions answered by a community of users to give a fast reliable answer.
 
 
 \subsection{Ontology generators} 
 \label{sec:ontology_generators}
 
-An ontology formally models real world \textit{concepts} and their
-relationships. A concept or class in an ontology gives us an abstract and
-simplified view of the world\cite{Gruber1993} in a machine-readable and
-language-independent format. The relationships and attributes of an
-ontological concept are defined using \textit{properties} and \textit{property
-restrictions}. An ontology definition contains all of
-these: classes, properties, and restrictions. A class in an ontology can have
-multiple \textit{super classes} and \textit{sub-classes}. Finally, a
-\textit{knowledge base} represents an ontology together with 
-instances of its classes.      
+% This section needs to be reworkd. It should be about 1 paragraph. It should define
+% what these (ontology, dbpedia, wordnet) mean to morpheus
+% What rigors boone invest to my pyramids? <<-- randomly generated
 
-The DBpedia\footnote{http://dbpedia.org} project is based on extracting 
-semantic information from the Wikipedia and making it available on the Web. 
-Wikipedia semantics includes info-box templates, categorization information, 
-images, Geo-coordinates, links to external Web pages, disambiguation pages, 
-and redirects between pages in Wiki markup form \cite{Bizer2009}. 
-DBpedia represents the Wikipedia categories using skos:concepts and category 
-relations using skos:broader \cite{Bizer2009}. In fact, 
-DBpedia does not define any new relations between the Wikipedia categories. 
-The Wikipedia categories are extracted directly from Wikipedia pages, and there 
-is no quality check on the resultant ontology. Similarly, additional ontological 
-relations in DBpedia are generated from the info-box attributes and their values.
 
-YAGO is a semi-automatically constructed ontology from the Wikipedia pages, info-boxes, categories and WordNet\footnote{http://wordnet.princeton.edu} synsets heterarchy\cite{Suchanek2009phd}. YAGO uses the Wikipedia page titles as its ontology individuals and categories as its ontology classes. The ontology's heterarchy is built using the \textit{hypernym} and \textit{hyponym} relations of the WordNet synsets. YAGO uses only the nouns from WordNet and ignores the WordNet verbs and adjectives. The connection between a WordNet synset and a Wikipedia category is achieved by parsing the category names and matching the parsed category components with the WordNet synsets\cite{Suchanek2009phd}. Those Wikipedia categories having no WordNet match are ignored in the YAGO ontology.
+%An ontology formally models real world \textit{concepts} and theirrelationships. A concept or class in an ontology gives us an abstract and simplified view of the world\cite{Gruber1993} in a machine-readable and language-independent format. The relationships and attributes of an ontological concept are defined using \textit{properties} and \textit{property restrictions}. An ontology definition contains all of these: classes, properties, and restrictions. A class in an ontology can have multiple \textit{super classes} and \textit{sub-classes}. Finally, a \textit{knowledge base} represents an ontology together with instances of its classes.
+
+%% use dbpedia instead of wikipedia here
+
+The DBpedia\footnote{http://dbpedia.org} project is based on extracting  semantic information from the Wikipedia and making it available on the Web.  Wikipedia semantics includes info-box templates, categorization information,  images, Geo-coordinates, links to external Web pages, disambiguation pages,  and redirects between pages in Wiki markup form \cite{Bizer2009}.  DBpedia represents the Wikipedia categories using skos:concepts and category relations using skos:broader \cite{Bizer2009}. In fact,  DBpedia does not define any new relations between the Wikipedia categories.  The Wikipedia categories are extracted directly from Wikipedia pages, and there  is no quality check on the resultant ontology. Similarly, additional ontological relations in DBpedia are generated from the info-box attributes and their values.
+
+YAGO is a semi-automatically constructed ontology from the Wikipedia pages, info-boxes, categories and WordNet\footnote{http://wordnet.princeton.edu} synsets heterarchy\cite {Suchanek2009phd}. YAGO uses the Wikipedia page titles as its ontology individuals and categories as its ontology classes. The ontology's heterarchy is built using the \textit{hypernym} and \textit{hyponym} relations of the WordNet synsets. YAGO uses only the nouns from WordNet and ignores the WordNet verbs and adjectives. The connection between a WordNet synset and a Wikipedia category is achieved by parsing the category names and matching the parsed category components with the WordNet synsets\cite{Suchanek2009phd}. Those Wikipedia categories having no WordNet match are ignored in the YAGO ontology.
 
 However, YAGO type extraction assumes that each Wikipedia page has at least one tagged category, and the assigned Wikipedia categories are relevant to that Wikipedia page. The Wikipedia page category assignments are subjectively assigned by human editors and some Wiki pages are unassigned i.e., they have no category. In addition, we cannot fully rely on the relevance of these assigned Wikipedia page categories. In addition, YAGO concentrates mainly on the fields of people, cities, events, and movies\cite{Suchanek2009phd}.
