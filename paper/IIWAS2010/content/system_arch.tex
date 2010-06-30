@@ -1,15 +1,21 @@
 \section{System Architecure}
 \label{sec:systemarch}
 
-This section presents ontology and copora, query processing, ranking queries, and query executing.
+% This was corrected in my version... (Joir-dan performing diff 2010-06-30)
+This section presents ontology and corpora, query processing, ranking queries, and query executing.
 
 \subsection{Using Ontology and Corpora} 
 \label{sec:ontology_corpora}
 
 Morpheus uses an ontology that contains categories of a particular realm of interest. Every leaf node in the ontology is associated with a corpus of words belonging to a category.  For example, we have constructed an automotive ontology containing categories relevant to the automotive realm. This ontology provides a structure for reference in the following sections.
 
-Morpheus uses the DBpedia categories, Wikipedia pages and the WordNet synset heterarchy to construct ontologies. This approch is motivated by YAGO \cite{Suchanek2009phd}. First a realm is mapped to a DBpedia category \cite{Bizer2009}. 
+%% Comment made by Joir-dan (2010-06-29)
+ %%Need to remove any references to Markov Blanket... since we abandoned that ship a while ago... 
+
+Morpheus uses the DBpedia categories, Wikipedia pages and the WordNet synset heterarchy to construct ontologies. This approach is motivated by YAGO \cite{Suchanek2009phd}. First a realm is mapped to a DBpedia category \cite{Bizer2009}. 
 Then a \emph{Markov Blanket} \cite{PRIS} is created covering all neighboring categories and using the DBpedia ontology properties \emph{broader} and \emph{narrower}. From here, the system recursively includes all categories up to the root.  
+
+%% ^^^ Needs to remove references to blanket
 
 Once we have the categories belonging to a particular realm, we associate them with WordNet synsets using an approach similar to YAGO\cite{Suchanek2009phd}. We determine a \emph{head noun} in the category name and search for it in the WordNet synsets. DBpedia categories having no WordNet synset match are excluded from our ontology. 
 
@@ -22,6 +28,8 @@ using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can
 easily obtain the term-category and term-corpus probabilities as 
 relative frequencies. 
 
+%% Comment by Joir-dan 2010-06-30: Term should prolly be replaced by n-gram
+
 \begin{equation}
 \label{eq:bayesrule}
 P (category | term) = \frac{P(term | category) P(category)}{P(term)}
@@ -33,50 +41,30 @@ In addition, we evaluate Latent Dirichlet Allocation (LDA) to identify latent to
 \subsection{ Recording}
 \label{sec:query_processing}
   
-The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser
-used to track the search pathways to an answer for a \textit{path-finders} query. It
-also helps guide to identify categories (optional) for the query terms. 
-Morpheus has two types of categories: \emph{input categories} and \emph{output categories}.
-Input categories annotates the query terms into a class or category, which are 
-useful in finding similar queries. On the other hand, output categories give hints
-to the expected answer of a user query. Morpheus captures all
-this query information in the representation of an SSQ. For example, suppose, a guide 
-tries to answer the query ``A 1997 Toyota Camry V6 needs what size tires?'', using
-Morpheus. With the help of the QRR, guide may choose relevant query terms and assign
-\emph{input categories} to them: Toyota : manufacturer, Camry V6 : 
-model, tire : automotive parts, and size as the \emph{output category}. 
-In addition, guide can log the search pathways to an answer (e.g. P215/60R16)
-to this query and select the query \emph{realm} as automotive.      
+%% Was edited and shortened by Joir-dan and Wilson (2010-06-29)
+The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser that records the interactions of a path-finder answering a question. The path-finder also uses the tool to identify ontological categories associated with search terms. Morpheus stores the query together with its terms and categories as an SSQ (Figure \ref{fig:ssq_example}). Using the QRR, the path-finder is also able to identify where answers can be found within traversed pages.
 
+%% Was added by Joir-dan and Wilson (2010-06-29)... but may need to be better formatted
+\begin{figure}[t]
+\label{fig:ssq_example}
+("An  1997 Toyota Camry V6 has what size tires", 
+     (1997: Date, Toyota: Manufacturer, Camry: Model, V6: Engine ),
+     (tire: Part, size: Measurement))
+ 
+%% Comment made by Joir-dan Gumbs (2010-06-29) 
+%%Need to talk a bit about this SSQ Structure: Does anyone see anything wrong with this representation?
+\caption{An example SSQ for the question: A 1997 Toyota Camry V6 has what size tires?}
+\end{figure} 
 
+%% Edited by Joir-dan and Wilson (2010-06-29)
 The \emph{Query Resolution Method} (QRM) is a data structure that models the
-question answering process. A QRM is usually constructed by a \emph{guide} with
-the help of the QRR. Each QRM contains an \emph{ontological realm}, an SSQ, and
-information to support the query answering process. QRMs are associated with an
-ontology that has a particular realm i.e. an ontological realm. In addition, 
-the QRM contains information required to visit each page needed to 
-answer the query as well as the order of visitation. For each
-dyanamic page, it stores the list of inputs to the URL such as form inputs and
-the possible referrence outputs (highlighted portions of the web page).
+question answering process. A QRM represents a generalized executable realization of the search process that the path-finder followed. The QRM is able to reconstruct the page search path followed by the path-finder. Each QRM contains an \emph{ontological realm}, an SSQ, and information to support the query answering process. For each dynamic page, it stores the list of inputs to the URL such as form inputs and the possible reference outputs (highlighted portions of the web page).
 
 
 % NLP arch. 
-% Joir-dan
+% This may need to be moved somewhere... but not sure where.... Joir-dan Gumbs (2010-06-29)
 
-Rather than working blindly, forming all possible n-grams from the query 
-and running probabilities, it seemed to be a better approach to identify 
-important noun phrases within the query, and work with those. Using our 
-query parser, we proceed to tokenize, parse, and chunk our candidate query, 
-extracting verb groups, answer classes, and descriptive info from each query. 
-In the example query "What is the tire size of a 1997 Toyota Camry?," 
-the verb group is the verb "is," the answer class is "tire size," and descriptive 
-info is "of a 1997 Toyota Camry." The next step is to create n-grams from these chunks. 
-Using these n-grams, we will query our database for frequencies associated with 
-each n-gram: overall frequency and categorical frequency, alongside category 
-term count and overall term count, to calculate categorical probabilities 
-and establish a realm for the candidate query, choosing realm with highest probability.
-
-
+Queries inserted by path-followers take a different approach. The Morpheus search system parses, tags, and processes the queries in order to pull important n-grams. The system then assigns the most probable realm to the query using \textit{realm}|\textit{n-gram} priors calculated from realm-specific corpora. Once the realm is assigned, an ontology search is performed to assign classes to the n-grams. An SSQ is constructed and the system attempts to match this SSQ to a query path created by a path-finding user. Rather than matching n-grams, the goal is to match input and output classes, since the paths can potentially answer similar queries.
 
 
 \subsection{Ranking} 
@@ -94,7 +82,7 @@ dispatch in CLOS and Dylan programming for generic function \emph{type} matches.
 
 We consider the category match as a type match and we use 
 \emph{category divergence} to calculate the relevance between 
-the candiate SSQ and a qualified SSQ. Each qualified SSQ will 
+the candidate SSQ and a qualified SSQ. Each qualified SSQ will 
 have input terms, output terms, and associated classes, and one realm (from QRM). 
 For the candidate SSQ, the relevant categories for terms 
 are determined from the NLP engine and corpora. The calculation of a realm 
@@ -104,7 +92,7 @@ We match QRMs that belong to the same \emph{realm} of the candidate SSQ.
 The relevance of a qualified SSQ to the candidate SSQ is 
 determined by aggregating the divergence measure of input-term-categories 
 associated with them. In addition, we order QRMs in the data store 
-by descreasing relevance. The order provides a ranking for the results 
+by decreasing relevance. The order provides a ranking for the results 
 to the user. The following subsection describes \emph{category divergence} 
 in detail.
 
@@ -162,16 +150,8 @@ that is calculated from \textit{d(Sedans, Root) = 4}, \textit{d(Sedans, Automobi
 
 \subsection{Executing} 
 
-Once we have relevant QRMs through QRM ranking for a given user query, we can get answers by re-running the pathways with help of the \emph{Query Resolution Engine} (QRE) of Morpheus. The evaluation of this script by the QRE simulates the behavior of a human browsing the web, that is, clicking buttons to follow links, submitting forms, and highlighting of datato form a text answer.
-
-
-%When a user submits a new query to the Morpheus system, one or more stored QRMs are executed to obtain results. A QRM contains an XML script representing an algorithm that will obtain the required result. The evaluation of this script by the QRE simulates the behavior of a human browsing the web, that is, clicking buttons to follow links, submitting forms, highlighting data, cutting and pasting text, and constructing an answer in the form of a text string. There is greater complexity in dealing with web forms than with links. At present, the GET form submission method is used. This means that in preparation to submit a form, the Morpheus System builds a querystring consisting of name-value pairs. For a given form, there may be text fields, drop-down boxes, and among other components. In order to support form submission in such circumstances, the QRE performs different actions based upon the input type. For text fields, simply adding a key/value pair to the query string suffices. For a drop-down box, the QRE extracts the form element to find the appropriate value to include in the query string. It does this by examine each option in the drop-down and matching the user’s input to the text field in the option. The value attribute of the option is then added to the querystring. The value and text attributes of a dropdown option might be the same, but they are not guaranteed to be. All input data are kept in an internal table. The QRM script contains keys that allow the QRE to map SSQ inputs from the table to the appropriate form inputs. Furthermore, highlighted text segments collected during execution of the script are stored in the table. Once all actions in the script have been carried out, the QRE returns the textual answer this process has created. This answer is then be rendered in a browser displayed to the user.
-
-
-
-
-
-
-
-
-
+QRM contains the necessary  
+information required to re-run this procedure.Once we have 
+relevant QRMs through QRM ranking for a given user query, we can  
+get answers by re-running the pathways with help of 
+the \emph{Query Resolution Engine} (QRE) of Morpheus. 
