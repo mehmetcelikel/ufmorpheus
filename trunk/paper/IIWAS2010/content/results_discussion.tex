@@ -5,16 +5,31 @@
 % Human made ontology 
 % Topic Models 
 
-First, we created an ontology for the automotive realm exploiting the Wikipedia pages, categories, and WordNet synsets. For each of the classes in the ontolgy we built corpora from the corresponding Wikipedia pages. Table describes the question answering process for the user query, ``A 1997 Toyota Camry V6 needs what size tires?''
+First, we built an ontology for the automotive realm exploiting the Wikipedia pages, categories, and WordNet synsets. For each of the classes in the ontolgy we built corpora from the corresponding Wikipedia pages. Figure \ref{fig:automotive_ontology} shows a subsection of this ontology.
+
+ describes the question answering process for the user query, ``A 1997 Toyota Camry V6 needs what size tires?''
+
 
 %% TODO - need to refer back to the table which is figure one.
-The Morpheus NLP engine parses this query into the constructs: WH:what,
-Descriptive Information:1997 Toyota Camry V6, Asking For:size tires. From the
-descriptive info, we generate the N-grams or terms 1997, 1997 Toyota, 1997
-Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6, Camry, Camry V6, and V6. For
-each of the terms, we determined relevant categories (non-increasing order of
-relevance) from the ontology corpora. Table \ref{tbl:term_categories} shows
-the top categories and their probabilities for each of the query term: 
+%The Morpheus NLP engine parses this query into the constructs: WH:what, Descriptive Information:1997 Toyota Camry V6, Asking For:size tires. From the descriptive info, we generate the N-grams or terms 1997, 1997 Toyota, 1997 Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6, Camry, Camry V6, and V6. For each of the terms, we determined relevant categories (non-increasing order of relevance) from the ontology corpora. Table \ref{tbl:term_categories} shows the top categories and their probabilities for each of the query term.
+In Table \ref{tbl:nlp_engine_parse} we show the data that is output by the Morpheus NLP engines parse of the query .  It extracts the WH question
+
+
+\begin{table}[h]\footnotesize
+	\begin{tabular}{|l|p{4.2cm}|}
+		\hline 
+		WH & what \\
+		\hline 
+		Descriptive Information & 1997 Toyota Camry V6 \\
+		\hline 
+		Asking for & size tires \\
+		\hline 
+		ngrams & 1997, 1997 Toyota, 1997 Toyota Camry, Toyota, Toyota Camry, Toyota Camry V6, Camry, Camry V6, V6 \\
+		\hline
+	\end{tabular}
+	\caption{The output of NLP engine parse}
+	\label{tbl:nlp_engine_parse} 
+\end{table}
 
 \begin{table}[h]\footnotesize
 
@@ -46,8 +61,8 @@ ranked QRMs based on the relevance score. Table \ref{tbl:ranked_queries} shows t
 Query & Tagged Classes & Score\\ \hline
 A 1997 Toyota Camry V6 needs what size tires? & IC:Sedans, Cars, Engines, Manufactures OC:size tires & 0.91\\ \hline 
 What is the tire size for a 1998 Sienna XLE Van? & IC:Vans, Manufactures OC: tire size & 0.72\\ \hline 
-Where can I buy a headlight for a Toyota Camry V6? & IC:Manufactures, Sedans, Engines OC: where & - \\ \hline 
-What is the cost of a Toyota Camry V6 muffler? &  IC:Manufactures, Sedans, Engines OC: the clost  & - \\ \hline
+%Where can I buy a headlight for a Toyota Camry V6? & IC:Manufactures, Sedans, Engines OC: where & - \\ \hline 
+%What is the cost of a Toyota Camry V6 muffler? &  IC:Manufactures, Sedans, Engines OC: the clost  & 0.97 \\ \hline
 \end{tabular}
 
 \caption{Top ranked queries and relevance scores: IC - input classes, OC - output classes}
@@ -59,7 +74,7 @@ What is the cost of a Toyota Camry V6 muffler? &  IC:Manufactures, Sedans, Engin
 %\subsection{Discussion}
 \section{Conclusion}
 
-In this paper, we propose a novel question answering system that uses the deep web and previously answered user queries to answer similar questions. The system uses a path finder to annotate answer paths so path followers can discover answers to similar questions.  Each $(question, answer)$ pair is assigned a realm, and new questions are matched to the new $(question, answer)$ pairs. Classification of terms into classes is based on term frequency distributions in our corpora of web documents. We are investigating improvements to our solution by an approach similar to Topic Models \cite{Blei2003latentdirichlet}. 
+In this paper, we propose a novel question answering system that uses the deep web and previously answered user queries to answer similar questions. The system uses a path-finder to annotate answer paths so path-followers can discover answers to similar questions.  Each $(question, answer)$ pair is assigned a realm, and new questions are matched to the new $(question, answer)$ pairs. Classification of terms into classes is based on term frequency distributions in our corpora of web documents. We are investigating improvements to our solution by an approach similar to Topic Models \cite{Blei2003latentdirichlet}. 
 
 Manually forming a corpus of wilipedia pages associated with a class is a cumbersome task. Topic Modeling provides a promising approach to identifying pages relevent to given class in a more automated manner.
 %The Wikipedia page categories has limitations. Without supervision, the page categorization is often a challenging problem, because topics in the pages that belong to a realm (e.g. automotive) usually overlap. So we are evaluating the applicability of probabilistic topic models to web page categorization, and automatic generation of a realm-ontology based on the topics being extracted.
