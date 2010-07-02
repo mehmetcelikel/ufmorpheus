@@ -46,9 +46,8 @@ The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser that r
 %Query & \multicolumn{9}{|c|}{A 1997 Toyota Camry V6 has what size tires?}\\
 
 %% TODO - we need the table here
-\begin{table}\footnotesize
+\begin{table}[h]
 \scalebox{0.76}{
-	\rowcolors{1}{white}{white}
 	\begin{tabular}{|r|l|l|l|l|l|l|l|l|}
 		\hline
 		\textbf{Terms} & 1997 & Toyota & Camry & V6 & size & tires \\
@@ -104,24 +103,13 @@ d(S, T)/(3h) & S \prec T\\
 
 Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) < cd(S,Q)$, that is, the divergence of a source category to a target ancestor category is smaller than the divergence of a source category to any category that is not an ancestor. This is an important property in determining the compatibility of categories for answering queries.  If a SSQ answers queries concerning an ancestor category, it is more relevant that a SSQ that answers queries from any non-ancestral category.
 
-% Algorithm 1: figure  
-%\begin{figure}[t]
-%	\centering
-%\includegraphics[width=85mm]{../img/vehicular_ontology.eps}
-%\includegraphics[width=85mm]{vehicular_ontology.eps}
-%\includegraphics[width=85mm]{img/OntologyDiagram.eps}
-%\caption{Abbreviated Vehicular Ontology}% - arrows represent inheritance relationships between the ontological classes.}
-%\label{fig:vehicular_ontology}
-%\end{figure}
+Suppose we want to find the category divergence between \textit{Sedan} and \textit{Bus} Figure \ref{fig:vehicular_ontology}. \textit{Sedan} is the subcategory of \textit{Sedan}, and \textit{Bus} is the subcategory of \textit{Automobile}. Therefore, the least common ancestor ($C$) for these two. This section presents ontology and copora, query processing, ranking queries, and the query resolution mechanism. categories is \textit{Automobile}. In addition, the tree height \textit{h = 4}. So, the normalized divergence $cd$\textit{(Sedan, Bus)} is \textit{7/12} that is calculated from \textit{d(Sedan, Root) = 4}, \textit{d(Sedan, Automobile) = 2}, and \textit{d (Bus, Automobile)=1}.
 
-
-\begin{figure}[t]
-	\includegraphics[scale=.65]{../img/OntologyDiagram.png}
+\begin{figure}[h]
+	\includegraphics[scale=0.65]{OntologyDiagram.png}
 	\caption{Abbreviated Vehicular Ontology}
 	\label{fig:vehicular_ontology}
 \end{figure}
-
-Suppose we want to find the category divergence between \textit{Sedan} and \textit{Bus} Figure \ref{fig:vehicular_ontology}. \textit{Sedan} is the subcategory of \textit{Sedan}, and \textit{Bus} is the subcategory of \textit{Automobile}. Therefore, the least common ancestor ($C$) for these two. This section presents ontology and copora, query processing, ranking queries, and the query resolution mechanism. categories is \textit{Automobile}. In addition, the tree height \textit{h = 4}. So, the normalized divergence $cd$\textit{(Sedan, Bus)} is \textit{7/12} that is calculated from \textit{d(Sedan, Root) = 4}, \textit{d(Sedan, Automobile) = 2}, and \textit{d (Bus, Automobile)=1}.
 
 \subsection{Executing} 
 
