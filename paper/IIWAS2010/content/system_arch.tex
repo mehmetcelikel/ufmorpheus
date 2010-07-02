@@ -15,13 +15,13 @@ Morpheus uses an ontology that contains classes of a particular realm of interes
 Morpheus uses the DBpedia categories, Wikipedia pages, and the WordNet synset heterarchy to find class-relevant web pages. First a realm is mapped to a DBpedia category \cite{Bizer2009}. Then a \emph{Markov Blanket} \cite{PRIS} is created covering all neighboring categories and using the DBpedia ontology properties \emph{broader} and \emph{narrower}.
 
 
-To build a corpus for each of the leaf nodes in the ontology, we extract \emph{terms} from the Wikipedia pages associated with the DBpedia categories found in its blanket. From this term corpus, we can find the likelihood of a term belonging to a particular category. This assists in categorizing terms in a \emph{path-follower} query. The likelihood is determined by the probability of a category given a term using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can easily obtain the term-category and term-corpus probabilities as relative frequencies. 
+To build a corpus for each of the leaf nodes in the ontology, we extract \emph{terms} from the Wikipedia pages associated with the DBpedia categories found in its blanket. From this term corpus, we can find the likelihood of a term belonging to a particular class. This assists in classifying terms in a \emph{path-follower} query. The likelihood is determined by the probability of a class given a term using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can easily obtain the term-class and term-corpus probabilities as relative frequencies. 
 
 %Once we have the categories belonging to a particular realm, we associate them with WordNet synsets using an approach similar to YAGO. We determine a \emph{head noun} in the category name and search for it in the WordNet synsets. DBpedia categories having no WordNet synset match are excluded from our ontology. <--- by Gordon
 
 \begin{equation}
 \label{eq:bayesrule}
-P (category | term) = \frac{P(term | category) P(category)}{P(term)}
+P (class | term) = \frac{P(term | class) P(class)}{P(term)}
 \end{equation}    
 
 In addition, we evaluate Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model that represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all  terms in the corpus.  For example, for the Wikipedia pages, the latent topics reflect the thematic structure of the pages. Thus, LDA can discover relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Given a text document, we tag related documents by matching their similarity over the estimated topic proportions, assisting in ontology and corpora construction.  Due to its fully generative semantics, this usage of LDA could address drawbacks of frequency based approaches (e.g. TF-IDF, LSI, and pLSI) such as dimensionality and failure to find the discriminative set of words for a document. %of frequency based approaches.% such as TF-IDF, LSI, and pLSI.
@@ -31,7 +31,7 @@ In addition, we evaluate Latent Dirichlet Allocation (LDA) to identify latent to
 \label{sec:query_processing}
 
 
-The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser that records the interactions of a path-finder answering a question. The path-finder also uses the tool to identify ontological categories associated with search terms. Morpheus stores the query together with its terms and categories as an SSQ.  Table \ref{tab:ssq_example} is an example showing the SSQ model of the query ``A 1997 Toyota Camry V6 has what size tires?". The SSQ in Table \ref{tab:ssq_example} is said to be \emph{qualified} because the classes associated with its terms have been identified. Using the QRR, the path-finder is also able to identify where answers can be found within traversed pages.
+The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser that records the interactions of a path-finder answering a question. The path-finder also uses the tool to identify ontological classes associated with search terms. Morpheus stores the query together with its terms and classes as an SSQ.  Table \ref{tab:ssq_example} is an example showing the SSQ model of the query ``A 1997 Toyota Camry V6 has what size tires?". The SSQ in Table \ref{tab:ssq_example} is said to be \emph{qualified} because the classes associated with its terms have been identified. Using the QRR, the path-finder is also able to identify where answers can be found within traversed pages.
 
 
 %	\begin{figure}[t]
@@ -69,7 +69,7 @@ The \emph{Query Resolution Method} (QRM) is a data structure that models the que
 % NLP arch. 
 % This may need to be moved somewhere... but not sure where.... Joir-dan Gumbs (2010-06-29)
 
-Queries inserted by path-followers take a different approach. The Morpheus search process parses and tags queries in order to record important terms. The system assigns the most probable realm given the terms in the query as calculated from realm-specific copora. Once the realm is assigned, an ontology search is performed to assign classes to the terms. An SSQ is constructed and the system attempts to match this candidate SSQ to existing QRM SSQs. Rather than matching exact query terms, the system matches input and output classes, because a QRM can potentially answer similar queries.
+Queries inserted by path-followers take a different approach. The Morpheus search process parses and tags queries in order to record important terms. The system assigns the most probable realm given the terms in the query as calculated from realm-specific copora. Once the realm is assigned, an ontology search is performed to assign classes to the terms. An SSQ is constructed and the system attempts to match this candidate SSQ to existing QRM SSQs. Rather than matching exact query terms, the system matches input and output classes, because a QRM can potentially answer many similar queries.
 
 
 \subsection{Ranking} 
@@ -77,18 +77,18 @@ Queries inserted by path-followers take a different approach. The Morpheus searc
 
 To answer a user's query, a candidate SSQ, Morpheus finds similar qualified SSQs that are associated with QRMs in the Morpheus data store.  To determine SSQ similarity, we consider the SSQ's realm, input terms, output terms, and their assigned classes. 
 
-The \emph{class divergence} of two classes within the ontology characterizes their similarity.  This solution is motivated by the concept of multiple dispatch in CLOS and Dylan programming for generic function type matches. 
+The \emph{class divergence} of two classes within the ontology characterizes their dissimilarity.  This solution is motivated by the concept of multiple dispatch in CLOS and Dylan programming for generic function type matches. 
 
-We consider the category match as a type match and we use \emph{category divergence} to calculate the relevance between the candidate SSQ and a qualified SSQ. Each qualified SSQ will have input terms, output terms, and associated classes, and one realm (from the QRM).  For the candidate SSQ, the relevant categories for terms are determined from the NLP engine and corpora. The calculation of a realm for a candidate query is performed using the n-grams found within the query and any probabilities as found with $p(realm|n\-gram)$. %% TODO - specify freq and reference joirdans stuff in section 3.2
+We consider the class match as a type match and we use \emph{class divergence} to calculate the relevance between the candidate SSQ and a qualified SSQ. Each qualified SSQ will have input terms, output terms, and associated classes, and one realm (from the QRM).  For the candidate SSQ, the relevant classes for terms are determined from the NLP engine and corpora. The calculation of a realm for a candidate query is performed using the n-grams found within the query and any probabilities as found with $p(realm|n\-gram)$. %% TODO - specify freq and reference joirdans stuff in section 3.2
 We match QRMs that belong to the same realm of the candidate SSQ. The relevance of a qualified SSQ to the candidate SSQ is determined by aggregating the divergence measure of input term classes associated with each SSQ. In addition, we order QRMs in the data store 
 by decreasing relevance. The order provides a ranking for the results 
-to the user. The following describes \emph{category divergence} 
+to the user. The following describes \emph{class divergence} 
 in detail.
 
 %\subsubsection{Catgeory Divergence}
 %\label{sec:ctd}
 
-We employ a quasimetric, \textit{category divergence (cd)}, between a source category and a target category using the \textit{topological structure} of the categories in an ontology. We write $S \prec T$ for the reflexive transitive closure of the supercategory relation. Let $d(P,Q)$ represent the hop distance in the directed ontology inheritance graph from $P$ to $Q$. The divergence between a source and target category ranges from zero (for identical categories) to one (for type incompatible categories). Let $S$ be the source category, $T$ be the target category, and $C$ be a least common ancestor category of $S$ and $T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The category divergence between $S$ and $T$ is defined given by:
+We employ a quasi-metric, \textit{class divergence (cd)}, between a source class and a target class using the \textit{topological structure} of the classes in an ontology. We write $S \prec T$ for the reflexive transitive closure of the superclass relation. Let $d(P,Q)$ represent the hop distance in the directed ontology inheritance graph from $P$ to $Q$. The divergence between a source and target class ranges from zero (for identical classes) to one (for type incompatible classes). Let $S$ be the source class, $T$ be the target class, and $C$ be a least common ancestor class of $S$ and $T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The class divergence between $S$ and $T$ is defined given by:
 
 \begin{equation}
 cd(S, T) = \begin{cases}
@@ -101,9 +101,11 @@ d(S, T)/(3h) & S \prec T\\
 
 \noindent where $h$ is the longest path in the ontology class heterarchy.
 
-Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) < cd(S,Q)$, that is, the divergence of a source category to a target ancestor category is smaller than the divergence of a source category to any category that is not an ancestor. This is an important property in determining the compatibility of categories for answering queries.  If a SSQ answers queries concerning an ancestor category, it is more relevant that a SSQ that answers queries from any non-ancestral category.
+Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) < cd(S,Q)$, that is, the divergence of a source class to a target ancestor class is smaller than the divergence of a source class to any class that is not an ancestor. This is an important property in determining the compatibility of classes for answering queries.  If an SSQ answers queries concerning an ancestor class, it is more relevant that an SSQ that answers queries from any non-ancestral class.
 
-Suppose we want to find the category divergence between \textit{Bus} and \textit{Sedan} (Figure \ref{fig:vehicular_ontology}). \textit{Sedan} is a subcategory of \textit{Automobile}, and \textit{Bus} is a subcategory of \textit{Land\_Vechicle}. Therefore, the least common ancestor ($C$) for these two is \textit{Land\_Vechicle}. In addition, the tree height \textit{h = 4}. So, the normalized divergence $cd$\textit{(Bus, Sedan)} is \textit{0.5} that is calculated from \textit{d(Bus, Root) = 3}, \textit{d(Bus, Land\_Vehicle) = 1}, and \textit{d (Sedan, Land\_Vehicle) = 2}.
+Suppose we want to find the class divergence between \emph{Bus} and \emph{Sedan} from the ontology shown in Figure \ref{fig:vehicular_ontology}. \emph{Sedan} is a subclass of \emph{Automobile} which is a subclass of \emph{Land\_Vehicle}.  \emph{Bus} is a subclass of \emph{Land\_Vehicle}, which is their least common ancestor $C$.  
+
+The longest path to the tree root is $h = 4$. Therefore, the normalized divergence $cd(Bus, Sedan)$ is $0.5$. The value is calculated from $d(Bus, Root) = 3$, $d(Bus, Land\_Vehicle) = 1$, and $d(Sedan, Land\_Vehicle) = 2$.
 
 \begin{figure}[h]
 	\centering
@@ -114,10 +116,8 @@ Suppose we want to find the category divergence between \textit{Bus} and \textit
 
 \subsection{Executing} 
 
-Once we have relevant QRMs through QRM ranking for a given user query, we can produce answers by re-running the pathways.
+Once we have ranked the QRMs for a given user query, we can produce answers by re-running the pathways stored in the QRMs.
 
 The Morpheus \emph{Query Executor} (QE) evaluates a script of the query resolving process.  It simulates a human clicking buttons to follow links, submitting forms, and highlighting of data to form a textual answer.  The QE assumes that because of the auto generated nature of deep web pages, the location of answers are the same irrespective of page changes.  It uses the relative XPath location to the answer node on HTML pages as described in \cite{Badica06}.
 
-
-%When a user submits a new query to the Morpheus system, one or more stored QRMs are executed to obtain results. A QRM contains an XML script representing an algorithm that will obtain the required result. The evaluation of this script by the QRE simulates the behavior of a human browsing the web, that is, clicking buttons to follow links, submitting forms, highlighting data, cutting and pasting text, and constructing an answer in the form of a text string. There is greater complexity in dealing with web forms than with links. At present, the GET form submission method is used. This means that in preparation to submit a form, the Morpheus System builds a querystring consisting of name-value pairs. For a given form, there may be text fields, drop-down boxes, and among other components. In order to support form submission in such circumstances, the QRE performs different actions based upon the input type. For text fields, simply adding a key/value pair to the query string suffices. For a drop-down box, the QRE extracts the form element to find the appropriate value to include in the query string. It does this by examine each option in the drop-down and matching the user’s input to the text field in the option. The value attribute of the option is then added to the querystring. The value and text attributes of a dropdown option might be the same, but they are not guaranteed to be. All input data are kept in an internal table. The QRM script contains keys that allow the QRE to map SSQ inputs from the table to the appropriate form inputs. Furthermore, highlighted text segments collected during execution of the script are stored in the table. Once all actions in the script have been carried out, the QRE returns the textual answer this process has created. This answer is then be rendered in a browser displayed to the user.
 
