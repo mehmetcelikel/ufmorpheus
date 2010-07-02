@@ -5,21 +5,20 @@
 % Human made ontology 
 % Topic Models 
 
-First, we built an ontology for the vehicular realm exploiting the Wikipedia pages, categories, and WordNet synsets. For each of the classes in the ontolgy we built corpora from the corresponding Wikipedia pages. Figure \ref{fig:vehicular_ontology} shows a subsection of this ontology.
+First, we built an ontology for the vehicular realm exploiting the Wikipedia pages, DBpedia categories, and WordNet synsets. For each of the classes in the ontolgy we built corpora from the corresponding Wikipedia pages. Figure \ref{fig:vehicular_ontology} shows a subsection of this ontology.
 
-In Table \ref{tbl:nlp_engine_parse} we show the data that is output by the Morpheus NLP engines parse of the query .  It extracts the WH-question, that is, the the term that identifies the sentence as a question.  Next, the engine locates the descriptive information that can be used to describe the answer. Then the engine extracts the terms that describe what is being requested. Finally, the engine produces n-grams from the terms in the descriptive information sections.
+In Table \ref{tbl:nlp_engine_parse} we show the data that is output by the Morpheus NLP engines parse of the query.  It extracts the \emph{wh}-term that identifies the sentence as a question, identifies the answer class, and locates descriptive phrases that can be used to identify the answer. Finally, the engine produces n-grams from the phrases in the descriptive information sections.
 
-Using the data in \ref{tbl:nlp_engine_parse} we determined relevant classes (non-increasing order of relevance) from the ontology given each n-gram. Table \ref{tbl:term_classes} shows the top classes and their probabilities for our example.
+Using the data in Table \ref{tbl:nlp_engine_parse} we determine relevant classes in non-increasing order of relevance. Table \ref{tbl:term_classes} shows the top classes and their probabilities for automotive queries.
 
-
-\begin{table}[h]\footnotesize
+\begin{table}[!]\footnotesize
 	\begin{tabular}{|l|p{4.2cm}|}
 		\hline 
-		WH & what \\
+		\emph{wh}-term & what \\
 		\hline 
-		Descriptive Information & 1997 Toyota Camry V6 \\
+		descriptive phrases & \small 1997 Toyota Camry V6 \\
 		\hline 
-		Asking for & size tires \\
+		asking for & size tires \\
 		\hline 
 		n-grams & \small 1997, 1997 Toyota, 1997 Toyota Camry, Toyota, Toyota Camry, Toyota Camry V6, Camry, Camry V6, V6 \\
 		\hline
@@ -28,7 +27,7 @@ Using the data in \ref{tbl:nlp_engine_parse} we determined relevant classes (non
 	\label{tbl:nlp_engine_parse} 
 \end{table}
 
-\begin{table}[h]\footnotesize
+\begin{table}[!]\footnotesize
 
 \begin{tabular}{| p{3.2cm} | l | r |}
 \hline 
@@ -48,24 +47,24 @@ V6 & Sedans & 4464535.40e-14\\ \hline
 
 \end{table}
 
-We found the top class of the terms in the candidate SSQ and determined the class divergence with the qualified SSQ classes in the QRM store. Then, we combined the divergence measure and ranked QRMs based on the relevance score. Table \ref{tbl:ranked_queries} shows the top ranked SSQ for the query.  Finally, we execute the selected QRM and display the results to the user.
+We found the top class of the terms in the candidate SSQ and determined the class divergence with the qualified SSQ classes in the QRM store. Then, we combined the divergence measure and ranked QRMs based on the relevance score. Table \ref{tbl:ranked_queries} shows the top ranked SSQ for the query. Finally, we execute the best QRMs and display the results to the user.
 
-\begin{table}[h]\footnotesize
+\begin{table}[!]\footnotesize
 
 \begin{tabular}{| p{3.5cm} | p{3cm} | r |}
 	\hline
 	Query & Tagged Classes & Score\\ 
 	\hline
-	\small A 1997 Toyota Camry V6 needs what size tires? & \small Sedan, Car, Engine, Manufacture & 0.91\\ 
+	\small A 1997 Toyota Camry V6 needs what size tires? & \small Sedan, Automobile, Engine, Manufacturer & 0.91\\ 
 	\hline 
-	\small What is the tire size for a 1998 Sienna XLE Van? & \small 1998 Toyota Sienna XLE Van: Van, Toyota : Manufacturers & 0.72\\
+	\small What is the tire size for a 1998 Sienna XLE Van? & \small Van, Manufacturer & 0.72\\
 	\hline 
-	\small Where can I buy an engine for a Toyota Camry V6? & \small Toyota Camry : Sedan, Toyota Camry V6 : Automobile Engine, Toyota : Manufacturers & 0.74 \\
+	\small Where can I buy an engine for a Toyota Camry V6? & \small Sedan, Automobile Engine, Manufacturers & 0.74 \\
 	\hline 
 %What is the cost of a Toyota Camry V6 muffler? &  IC:Manufactures, Sedans, Engines OC: the clost  & 0.97 \\ \hline
 \end{tabular}
 
-\caption{Top ranked queries and relevance scores: IC - input classes, OC - output classes}
+\caption{Top ranked queries}
 \label{tbl:ranked_queries}   
 
 \end{table}
@@ -74,12 +73,11 @@ We found the top class of the terms in the candidate SSQ and determined the clas
 %\subsection{Discussion}
 \section{Conclusion}
 
-In this paper, we propose a novel question answering system that uses the deep web and previously answered user queries to answer similar questions. The system uses a path-finder to annotate answer paths so path-followers can discover answers to similar questions.  Each $(question, answer\_path)$ pair is assigned a realm, and new questions are matched to existing $(question, answer\_path)$ pairs. Classification of new question terms into classes is based on term frequency distributions in our realm specific corpora of web documents.  These terms are the input to existing answer path and we re-execute answers-paths with these new inputs to produce answers.
+In this paper, we propose a novel question answering system that uses the deep web and previously answered user queries to answer similar questions. The system uses a path finder to annotate answer paths so path followers can discover answers to similar questions.  Each (\emph{question, answer path}) pair is assigned a realm, and new questions are matched to existing (\emph{question, answer path}) pairs. Classification of new question terms into classes is based on term frequency distributions in our realm specific corpora of web documents.  These terms are the input to existing answer paths and we re-execute these paths with the new input to produce results.
 
-Manually forming a corpus of Wikipedia pages associated with a class is a cumbersome task. Topic Modeling provides a promising approach to identifying pages relevant to given class in a more automated manner \cite{Blei2003latentdirichlet}. We believe a mix between our web form entry annotation methods and \cite{1453931} can yield promising results.  Additionally, this approach along with the ideas in \cite{1687749} may completely remove the user out of the answer path generation process.
+Manually forming a corpus of Wikipedia pages associated with a class is a cumbersome task. Topic modeling provides a promising approach to identifying pages relevant to a given class in a more automated manner \cite{Blei2003latentdirichlet}. We believe a mix between our web form entry annotation methods and form label extraction \cite{1453931} can yield promising results. Combining this with the method of Elmeleegy et al. \cite{1687749} may completely remove the user from the answer path generation process.
 
-Additionally, we are investigating methods of combining and merging QRMs to answer new questions.  We will build on previous Morpheus detailing transform composition \cite{transformscout}.
-
+Additionally, we are investigating methods of merging QRMs to answer compound questions.  We will also chain QRMs using the principles of transform composition \cite{transformscout}.
 
 
 % 2. Current stage of the project 
