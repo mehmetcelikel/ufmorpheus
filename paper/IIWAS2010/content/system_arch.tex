@@ -7,7 +7,7 @@ This section presents ontology and corpora, query processing, ranking queries, a
 \subsection{Using Ontology and Corpora} 
 \label{sec:ontology_corpora}
 
-Morpheus uses an ontology that contains classes of a particular realm of interest. Each leaf node in the ontology is associated with a corpus of words belonging to a class.  For example, we have constructed an vehicular ontology containing classes relevant to the vehicular realm. This ontology provides a structure for reference in the following sections.
+Morpheus uses an ontology that contains classes of a particular realm of interest. Each leaf node in the ontology is associated with a corpus of words belonging to a class.  For example, we have constructed a vehicular ontology containing classes relevant to the vehicular realm. This ontology provides a structure for reference in the following sections.
 
 %% Need ontology paragraph
 
@@ -103,10 +103,11 @@ d(S, T)/(3h) & S \prec T\\
 
 Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) < cd(S,Q)$, that is, the divergence of a source category to a target ancestor category is smaller than the divergence of a source category to any category that is not an ancestor. This is an important property in determining the compatibility of categories for answering queries.  If a SSQ answers queries concerning an ancestor category, it is more relevant that a SSQ that answers queries from any non-ancestral category.
 
-Suppose we want to find the category divergence between \textit{Sedan} and \textit{Bus} Figure \ref{fig:vehicular_ontology}. \textit{Sedan} is the subcategory of \textit{Sedan}, and \textit{Bus} is the subcategory of \textit{Automobile}. Therefore, the least common ancestor ($C$) for these two. This section presents ontology and copora, query processing, ranking queries, and the query resolution mechanism. categories is \textit{Automobile}. In addition, the tree height \textit{h = 4}. So, the normalized divergence $cd$\textit{(Sedan, Bus)} is \textit{7/12} that is calculated from \textit{d(Sedan, Root) = 4}, \textit{d(Sedan, Automobile) = 2}, and \textit{d (Bus, Automobile)=1}.
+Suppose we want to find the category divergence between \textit{Bus} and \textit{Sedan} (Figure \ref{fig:vehicular_ontology}). \textit{Sedan} is a subcategory of \textit{Automobile}, and \textit{Bus} is a subcategory of \textit{Land\_Vechicle}. Therefore, the least common ancestor ($C$) for these two is \textit{Land\_Vechicle}. In addition, the tree height \textit{h = 4}. So, the normalized divergence $cd$\textit{(Bus, Sedan)} is \textit{0.5} that is calculated from \textit{d(Bus, Root) = 3}, \textit{d(Bus, Land\_Vehicle) = 1}, and \textit{d (Sedan, Land\_Vehicle) = 2}.
 
 \begin{figure}[h]
-	\includegraphics[scale=0.65]{OntologyDiagram.png}
+	\centering
+	\includegraphics[scale=0.90]{OntologyDiagram.png}
 	\caption{Abbreviated Vehicular Ontology}
 	\label{fig:vehicular_ontology}
 \end{figure}
