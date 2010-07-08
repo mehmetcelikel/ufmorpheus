@@ -1497,6 +1497,7 @@ namespace DobsonGUI
             {
                 //outputs are already classes, so try to find the class id for the current string
                 //if none is found, then insert a new class
+                //What is the purpose of formatKey? FIXME
                 string formattedKey = Main.formatKey(e.Individual);
 
                 ContextClass c = (ContextClass)contextClasses[formattedKey];
@@ -1514,10 +1515,12 @@ namespace DobsonGUI
 
                 if (e.ElementContext.contextID == -1)
                     bl.insertContext(e.ElementContext);
+
+                //what is the purpose of variable cls? FIXME
                 int cls = -1;
                 if (c != null)
                     cls = c.classId;
-                Phrase phrase = new Phrase(e.Individual, e.ElementContext.contextID, cls);
+                Phrase phrase = new Phrase(e.Individual, e.ElementContext.contextID, e.ClassId);
 
                 PhraseBL PhraseBl = new PhraseBL();
 
