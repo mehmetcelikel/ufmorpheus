@@ -59,7 +59,7 @@ The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser that r
 \end{table}
 
 
-The \emph{Query Resolution Method} (QRM) is a data structure that models the question answering process. A QRM represents a generalized executable realization of the search process that the path finder followed. The QRM is able to reconstruct the page search path followed by the path finder. Each QRM contains an \emph{ontological realm}, an SSQ, and information to support the query answering process. For each dynamic page, the QRM contains a list of inputs and reference outputs from the URL.
+The \emph{Query Resolution Method} (QRM) is a data structure that models the question answering process. A QRM represents a generalized executable realization of the search process that the path finder followed. The QRM is able to reconstruct the page search path followed by the path finder. Each QRM contains a realm from our ontology, an SSQ, and information to support the query answering process. For each dynamic page, the QRM contains a list of inputs and reference outputs from the URL.
 
 % NLP arch. 
 % This may need to be moved somewhere... but not sure where.... Joir-dan Gumbs (2010-06-29)
@@ -74,7 +74,7 @@ To answer a user's query, a \emph{candidate} SSQ, Morpheus finds similar qualifi
 
 The \emph{class divergence} of two classes within the ontology characterizes their dissimilarity.  This solution is motivated by the concept of multiple dispatch in CLOS and Dylan programming for generic function type matches \cite{Barrett1996}. 
 
-We consider the class match as a type match and we use \emph{class divergence} to calculate the relevance between the candidate SSQ and a qualified SSQ. Each qualified SSQ will have input terms, output terms, associated classes, and one realm from the QRM.  For the candidate SSQ, the relevant classes for terms are determined from the natural language processing engine and corpora. The calculation of a realm for a candidate query is performed using the n-grams found within the query and any probabilities found with $p(realm|n\-gram)$. %% TODO - specify freq and reference joirdans stuff in section 3.2
+We consider the class match as a type match and we use \emph{class divergence} to calculate the relevance between the candidate SSQ and a qualified SSQ. Each qualified SSQ will have input terms, output terms, associated classes, and one realm from the QRM.  For the candidate SSQ, the relevant classes for terms are determined from the natural language processing engine and corpora. The calculation of a realm for a candidate query is performed using the terms found within the query and any probabilities found with $p(realm|term)$. %% TODO - specify freq and reference joirdans stuff in section 3.2
 We match QRMs that belong to the same realm of the candidate SSQ. The relevance of a qualified SSQ to the candidate SSQ is determined by aggregating the divergence measure of input term classes associated with each SSQ. In addition, we order QRMs in the data store by decreasing relevance. The order provides a ranking for the results to the user. The following describes \emph{class divergence} in detail.
 
 %\subsubsection{Catgeory Divergence}
