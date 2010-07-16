@@ -75,7 +75,7 @@ namespace DobsonLibrary.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT classid,name FROM class.
+        ///   Looks up a localized string similar to SELECT classid,name FROM class WHERE version = (SELECT max(version) from class).
         /// </summary>
         internal static string getAllContextClassesMorpheus3DB {
             get {
