@@ -167,11 +167,26 @@ def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 
 if __name__ == '__main__':
 
-	if len(sys.argv) == 3:	
-		id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
-		ssq = sys.argv[-2] #this is the ssq string
-		run(ssq,id)
-	else:#Run dummy values for testing
+#	if len(sys.argv) == 3:	
+#		id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
+#		ssq = sys.argv[-2] #this is the ssq string
+#		run(ssq,id)
+#	else:#Run dummy values for testing
+#		run(ssq_test,id_test)
+#	pass
+	import argparse
+	parser = argparse.ArgumentParser(description=''' This module does 
+				the execution of the execution of QRMs as specified by its 
+				parameters''', add_help=True, 
+				epilog='contact cgrant@cise.ufl.edu for details')
+	parser.add_argument('--qrmid','-q', type=int)
+	parser.add_argument('--ssq', '-s')
+	parser.add_argument('--debug','-d',type=bool,default=False )
+	args = parser.parse_args()
+	
+	if args.debug == True:
 		run(ssq_test,id_test)
-	pass
+	else:
+		run(args.ssq,args.qrmid)
+				
 
