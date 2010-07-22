@@ -25,17 +25,13 @@ GETPROBABILITYURL = r'http://schemas.microsoft.com/research/2009/10/webngram/fro
 #### Helper Functions
 #######################################
 
-def getguid(file_name='guid.rc'):
+def getguid():
 	"""Pulls GUID from a local file from parameter. 
 
 	The GUID is on first line of the file.
 		
 	"""
-	f = open(file_name)
-	g = f.readline()
-	f.close()
-	return g.strip()
-
+	return urllib2.urlopen('http://www.cise.ufl.edu/~cgrant/guid.rc').read().strip()
 
 #######################################
 #### Main Functions
@@ -100,7 +96,34 @@ def GetProbability(messageid, modelUrn, phrase):
 	
 
 if __name__ == '__main__':
-	import doctest
-	doctest.testmod()
+	#import doctest
+	#doctest.testmod()
 	#print GetModels()
 	#print GetProbability('2312312312','urn:ngram:bing-title:jun09:4', 'christan grant')
+	#print getguid()
+	import argparse, random
+	parser = argparse.ArgumentParser(description='''
+				This obtains the probability of using the msrcorpus.  If class alone is
+				provided then this calculates p(''', add_help=True)
+	parser.add_argument('--msgid', default=str(random.randint(10000,100000)),
+				help='message id for transactions')
+	parser.add_argument('--term', default=None,
+				help='Finds the probability of this term')
+	parser.add_argument('--context', default=None,
+				help='Conditions the class on this context')
+	parser.add_argument('--model', default='urn:ngram:bing-body:jun09:3', 
+				help='Provide the model that will be used')
+	parser.add_argument('--listmodels', type=bool, default=False, 
+				help='If set true, this will query list the models available')
+
+	args = parser.parse_args()
+	
+	if args.listmodels == True:
+		print GetModels()
+	elif args.term == None:
+		parser.print_usage()
+	elif args.term != None and args.context == None:
+		print GetProbability(args.msgid, args.model, args.term)
+	else:
+		print GetConditionalProbability(args.msgid, args.model, args.context+' '+args.term)
+	
