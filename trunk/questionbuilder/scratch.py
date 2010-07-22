@@ -69,16 +69,32 @@ def fetch_query(qrmid):
 
 
 if __name__ == '__main__':
-	import sys
-	if len(sys.argv) > 1 and sys.argv[1].isdigit():
-		qrmidarray = [int(sys.argv[1])]
-	else:
-		qrmidarray = [59,60,75]
-	
-	for qid in qrmidarray:
-		sentence, qrm = fetch_query(qid)
-		sentence = chunker(sentence)
-		query_map(sentence, qrm)
+#	import sys
+#	if len(sys.argv) > 1 and sys.argv[1].isdigit():
+#		qrmidarray = [int(sys.argv[1])]
+#	else:
+#		qrmidarray = [59,60,75]
+#	
+#	for qid in qrmidarray:
+#		sentence, qrm = fetch_query(qid)
+#		sentence = chunker(sentence)
+#		query_map(sentence, qrm)
 
-
-
+	import argparse
+	parser = argparse.ArgumentParser(description='''
+				Build questions answer pairs from a webpage or answerpath''',
+				add_help=True,
+				epilog = 'contact cgrant@cise.ufl.edu for questions')
+	parser.add_argument('--qrmid', nargs='+', type=int,
+				help='list qrms, ex; 59 60 75')
+	parser.add_argument('--printqrms', default='False', type=bool,
+				help='prints all the qrmids. Use True to enable')
+	parser.add_argument('--webpage', nargs='+', required=False)
+	args = parser.parse_args()
+		
+	print args
+	if args.printqrms:
+		for qid in args.qrmid:
+			sentence, qrm = fetch_query(qid)
+			sentence = chunker(sentence)
+			query_map(sentence, qrm)

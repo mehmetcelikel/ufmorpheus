@@ -165,8 +165,8 @@ def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 
 	return found
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
 #	if len(sys.argv) == 3:	
 #		id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
 #		ssq = sys.argv[-2] #this is the ssq string
