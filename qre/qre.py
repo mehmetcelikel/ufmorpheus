@@ -2,16 +2,16 @@
 This class runs the code
 """
 
-__authors___ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
+__authors__ = "Christan Earl Grant"
 
-import lxml
-from lxml import etree
-import pdb
 import ActionState,ActionObject,DataParser
-import sys
+
+import lxml, psycopg2
+from lxml import etree
+
+import sys, urllib
+
 import pdb
-import psycopg2
-import urllib
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
@@ -41,11 +41,12 @@ ssq_test = """<ssq>
         </output_list>
 
 </ssq>
-	"""
+"""
+
+
 def run(ssq=ssq_test, id=id_test):
-	
 	"""Run the Executor script
-	
+	Get code xml from the DB given the id	
 	Iterate once over the script xml
 		if node is userdate
 			Create the hash table using UserDataParser
@@ -118,12 +119,14 @@ def run(ssq=ssq_test, id=id_test):
 	
 	state.run()
 
-	result = ''
+	result = ' '
 	for k in state.kv_hash.keys():
 		if state.kv_hash[k] != '':
+			result += ' '
 			result += state.kv_hash[k] 
 
-	return result
+	return result.strip()
+
 
 #populate the value hash from a string
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
@@ -146,6 +149,7 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 	
 	print('The given ssq does not match this qrm\'s ssq, aborting')
 	return False
+
 
 #parse the xml node and load its values into the appropriate spots
 #in the value hash
@@ -179,14 +183,17 @@ if __name__ == '__main__':
 				the execution of the execution of QRMs as specified by its 
 				parameters''', add_help=True, 
 				epilog='contact cgrant@cise.ufl.edu for details')
-	parser.add_argument('--qrmid','-q', type=int)
-	parser.add_argument('--ssq', '-s')
-	parser.add_argument('--debug','-d',type=bool,default=False )
+	parser.add_argument('--qrmid','-q',type=int)
+	parser.add_argument('--ssq','-s')
+	parser.add_argument('--debug','-d',type=bool, default=False)
 	args = parser.parse_args()
-	
+
 	if args.debug == True:
-		run(ssq_test,id_test)
+		#pdb.set_trace()
+		print run(ssq_test,id_test)
+	elif args.ssq != None and args.qrmid != None:
+		print run(args.ssq,args.qrmid)
 	else:
-		run(args.ssq,args.qrmid)
+		parser.print_usage()
 				
 
