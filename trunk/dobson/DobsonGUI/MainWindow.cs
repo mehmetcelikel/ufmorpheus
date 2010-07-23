@@ -160,6 +160,8 @@ namespace DobsonGUI
 
             classMenuDropDown.Items.Clear();
 
+            outClassMenuDropDown.Items.Clear();
+
             ContextBL contextBL = new ContextBL();
 
             allContexts = contextBL.getAllContexts();
