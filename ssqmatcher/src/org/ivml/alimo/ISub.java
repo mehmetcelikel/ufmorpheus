@@ -1,5 +1,5 @@
 /*
- * Created on 18 Ïêô 2004
+ * Created on 18 2004
  */
 package org.ivml.alimo;
 
@@ -9,7 +9,7 @@ package org.ivml.alimo;
  * This class implements the string matching method proposed in the paper
  * "A String Metric For Ontology Alignment", published in ISWC 2005 
  *
- * Jérôme Euzenat: added normalization
+ * Jerome Euzenat: added normalization
  */
 public class ISub {
 	

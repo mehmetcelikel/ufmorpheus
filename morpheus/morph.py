@@ -49,8 +49,15 @@ def buildall(recompile=True):
 def compile_ssqmatcher():
 	""" Compiles the ssqmatcher code into a jarfile called ssqmatcher.jar """
 	import subprocess
-	return subprocess.Popen('ant', cwd='../ssqmatcher/').wait()
 
+	cmd1 = ['ant','-buildfile', 'build_files.xml']
+	cmd2 = ['ant','-buildfile', 'build_jar.xml']
+
+	exit_status1 = subproces.Popen(cmd1, cwd='../ssqmatcher/').wait()
+	exit_status2 = subproces.Popen(cmd2, cwd='../ssqmatcher/').wait()
+
+	return exit_status1 + exit_status2
+	
 
 def makenquery(query):
 	""" Takes a natural language query and turns it in to the natual query format
@@ -60,8 +67,10 @@ def makenquery(query):
 	"""
 	import nqparser
 	import nqparser.extractor
+
 	extractor = nqparser.extractor.TermExtractor()
 	extractor.run(query, False)
+
 	return extractor.getExportString()
 
 
