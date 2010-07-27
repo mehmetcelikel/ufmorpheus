@@ -32,6 +32,7 @@ def buildall(recompile=True):
 	try:
 		import nltk
 		import lxml
+		import psycopg2
 	except Exception as e:
 		print e
 		error_building = True
@@ -68,6 +69,8 @@ def getssqmatches(nquery):
 	import subprocess, tempfile
 	tf = tempfile.TemporaryFile()
 	cmd = ['java','-jar','ssqmatcher.jar',nquery]
+	
+	print cmd
 
 	subprocess.Popen(cmd, stdout=tf, cwd='../ssqmatcher/').wait()
 
@@ -83,3 +86,4 @@ if __name__ == '__main__':
 	ssqmatches = getssqmatches(nquery)
 	print ssqmatches
 
+	# TODO - use the new ssqs to run the QRE
