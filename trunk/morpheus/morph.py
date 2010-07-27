@@ -70,16 +70,40 @@ def makenquery(query):
 
 	extractor = nqparser.extractor.TermExtractor()
 	extractor.run(query, False)
+	nqstring = extractor.getExportString()
 
-	return extractor.getExportString()
+	return nquerytojson(nqstring) # Before returning, turn it into JSON
+
+
+def nquerytojson(nqstring):
+	""" Takes the output of the nqparser and returns it in JSON format """
+	import json
+	d = {}
+	
+	# Split the string to get the key value pairs
+	# also removes the trailng ';' from the format
+	z = [j.split(':') for j in nqstring.strip(';').split(';')]
+	
+	# Add terms to the dictionary
+	for t in z:
+		if t[0] == 'NG':
+			d[t[0]] = [j for j in t[1].split(',')]
+		elif len(t) > 1:
+			d[t[0]] = t[1]
+		else:
+			d[t[0]] = None
+	
+	#return json.dumps(d,indent=2)		 
+	return json.dumps(d)		 
 
 
 def getssqmatches(nquery):
+	""" Call the ssq matching code and return output as a string """
 	import subprocess, tempfile
 	tf = tempfile.TemporaryFile()
-	cmd = ['java','-jar','ssqmatcher.jar',nquery]
+	cmd = ['java','-jar','ssqmatcher.jar', '"%s"' % nquery] # nquery in quotes
 	
-	print cmd
+	#print ' '.join(cmd)
 
 	subprocess.Popen(cmd, stdout=tf, cwd='../ssqmatcher/').wait()
 
@@ -91,7 +115,7 @@ def getssqmatches(nquery):
 if __name__ == '__main__':
 	import argparse
 	print buildall(False)
-	nquery =  makenquery('What is the the tire size for a 1997 Toyota Camry')	
+	nquery =  makenquery('What is the the tire size for a 1997 Toyota Camry')
 	ssqmatches = getssqmatches(nquery)
 	print ssqmatches
 
