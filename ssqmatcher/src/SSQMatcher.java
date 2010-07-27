@@ -6,6 +6,18 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ContainerFactory;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 
@@ -339,31 +351,62 @@ public class SSQMatcher {
 	}
 
 	private static SSQClass buildCandidateQuery(String candidateQInfo) {
+		
+		/*
+		{
+		 "QU": "What is the the tire size for a 1997 Toyota Camry",
+		 "AF": "the tire size",
+		 "DI": "for a 1997 Toyota Camry",
+		 "VG": "",
+		 "NG": ["for", "for a", "for a 1997", "a", "a 1997", "a 1997 Toyota", "1997", "1997 Toyota", "1997 Toyota Camry", "Toyota", "Toyota Camry", "Camry", "the", "the tire", "the tire size", "tire", "tire size", "size"],
+		 "WH": "what"
+		}
+		*/
+		
+		JSONParser parser = new JSONParser();
+		ContainerFactory containerFactory = new ContainerFactory() {
+			public List creatArrayContainer() {
+				return new LinkedList();
+			}
+
+			public Map createObjectContainer() {
+				return new LinkedHashMap();
+			}
+
+		};
 
 		SSQClass candidate = new SSQClass();
-		String[] ary = candidateQInfo.trim().split(";");
-		for (String item : ary){
-			String attrib = item.split(":")[0].trim();
-			String val = item.split(":")[1].trim();
+		
+		try {
+			Map json = (Map) parser.parse(candidateQInfo.trim(),
+					containerFactory);
+			Iterator iter = json.entrySet().iterator();
 			
-			if (val == null || val.equalsIgnoreCase(""))
-				continue;
+			while (iter.hasNext()) {
+				Map.Entry entry = (Map.Entry) iter.next();
 
-			if (attrib.equalsIgnoreCase("Q"))
-				candidate.setQuery(val);
-			else if (attrib.equalsIgnoreCase("AF"))
-				candidate.addOutputs(val);
-			else if (attrib.equalsIgnoreCase("DI")) {
-				// Do we need this ??
-			} 
-			else if (attrib.equalsIgnoreCase("NGDI")) {
-				String[] terms = val.split(",");
-				for (String term : terms) 
-					candidate.addInputs(term.trim()); 
-			} 
-			else if (attrib.equalsIgnoreCase("WH")) {
-				// Do we need this ?
+				if (entry.getKey().toString().equalsIgnoreCase("QU"))
+					candidate.setQuery(entry.getValue().toString());
+				else if (entry.getKey().toString().equalsIgnoreCase("AF"))
+					candidate.addOutputs(entry.getValue().toString());
+				else if (entry.getKey().toString().equalsIgnoreCase("DI")) {
+					// Do we need this ??
+				} else if (entry.getKey().toString().equalsIgnoreCase("NG")) {
+					LinkedList array = (LinkedList) entry.getValue();
+					for (Object term : array)
+						candidate.addInputs(term.toString().trim());
+
+				} else if (entry.getKey().toString().equalsIgnoreCase("WH")) {
+					// Do we need this ?
+				}
+
+				// System.out.println(entry.getKey() + " => " + entry.getValue());
 			}
+
+		} catch (ParseException pe) {
+
+			System.out.println("Invalid input. EXIT! " + pe.toString());
+			System.exit(2);
 		}
 		
 		return candidate;
