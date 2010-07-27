@@ -25,7 +25,7 @@ ssq_test = """<ssq>
 
         <input_list>
                 <input type="when" dataclass="year">
-                1997
+               	1997 
                 </input>
                 <input type="what" dataclass="make">
                 Toyota
