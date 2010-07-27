@@ -14,7 +14,8 @@ import sys, urllib
 
 import pdb
 
-__connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' password='%(pwd)s'"
+__connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' \
+				password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
 __code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
 id_test = 75
@@ -73,9 +74,9 @@ def run(ssq=ssq_test, id=id_test):
 	cursor = connection.cursor()
 	cursor.execute(q)
 	result = cursor.fetchall()
-	code = urllib.unquote( result[0][0] )
+	code = urllib.unquote(result[0][0])
 
-	assert(len(code) > 0) # ensure text was returned
+	assert(len(code) > 0) # Ensure text was returned
 
 	root = etree.fromstring(code)
 
