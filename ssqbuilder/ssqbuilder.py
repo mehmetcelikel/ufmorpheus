@@ -33,6 +33,7 @@ def ssqbuilder(queryid):
 
 	
 	# Realm and query should be the same for all
+	# Unsure what to do with individualid and queryid
 	# Construct ssq
 	ssq_etree = lxml.etree.Element('ssq')
 	ssq_etree.append(etree_with_text(tag='realm', text=ssqinfo_list[0]['realm']))
@@ -52,12 +53,11 @@ def ssqbuilder(queryid):
 
 	ssq_etree.append(input_etree)
 	ssq_etree.append(output_etree)
-
-	# Unsure what to do with individualid and queryid
 	
+	ssqstring = lxml.etree.tostring(ssq_etree, pretty_print=True)
 	put_ssq_script(queryid, ssqstring) # The ssqstring is the prettyprinted xml 
 	
-	return lxml.etree.tostring(ssq_etree, pretty_print=True)
+	return ssqstring
 
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s'	password='%(pwd)s'"
