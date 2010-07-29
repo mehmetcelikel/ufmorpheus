@@ -1,6 +1,9 @@
 #!/usr/bin/python
 
+import urllib
+
 import lxml
+import lxml.etree
 import psycopg2
 
 
@@ -10,7 +13,8 @@ def etree_with_text(tag, text, **kwargs):
 	etree.text = text
 	return etree
 
-def ssqbuilder(queryid):
+
+def ssqbuilder(queryid, do_update=True):
 	""" Takes a query id and returns the ssq representation """
 	ssqinfo_list = get_ssq_info(queryid)
 	
@@ -55,7 +59,9 @@ def ssqbuilder(queryid):
 	ssq_etree.append(output_etree)
 	
 	ssqstring = lxml.etree.tostring(ssq_etree, pretty_print=True)
-	put_ssq_script(queryid, ssqstring) # The ssqstring is the prettyprinted xml 
+	
+	if do_update:
+		put_ssq_script(queryid, ssqstring) # The ssqstring is the pretty xml
 	
 	return ssqstring
 
@@ -109,12 +115,12 @@ def put_ssq_script(queryid, ssqstring):
 
 	cursor = connection.cursor();
 	
-	query = """UPDATE query SET ssq = "%s" where queryid = %s""" % \
-				(ssqstring, queryid)
+	query = """UPDATE query SET ssq = '%s' where queryid = %s""" % \
+				(urllib.quote(ssqstring), queryid)
 	cursor.execute(query)
-	cursor.commit()
+	connection.commit()
 
-	if cursor.rowcont == 1:
+	if cursor.rowcount == 1:
 		return True
 	else:
 		return False
