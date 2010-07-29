@@ -32,7 +32,7 @@ def GeneralizeQueries(qrmid, queryid):
     qrm2 = Qrm()    
         
     if qrmid != None:
-        qrm1 = Loader.GetQRMFromDb(qrmid)
+        qrm1 = Loader.GetQRMFromDb(qrmid) # XXX <-- Bug, no pagereference.qrmid exists
     else:
         qrm1 = Loader.GetQRMFromQuery(queryid)
 
@@ -43,10 +43,12 @@ def GeneralizeQueries(qrmid, queryid):
         return      
     
     #Check queries for appropriateness of generalization
+    # TODO -- Need to deal with two queries of different lengths
     if qrm1.pageLength() != qrm2.pageLength():
        print("Entities containing differing page lengths cannot be generalized")    
        return
    
+    # FIXME -- This assumtion is too restrictive, need to be able to handle all cases
     if qrm1.matchSsqClasses(qrm2) == False:
        print("Both entities must have matching SSQ input/output classes")
        return
@@ -205,12 +207,12 @@ def generalizeQRMS(q1, q2):
     for i in range(0, qS.pageLength()):
 
         gp = generalizeActions(qS.pageList[i],qL.pageList[i])
-	
-	#set the page url  
-	gp.url = qS.pageList[i].url
 
-	#set the desintation url 
-	gp.destinationUrl = qS.pageList[i].destinationUrl
+        #set the page url  
+        gp.url = qS.pageList[i].url
+
+        #set the desintation url 
+        gp.destinationUrl = qS.pageList[i].destinationUrl
 
         #Check if generalizing failed - Stop generalizing if so
         #Temporary approach
@@ -221,7 +223,7 @@ def generalizeQRMS(q1, q2):
         qS.pageList[i] = gp
 
     qS.realmId = q1.realmId    
-    
+
     return qS
 
 def generalizeActions(p1, p2):
@@ -251,16 +253,16 @@ def generalizeActions(p1, p2):
         
         p3Epath = g.Learn([p1Epath, p2Epath])
 
-	#what about form inputs?
+        #what about form inputs?
 
-	method = getFormMethod(p1)
-	
-	p3 = Form.New(p1.url, p1.destinationUrl, "", "", p1.pagesrc, method, p1.formInputs)
+        method = getFormMethod(p1)
 
-	#we use the input list from the first page, because they should be the same
-  
+        p3 = Form.New(p1.url, p1.destinationUrl, "", "", p1.pagesrc, method, p1.formInputs)
+
+        #we use the input list from the first page, because they should be the same
+
         p3.xpath = p3Epath.epath_to_xpath()
-    
+
         #Check the validity of the result
         if compareExtractions(p3.xpath,p1.xpath,p1.pagesrc) != NO_SIMILARITY:
             print("Processed form xpath")
@@ -270,32 +272,32 @@ def generalizeActions(p1, p2):
 
     elif p1.actionType == ActionType.Link:    
 
-	print('Processing link click action')
+        print('Processing link click action')
 
-       	p1Epath.xpath_to_epath(p1.pagesrc,p1.xpath)
+        p1Epath.xpath_to_epath(p1.pagesrc,p1.xpath)
         
-       	p2Epath.xpath_to_epath(p2.pagesrc,p2.xpath)
+        p2Epath.xpath_to_epath(p2.pagesrc,p2.xpath)
         
-       	p3Epath = g.Learn([p1Epath,p2Epath])
+        p3Epath = g.Learn([p1Epath,p2Epath])
         
-       	newxpath = p3Epath.epath_to_xpath()
+        newxpath = p3Epath.epath_to_xpath()
 
-	p3 = Link.New(p1.url, p1.destinationUrl, "", "", "")
+        p3 = Link.New(p1.url, p1.destinationUrl, "", "", "")
 
-       	#Check the validity of the result
-       	if compareExtractions(newxpath,p1.xpath,p1.pagesrc) != NO_SIMILARITY:
-       	    p3.xpath = newxpath
-       	else:
-	    print("Generalized link xpath is not valid, using non-generalized xpath\n")
+        #Check the validity of the result
+        if compareExtractions(newxpath,p1.xpath,p1.pagesrc) != NO_SIMILARITY:
+            p3.xpath = newxpath
+        else:
+            print("Generalized link xpath is not valid, using non-generalized xpath\n")
             p3.xpath = p1.xpath
 
         print("Done with link\n")
 
     elif p1.actionType == ActionType.Highlight:
-	
-	print('Processing highlight action')
-	p1Epath = ExtractionPath()
-	p2Epath = ExtractionPath()
+
+        print('Processing highlight action')
+        p1Epath = ExtractionPath()
+        p2Epath = ExtractionPath()
     
        	#Get extraction paths to the start and end points
        	p1Epath.xpath_to_epath(p1.pagesrc,p1.meetpoint)
