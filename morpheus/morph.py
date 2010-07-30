@@ -170,7 +170,14 @@ if __name__ == '__main__':
 	buildall(True)
 	import qre
 	import qre.qre
-	nquery =  makenquery('A 1997 Toyota Camry V6 needs what tire size?')
+
+	parser = argparse.ArgumentParser(description="This module runs morpheus",
+				add_help=True)
+	parser.add_argument('--query', 
+				default='A 1997 Toyota Camry V6 needs what tire size?')
+	args = parser.parse_args()
+
+	nquery =  makenquery(args.query)
 	ssqmatches = getssqmatches(nquery)
 	
 	#print ssqmatches
