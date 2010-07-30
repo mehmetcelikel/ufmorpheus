@@ -143,24 +143,41 @@ def get_qrmid_ssqpair(queryid):
 	""" Gets the (qrmid,ssq) pair from query table """
 	# TODO - query the db for qrmids corresponding to the queryid.
 	pass
+	import psycopg2
+	
+	__query = "SELECT qrmid,ssq FROM query WHERE qrmid = %(id)s"
+	
+	conn = psycopg2.connect(__connect_string % __connect_params) # Assumed 2 work
+	q = __query % {'id':queryid}
+	
+	cursor = conn.cursor()
+	cursor.execute(q)
+	result = cursor.fetchall()
+	qrmid,ssq = result[0][1], urllib.unquote(result[0][1])
+
+	return (qrmid,ssq)
 
 
 if __name__ == '__main__':
 	import argparse
 	import json
-	import qre	
 	buildall(True)
-	nquery =  makenquery('What is the the tire size for a 1997 Toyota Camry')
+	nquery =  makenquery('A 1997 Toyota Camry V6 needs what tire size?')
 	ssqmatches = getssqmatches(nquery)
 	
 	#print ssqmatches
 
-	ssqm = json.dumps(ssqmatches)
+	ssqm = json.loads(json.dumps(ssqmatches))
 	
 	# TODO - Need to merge the created SSQ and run it against qrms
 	# This only runs previous querys
+	result_array = []
+	print ssqm
 	for entry in ssqm['queryids']:
-		(queryid,ssq) = entry[0]
-		qrmids = get_qrmid_fromqueryid(queryid)
-		print qre.run(ssq, qrmids)
-		
+		queryid = entry[0]
+		qrmid,ssq = get_qrmid_fromqueryid(queryid)
+		z = qre.qre.run(ssq, qrmid)
+		print z
+		result_array.append(z)
+
+	return result_array		
