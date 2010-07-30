@@ -12,9 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -251,7 +248,7 @@ public class SSQMatcher {
 
 		SSQClass candidate = buildCandidateQuery(candidateQInfo);
 
-		sb.append("{ ");
+		sb.append("\" { ");
 		
 		sb.append(candidate.toSend());
 		
@@ -265,13 +262,13 @@ public class SSQMatcher {
 
 		
 		
-		sb.append(" 'queryids': [");
+		sb.append(" \"queryids\": [");
 		
 		for (SSQMatcher.QRMSimilarityMeasure qm : qrmSim)
 			sb.append("[" + qm.queryID + ", " + qm.QRMDivergence + "], ");
 		
 		
-		sb.append("], 'nqoutput': {}, }");
+		sb.append("], \"nqoutput\": {}, } \"");
 		
 		Utils.log("\nOUTPUT\n" + sb.toString());
 		
