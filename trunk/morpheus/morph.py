@@ -8,6 +8,7 @@ __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : \
 
 
 def buildall(recompile=True):
+	""" Check dependencies for end 2 end. Compile where needed. Update path """
 	import sys
 	
 	# Add all necessary directories
@@ -140,11 +141,9 @@ def getqrmcode(qrmid):
 
 if __name__ == '__main__':
 	import argparse
-	buildall(False)
+	buildall(True)
 	nquery =  makenquery('What is the the tire size for a 1997 Toyota Camry')
-	print nquery
 	ssqmatches = getssqmatches(nquery)
-
-		
+	
 	print ssqmatches
 	# TODO - use the new ssqs to run the QRE

@@ -187,14 +187,22 @@ if __name__ == '__main__':
 				epilog='contact cgrant@cise.ufl.edu for details')
 	parser.add_argument('--qrmid','-q',type=int)
 	parser.add_argument('--ssq','-s')
+	parser.add_argument('--ssqf','-sf', help='File location of ssq' )
 	parser.add_argument('--debug','-d',type=bool, default=False)
 	args = parser.parse_args()
 
 	if args.debug == True:
 		#pdb.set_trace()
 		print run(ssq_test,id_test)
-	elif args.ssq != None and args.qrmid != None:
-		print run(args.ssq,args.qrmid)
+	elif (args.ssq != None or args.ssqf != None) and \
+				args.qrmid != None:
+			if args.ssqf == None:
+				print run(args.ssq,args.qrmid)
+			else:
+				ssq_text = open(args.ssqf, 'r').read()
+				print ssq_text
+				print run(ssq_text,args.qrmid)
+			
 	else:
 		parser.print_usage()
 				
