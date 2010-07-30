@@ -1,5 +1,9 @@
 #!/usr/bin/python
 import logging
+import sys
+import urllib
+
+import psycopg2
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' \
 				password='%(pwd)s'"
@@ -9,7 +13,6 @@ __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : \
 
 def buildall(recompile=True):
 	""" Check dependencies for end 2 end. Compile where needed. Update path """
-	import sys
 	
 	# Add all necessary directories
 	if '../' not in sys.path:
@@ -26,6 +29,7 @@ def buildall(recompile=True):
 		error_building = True
 
 	# Check qre imports
+	sys.path.append('../qre/')
 	try:
 		import qre, qre.qre
 	except Exception as e:
@@ -143,9 +147,8 @@ def get_qrmid_ssqpair(queryid):
 	""" Gets the (qrmid,ssq) pair from query table """
 	# TODO - query the db for qrmids corresponding to the queryid.
 	pass
-	import psycopg2
 	
-	__query = "SELECT qrmid,ssq FROM query WHERE qrmid = %(id)s"
+	__query = "SELECT qrmid,ssq FROM query WHERE queryid = %(id)s"
 	
 	conn = psycopg2.connect(__connect_string % __connect_params) # Assumed 2 work
 	q = __query % {'id':queryid}
@@ -153,21 +156,26 @@ def get_qrmid_ssqpair(queryid):
 	cursor = conn.cursor()
 	cursor.execute(q)
 	result = cursor.fetchall()
-	qrmid,ssq = result[0][1], urllib.unquote(result[0][1])
+	if len(result) == 0:
+		return (None,None)
+	else:
+		qrmid,ssq = result[0][0], urllib.unquote(result[0][1])
 
 	return (qrmid,ssq)
 
 
 if __name__ == '__main__':
 	import argparse
-	import json
+	import json, pdb
 	buildall(True)
+	import qre
+	import qre.qre
 	nquery =  makenquery('A 1997 Toyota Camry V6 needs what tire size?')
 	ssqmatches = getssqmatches(nquery)
 	
 	#print ssqmatches
-
-	ssqm = json.loads(json.dumps(ssqmatches))
+	pdb.set_trace()
+	ssqm = eval(json.loads(json.dumps(ssqmatches)))
 	
 	# TODO - Need to merge the created SSQ and run it against qrms
 	# This only runs previous querys
@@ -175,9 +183,13 @@ if __name__ == '__main__':
 	print ssqm
 	for entry in ssqm['queryids']:
 		queryid = entry[0]
-		qrmid,ssq = get_qrmid_fromqueryid(queryid)
-		z = qre.qre.run(ssq, qrmid)
-		print z
-		result_array.append(z)
-
-	return result_array		
+		qrmid,ssq = get_qrmid_ssqpair(queryid)
+		if None in (qrmid,ssq):
+			continue
+		else:
+			z = qre.qre.run(ssq, qrmid)
+			result_array.append(z)
+	
+	print 
+	print('-'*40)
+	print result_array		
