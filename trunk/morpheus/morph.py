@@ -139,11 +139,28 @@ def getqrmcode(qrmid):
 	return code
 
 
+def get_qrmid_ssqpair(queryid):
+	""" Gets the (qrmid,ssq) pair from query table """
+	# TODO - query the db for qrmids corresponding to the queryid.
+	pass
+
+
 if __name__ == '__main__':
 	import argparse
+	import json
+	import qre	
 	buildall(True)
 	nquery =  makenquery('What is the the tire size for a 1997 Toyota Camry')
 	ssqmatches = getssqmatches(nquery)
 	
-	print ssqmatches
-	# TODO - use the new ssqs to run the QRE
+	#print ssqmatches
+
+	ssqm = json.dumps(ssqmatches)
+	
+	# TODO - Need to merge the created SSQ and run it against qrms
+	# This only runs previous querys
+	for entry in ssqm['queryids']:
+		(queryid,ssq) = entry[0]
+		qrmids = get_qrmid_fromqueryid(queryid)
+		print qre.run(ssq, qrmids)
+		
