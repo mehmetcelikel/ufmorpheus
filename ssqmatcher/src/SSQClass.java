@@ -173,24 +173,24 @@ public class SSQClass {
 	public String toSend() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(" 'query': " + this.query + ", ");
-		sb.append(" 'realm': " + this.realm + ", ");
+		sb.append(" \"query\": \"" + this.query + "\", ");
+		sb.append(" \"realm\": \"" + this.realm + "\", ");
 		
-		sb.append(" 'ssq': { ");
-		sb.append(" 'inputs': [ ");
+		sb.append(" \"ssq\": { ");
+		sb.append(" \"inputs\": [ ");
 		for (Term t : this.inputs) {			
-			sb.append("{ '" + t.term + "': [ ");
+			sb.append("{ \"" + t.term + "\": [ ");
 			for (Category c : t.getCategories())
-				sb.append("['" + c.category + "', " + c.probability + "],");
+				sb.append("[\"" + c.category + "\", " + c.probability + "],");
 			sb.append(" ] }, ");
 		}
 		sb.append("], ");
 
-		sb.append(" 'outputs': [ ");
+		sb.append(" \"outputs\": [ ");
 		for (Term t : this.outputs) {			
-			sb.append("{ '" + t.term + "': [ ");
+			sb.append("{ \"" + t.term + "\": [ ");
 			for (Category c : t.getCategories())
-				sb.append("['" + c.category + "', " + c.probability + "],");
+				sb.append("[\"" + c.category + "\", " + c.probability + "],");
 			sb.append(" ] }, ");
 		}
 		sb.append("]");
