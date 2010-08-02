@@ -1,0 +1,63 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module morpheus.qre.qre</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="morpheus.html"><font color="#ffffff">morpheus</font></a>.<a href="morpheus.qre.html"><font color="#ffffff">qre</font></a>.qre</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:///C:/users/33as/documents/morpheus/morpheus/qre/qre.py">c:\users\33as\documents\morpheus\morpheus\qre\qre.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;class&nbsp;runs&nbsp;the&nbsp;code</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="morpheus.qre.ActionObject.html">morpheus.qre.ActionObject</a><br>
+<a href="morpheus.qre.ActionState.html">morpheus.qre.ActionState</a><br>
+<a href="morpheus.qre.DataParser.html">morpheus.qre.DataParser</a><br>
+</td><td width="25%" valign=top><a href="lxml.etree.html">lxml.etree</a><br>
+<a href="lxml.html">lxml</a><br>
+<a href="pdb.html">pdb</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+<a href="sys.html">sys</a><br>
+<a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-loadValueIntoHash"><strong>loadValueIntoHash</strong></a>(xml, valueHash, classHash, contextHash, typeHash)</dt><dd><tt>#parse&nbsp;the&nbsp;xml&nbsp;node&nbsp;and&nbsp;load&nbsp;its&nbsp;values&nbsp;into&nbsp;the&nbsp;appropriate&nbsp;spots<br>
+#in&nbsp;the&nbsp;value&nbsp;hash</tt></dd></dl>
+ <dl><dt><a name="-read_ssq_text"><strong>read_ssq_text</strong></a>(xmlstring, valueHash, classHash, contextHash, typeHash)</dt><dd><tt>#populate&nbsp;the&nbsp;value&nbsp;hash&nbsp;from&nbsp;a&nbsp;string</tt></dd></dl>
+ <dl><dt><a name="-run"><strong>run</strong></a>(ssq<font color="#909090">='&lt;ssq&gt;<font color="#c040c0">\n\n</font>        &lt;realm&gt;Automotive&lt;/realm&gt;<font color="#c040c0">\n</font>       ...        &lt;/output&gt;<font color="#c040c0">\n</font>        &lt;/output_list&gt;<font color="#c040c0">\n\n</font>&lt;/ssq&gt;<font color="#c040c0">\n</font>'</font>, id<font color="#909090">=75</font>)</dt><dd><tt>Run&nbsp;the&nbsp;Executor&nbsp;script<br>
+Get&nbsp;code&nbsp;xml&nbsp;from&nbsp;the&nbsp;DB&nbsp;given&nbsp;the&nbsp;id&nbsp;&nbsp;&nbsp;<br>
+Iterate&nbsp;once&nbsp;over&nbsp;the&nbsp;script&nbsp;xml<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;node&nbsp;is&nbsp;userdate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create&nbsp;the&nbsp;hash&nbsp;table&nbsp;using&nbsp;UserDataParser<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;node&nbsp;is&nbsp;action&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create&nbsp;Hash&nbsp;table&nbsp;pair&nbsp;using&nbsp;ActionDataParser<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;if&nbsp;is&nbsp;the&nbsp;starturl<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create&nbsp;action&nbsp;object&nbsp;for&nbsp;it&nbsp;and&nbsp;make&nbsp;it&nbsp;first&nbsp;element&nbsp;in&nbsp;the&nbsp;action_list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else&nbsp;it&nbsp;must&nbsp;be&nbsp;sequence<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interate&nbsp;through&nbsp;the&nbsp;children&nbsp;and&nbsp;populate&nbsp;the&nbsp;action&nbsp;object&nbsp;list<br>
+&nbsp;<br>
+Initialize&nbsp;state&nbsp;with&nbsp;the&nbsp;created&nbsp;data&nbsp;structures<br>
+Call&nbsp;state.<a href="#-run">run</a>()</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__authors__</strong> = 'Christan Earl Grant'<br>
+<strong>id_test</strong> = 75<br>
+<strong>ssq_test</strong> = '&lt;ssq&gt;<font color="#c040c0">\n\n</font>        &lt;realm&gt;Automotive&lt;/realm&gt;<font color="#c040c0">\n</font>       ...        &lt;/output&gt;<font color="#c040c0">\n</font>        &lt;/output_list&gt;<font color="#c040c0">\n\n</font>&lt;/ssq&gt;<font color="#c040c0">\n</font>'</td></tr></table>
+</body></html>

@@ -1,0 +1,126 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module morpheus.qre.ActionObject</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="morpheus.html"><font color="#ffffff">morpheus</font></a>.<a href="morpheus.qre.html"><font color="#ffffff">qre</font></a>.ActionObject</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:///C:/users/33as/documents/morpheus/morpheus/qre/actionobject.py">c:\users\33as\documents\morpheus\morpheus\qre\actionobject.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;class&nbsp;implements&nbsp;the&nbsp;action&nbsp;objects&nbsp;for&nbsp;all&nbsp;actions</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Highlight.html">Highlight</a><br>
+<a href="Loader.html">Loader</a><br>
+<a href="lxml.etree.html">lxml.etree</a><br>
+</td><td width="25%" valign=top><a href="lxml.html">lxml</a><br>
+<a href="pdb.html">pdb</a><br>
+<a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="urllib.html">urllib</a><br>
+<a href="urllib2.html">urllib2</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="morpheus.qre.ActionObject.html#ActionObject">ActionObject</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="morpheus.qre.ActionObject.html#FormAction">FormAction</a>
+</font></dt><dt><font face="helvetica, arial"><a href="morpheus.qre.ActionObject.html#HighlightAction">HighlightAction</a>
+</font></dt><dt><font face="helvetica, arial"><a href="morpheus.qre.ActionObject.html#LinkAction">LinkAction</a>
+</font></dt><dt><font face="helvetica, arial"><a href="morpheus.qre.ActionObject.html#URLAction">URLAction</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ActionObject">class <strong>ActionObject</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;Class&nbsp;of&nbsp;all&nbsp;actions<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ActionObject-do"><strong>do</strong></a>(self, state)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FormAction">class <strong>FormAction</strong></a>(<a href="morpheus.qre.ActionObject.html#ActionObject">ActionObject</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="FormAction-__init__"><strong>__init__</strong></a>(self, _xmlnode)</dt></dl>
+
+<dl><dt><a name="FormAction-do"><strong>do</strong></a>(self, state)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="HighlightAction">class <strong>HighlightAction</strong></a>(<a href="morpheus.qre.ActionObject.html#ActionObject">ActionObject</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="HighlightAction-__init__"><strong>__init__</strong></a>(self, _xmlnode)</dt></dl>
+
+<dl><dt><a name="HighlightAction-do"><strong>do</strong></a>(self, state)</dt><dd><tt>Does&nbsp;the&nbsp;<a href="#HighlightAction">HighlightAction</a>&nbsp;and&nbsp;returns&nbsp;the&nbsp;state</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LinkAction">class <strong>LinkAction</strong></a>(<a href="morpheus.qre.ActionObject.html#ActionObject">ActionObject</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="LinkAction-__init__"><strong>__init__</strong></a>(self, _xmlnode)</dt></dl>
+
+<dl><dt><a name="LinkAction-do"><strong>do</strong></a>(self, state)</dt><dd><tt>Does&nbsp;<a href="#LinkAction">LinkAction</a>&nbsp;and&nbsp;returns&nbsp;the&nbsp;state</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="URLAction">class <strong>URLAction</strong></a>(<a href="morpheus.qre.ActionObject.html#ActionObject">ActionObject</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="URLAction-__init__"><strong>__init__</strong></a>(self, _xmlnode)</dt></dl>
+
+<dl><dt><a name="URLAction-do"><strong>do</strong></a>(self, state)</dt><dd><tt>Does&nbsp;<a href="#URLAction">URLAction</a>&nbsp;and&nbsp;returns&nbsp;the&nbsp;state</tt></dd></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-abstract"><strong>abstract</strong></a>()</dt></dl>
+ <dl><dt><a name="-fix_links"><strong>fix_links</strong></a>(state, seq, html, url)</dt></dl>
+ <dl><dt><a name="-removeTBodies"><strong>removeTBodies</strong></a>(xpath)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__authors__</strong> = ['"Christan Earl Grant" &lt;cgrant@cise.ufl.edu&gt;']<br>
+<strong>make_links_absolute</strong> = &lt;lxml.html._MethodFunc object&gt;</td></tr></table>
+</body></html>

@@ -1,0 +1,46 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module morpheus.qre.DataParser</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="morpheus.html"><font color="#ffffff">morpheus</font></a>.<a href="morpheus.qre.html"><font color="#ffffff">qre</font></a>.DataParser</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:///C:/users/33as/documents/morpheus/morpheus/qre/dataparser.py">c:\users\33as\documents\morpheus\morpheus\qre\dataparser.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;class&nbsp;contains&nbsp;functioni&nbsp;that&nbsp;transform&nbsp;either&nbsp;user&nbsp;data&nbsp;or<br>
+action&nbsp;data&nbsp;from&nbsp;xml&nbsp;nodes&nbsp;into&nbsp;hash&nbsp;tables.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pdb.html">pdb</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-ActionDataParser"><strong>ActionDataParser</strong></a>(xmlnode)</dt><dd><tt>Returns&nbsp;hash&nbsp;table&nbsp;quartet.<br>
+The&nbsp;first&nbsp;hash&nbsp;table&nbsp;pair&nbsp;is&nbsp;of&nbsp;the&nbsp;(key,value)&nbsp;pairs<br>
+The&nbsp;second&nbsp;hash&nbsp;table&nbsp;pair&nbsp;is&nbsp;of&nbsp;the&nbsp;(key,type)&nbsp;pairs<br>
+It&nbsp;does&nbsp;this&nbsp;by&nbsp;parsing&nbsp;children&nbsp;of&nbsp;the&nbsp;form:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;info&nbsp;key="one"&nbsp;value="1"&nbsp;type="userinput"&nbsp;dataclass="classA"&nbsp;context="contextB"/&gt;</tt></dd></dl>
+ <dl><dt><a name="-UserDataParser"><strong>UserDataParser</strong></a>(xmlnode)</dt><dd><tt>Returns&nbsp;a&nbsp;hash&nbsp;table&nbsp;with&nbsp;the&nbsp;key&nbsp;value&nbsp;pairs.<br>
+&nbsp;<br>
+Does&nbsp;this&nbsp;by&nbsp;parsing&nbsp;all&nbsp;the&nbsp;children&nbsp;who&nbsp;are&nbsp;of&nbsp;the&nbsp;form:<br>
+&lt;info&nbsp;key="two"&nbsp;value="2"&nbsp;/&gt;</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__authors__</strong> = ['"Christan Earl Grant" &lt;cgrant@cise.ufl.edu&gt;']</td></tr></table>
+</body></html>
