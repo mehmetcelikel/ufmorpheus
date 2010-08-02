@@ -8,10 +8,10 @@ import extractor as ext
 
 def showChoices():
     print(
-          '''
-          1) Parse Query
-          2) Exit
-          ''');
+	  '''
+	  1) Parse Query
+	  2) Exit
+	  ''');
 
 def choice1():
     #verboseMode = True if raw_input("Verbose Mode: ").lower() == "true" else False
@@ -23,16 +23,18 @@ def choice1():
     #ext.subjectExtractor(query);
     return;
 
-choice = "0";
+if __name__=="__main__":
 
-while(choice != "2"):
-    showChoices();
-    choice = raw_input("Option #: ");
- 
-    if(choice == "1"):
-        choice1();
-    else:
-        print("Done");
-        
+	choice = "0";
+
+	while(choice != "2"):
+	    showChoices();
+	    choice = raw_input("Option #: ");
+	 
+	    if(choice == "1"):
+		choice1();
+	    else:
+		print("Done");
+	
 
         
