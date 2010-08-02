@@ -248,7 +248,7 @@ public class SSQMatcher {
 
 		SSQClass candidate = buildCandidateQuery(candidateQInfo);
 
-		sb.append("\" { ");
+		sb.append(" { ");
 		
 		sb.append(candidate.toSend());
 		
@@ -264,11 +264,15 @@ public class SSQMatcher {
 		
 		sb.append(" \"queryids\": [");
 		
-		for (SSQMatcher.QRMSimilarityMeasure qm : qrmSim)
+		for (SSQMatcher.QRMSimilarityMeasure qm : qrmSim){
 			sb.append("[" + qm.queryID + ", " + qm.QRMDivergence + "], ");
+		}
+		if(qrmSim.size() > 0){
+			sb.deleteCharAt(sb.lastIndexOf(","));
+		}
 		
 		
-		sb.append("], \"nqoutput\": {}, } \"");
+		sb.append("], \"nqoutput\": {} } ");
 		
 		Utils.log("\nOUTPUT\n" + sb.toString());
 		

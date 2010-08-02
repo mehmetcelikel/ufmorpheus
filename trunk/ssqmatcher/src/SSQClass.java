@@ -177,24 +177,38 @@ public class SSQClass {
 		sb.append(" \"realm\": \"" + this.realm + "\", ");
 		
 		sb.append(" \"ssq\": { ");
+
 		sb.append(" \"inputs\": [ ");
-		for (Term t : this.inputs) {			
+		for (Term t : this.inputs) {
 			sb.append("{ \"" + t.term + "\": [ ");
-			for (Category c : t.getCategories())
+			for (Category c : t.getCategories()){
 				sb.append("[\"" + c.category + "\", " + c.probability + "],");
+			}
+			if(t.getCategories().size() > 0){ // Need to remove the trailing comma
+				sb.deleteCharAt(sb.lastIndexOf(","));
+			}
 			sb.append(" ] }, ");
+		}
+		if(this.inputs.size() > 0){
+			sb.deleteCharAt(sb.lastIndexOf(","));
 		}
 		sb.append("], ");
 
 		sb.append(" \"outputs\": [ ");
 		for (Term t : this.outputs) {			
 			sb.append("{ \"" + t.term + "\": [ ");
-			for (Category c : t.getCategories())
+			for (Category c : t.getCategories()){
 				sb.append("[\"" + c.category + "\", " + c.probability + "],");
+			}
+			if(t.getCategories().size() > 0){ // Need to remove the trailing comma
+				sb.deleteCharAt(sb.lastIndexOf(","));
+			}
 			sb.append(" ] }, ");
+		}		
+		if(this.outputs.size() > 0){
+			sb.deleteCharAt(sb.lastIndexOf(","));
 		}
-		sb.append("]");
-		sb.append(" }, ");
+		sb.append("] }, ");
 
 		return sb.toString();
 	}

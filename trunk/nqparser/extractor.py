@@ -4,9 +4,11 @@ Created on May 26, 2010
 @author: Joir-dan
 '''
 
-import nltk;
-from nltk import tokenize;
-import re;
+import re
+
+import nltk
+from nltk import tokenize
+
 
 class TermExtractor(object):
     def __init__(self):
@@ -122,7 +124,7 @@ class TermExtractor(object):
 
     def __resetVars(self, verboseMode):
         self.__VERBOSE = verboseMode
-        print("Verbose: True" if self.__VERBOSE is True else "Verbose: False")
+        if self.__VERBOSE: print("Verbose: True" if self.__VERBOSE is True else "Verbose: False")
         self.__flags = {"Found_What": False, "Found_Verb": False , "Found_Object" : False, "Has_WHNP" : False, "Has_Multiple_WHNP": False}
         self.__returnGroup = {"Asking_For": [], "Descriptive_Info" : [], "Verb_Groups": [], "WH_Term": None }
         self.__terms = None
@@ -144,7 +146,8 @@ class TermExtractor(object):
         FOUND_WH = False
         FOUND_VG = False
         MULT_VG = False
-        print("Length of Cache: "+str(len(self.__npCache)))
+        if self.__VERBOSE:
+            print("Length of Cache: "+str(len(self.__npCache)))
         for term in self.__npCache:
             if term == "@what": FOUND_WH = True 
             elif term == "@verb": 
@@ -162,13 +165,15 @@ class TermExtractor(object):
                     elif self.__returnGroup["WH_Term"] == "when":
                         self.__returnGroup["Descriptive_Info"].append(" ".join(nltk.tag.untag(term.leaves())))
                         self.__returnGroup["Asking_For"].append("@time")
-                    print(" ".join(nltk.tag.untag(term.leaves())))
+                    if self.__VERBOSE:
+                        print(" ".join(nltk.tag.untag(term.leaves())))
                 else:
                     position = 1
                     POS_FLAG = False
-                    print("Number of terms after NPh(1): "+ str(len(term[1:])))
+                    if self.__VERBOSE:
+                        print("Number of terms after NPh(1): "+ str(len(term[1:])))
                     for chunk in term[1:]:
-                        print chunk
+                        if self.__VERBOSE: print chunk
                         if chunk.node == "POS": # Then we have <NPh><POS><NPh>((<POS><NPh>)+)?
                             if not POS_FLAG: POS_FLAG = True
                             self.__returnGroup["Descriptive_Info"].append(" ".join(nltk.tag.untag(term[position-1].leaves())))
@@ -232,27 +237,29 @@ class TermExtractor(object):
                 
     def __andFinallyExtractTerms(self):
         weDidntFindAnEndChunk = True
-        print("Extracting Terms.")
-        print("Number of Phrases: "+str(len(self.__finalChunk)))
+        if self.__VERBOSE:
+            print("Extracting Terms.")
+            print("Number of Phrases: "+str(len(self.__finalChunk)))
         for phrase in self.__finalChunk:
             if phrase.node == "WHNPh":          # WH-Noun Phrase was found
-                print(phrase.leaves())
+                if self.__VERBOSE: print(phrase.leaves())
                 self.__foundWHNPh(phrase)
             elif phrase.node == "WH":           # WH term found
-                print(phrase.leaves())
+                if self.__VERBOSE: print(phrase.leaves())
                 self.__foundWH(phrase)
             elif phrase.node == "PPh":
                 self.__foundPPh(phrase)
             elif phrase.node == "NPh":          # Noun Phrase found...
-                print(phrase.leaves())
+                if self.__VERBOSE: print(phrase.leaves())
                 self.__foundNPh(phrase)         
             elif phrase.node == "VPh":          # Verb Phrase found
                 self.__foundVPh(phrase)
             elif phrase.node == "END":
-                print("End of question")
+                if self.__VERBOSE: print("End of question")
                 weDidntFindAnEndChunk = False
                 self.__dealWithNPCache();
-            else: print("ERROR")
+            else: 
+                if self.__VERBOSE: print("ERROR")
         if weDidntFindAnEndChunk:
             self.__dealWithNPCache()
             
