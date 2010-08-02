@@ -188,7 +188,7 @@ if __name__ == '__main__':
 	parser.add_argument('--qrmid','-q',type=int)
 	parser.add_argument('--ssq','-s')
 	parser.add_argument('--ssqf','-sf', help='File location of ssq' )
-	parser.add_argument('--debug','-d',type=bool, default=False)
+	parser.add_argument('--debug','-d',default=False, action='store_true')
 	args = parser.parse_args()
 
 	if args.debug == True:

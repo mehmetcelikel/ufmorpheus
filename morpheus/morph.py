@@ -53,7 +53,7 @@ def buildall(recompile=True):
 		error_building = True
 
 	# Compile ssqmatcher java code
-	if recompile == True:
+	if recompile:
 		exit_status = compile_ssqmatcher()
 
 	return (error_building, exit_status)
@@ -112,17 +112,15 @@ def nquerytojson(nqstring):
 
 def getssqmatches(nquery):
 	""" Call the ssq matching code and return output as a string """
-	import subprocess, tempfile
+	import subprocess, tempfile, json
 	tf = tempfile.TemporaryFile()
 	cmd = ['java','-jar','ssqmatcher.jar', "%s" % nquery] # nquery in quotes
 
-	print cmd
-	
 	subprocess.Popen(cmd, stdout=tf, cwd='../ssqmatcher/').wait()
 
 	tf.seek(0) # Need to send the file back to the begining to read output
 
-	return ' '.join([t for t in tf.readlines()])
+	return json.load(tf)
 
 
 def getqrmcode(qrmid):
@@ -145,9 +143,6 @@ def getqrmcode(qrmid):
 
 def get_qrmid_ssqpair(queryid):
 	""" Gets the (qrmid,ssq) pair from query table """
-	# TODO - query the db for qrmids corresponding to the queryid.
-	pass
-	
 	__query = "SELECT qrmid,ssq FROM query WHERE queryid = %(id)s"
 	
 	conn = psycopg2.connect(__connect_string % __connect_params) # Assumed 2 work
@@ -164,39 +159,51 @@ def get_qrmid_ssqpair(queryid):
 	return (qrmid,ssq)
 
 
+def run_qre(ssq, qrmid):
+	""" Runs the qre on the above arguments and returns the result """
+	import qre
+	import qre.qre
+	return qre.qre.run(ssq,qrmid)
+
+
 if __name__ == '__main__':
 	import argparse
 	import json, pdb
-	buildall(True)
-	import qre
-	import qre.qre
 
 	parser = argparse.ArgumentParser(description="This module runs morpheus",
 				add_help=True)
 	parser.add_argument('--query', 
 				default='A 1997 Toyota Camry V6 needs what tire size?')
+	parser.add_argument('--build','-b',default=True,action='store_false',
+				help='This is true if we should rebuild the java code')
 	args = parser.parse_args()
 
-	nquery =  makenquery(args.query)
-	ssqmatches = getssqmatches(nquery)
+	buildall(args.build) # Build all java code if necessary
 	
-	#print ssqmatches
-	pdb.set_trace()
-	ssqm = eval(json.loads(json.dumps(ssqmatches)))
+	print 
+	print '-'*40
+	nquery =  makenquery(args.query) # Make the nquery object
+	
+	print 
+	print '-'*40
+	ssqm = getssqmatches(nquery) # Returns a loaded json object
+	
+	print ssqm
+	print 
+	print '-'*40
 	
 	# TODO - Need to merge the created SSQ and run it against qrms
 	# This only runs previous querys
 	result_array = []
-	print ssqm
 	for entry in ssqm['queryids']:
 		queryid = entry[0]
 		qrmid,ssq = get_qrmid_ssqpair(queryid)
 		if None in (qrmid,ssq):
 			continue
 		else:
-			z = qre.qre.run(ssq, qrmid)
+			z = run_qre(ssq, qrmid)
 			result_array.append(z)
 	
 	print 
-	print('-'*40)
+	print '-'*40
 	print result_array		
