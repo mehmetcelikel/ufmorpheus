@@ -1,0 +1,58 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module morpheus.msrngram.msrngram</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="morpheus.html"><font color="#ffffff">morpheus</font></a>.<a href="morpheus.msrngram.html"><font color="#ffffff">msrngram</font></a>.msrngram</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:///C:/users/33as/documents/morpheus/morpheus/msrngram/msrngram.py">c:\users\33as\documents\morpheus\morpheus\msrngram\msrngram.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="morpheus.msrngram.payload.html">morpheus.msrngram.payload</a><br>
+</td><td width="25%" valign=top><a href="urllib2.html">urllib2</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-GetConditionalProbability"><strong>GetConditionalProbability</strong></a>(messageid, modelUrn, phrase)</dt><dd><tt>Gets&nbsp;the&nbsp;Conditional&nbsp;Probability&nbsp;from&nbsp;the&nbsp;parameter<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-GetConditionalProbability">GetConditionalProbability</a>('2312312312','urn:ngram:bing-title:jun09:4',&nbsp;'christan&nbsp;grant')<br>
+'-3.91797137'</tt></dd></dl>
+ <dl><dt><a name="-GetModels"><strong>GetModels</strong></a>()</dt><dd><tt>Gets&nbsp;the&nbsp;available&nbsp;models&nbsp;and&nbsp;returns&nbsp;a&nbsp;list<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-GetModels">GetModels</a>()<br>
+['urn:ngram:bing-anchor:jun09:1',&nbsp;'urn:ngram:bing-anchor:jun09:2',&nbsp;'urn:ngram:bing-anchor:jun09:3',&nbsp;'urn:ngram:bing-anchor:jun09:4',&nbsp;'urn:ngram:bing-body:jun09:1',&nbsp;'urn:ngram:bing-body:jun09:2',&nbsp;'urn:ngram:bing-body:jun09:3',&nbsp;'urn:ngram:bing-title:jun09:1',&nbsp;'urn:ngram:bing-title:jun09:2',&nbsp;'urn:ngram:bing-title:jun09:3',&nbsp;'urn:ngram:bing-title:jun09:4']</tt></dd></dl>
+ <dl><dt><a name="-GetProbability"><strong>GetProbability</strong></a>(messageid, modelUrn, phrase)</dt><dd><tt>Gets&nbsp;the&nbsp;Probability&nbsp;from&nbsp;the&nbsp;parameter<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-GetProbability">GetProbability</a>('2312312312','urn:ngram:bing-title:jun09:4',&nbsp;'christan&nbsp;grant')<br>
+'-9.032675'</tt></dd></dl>
+ <dl><dt><a name="-getguid"><strong>getguid</strong></a>()</dt><dd><tt>Pulls&nbsp;GUID&nbsp;from&nbsp;a&nbsp;local&nbsp;file&nbsp;from&nbsp;parameter.&nbsp;<br>
+&nbsp;<br>
+The&nbsp;GUID&nbsp;is&nbsp;on&nbsp;first&nbsp;line&nbsp;of&nbsp;the&nbsp;file.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>CONTENT_TYPE</strong> = 'application/soap+xml; charset=utf-8'<br>
+<strong>GETCONDITIONALPROBABILITYURL</strong> = 'http://schemas.microsoft.com/research/2009/10/we...frontend/ILookupService/GetConditionalProbability'<br>
+<strong>GETMODELSURL</strong> = 'http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetModels'<br>
+<strong>GETPROBABILITYURL</strong> = 'http://schemas.microsoft.com/research/2009/10/webngram/frontend/ILookupService/GetProbability'<br>
+<strong>LOOKUP_URL</strong> = 'http://web-ngram.research.microsoft.com/Lookup.svc'<br>
+<strong>USER_AGENT</strong> = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'<br>
+<strong>WSDLFILE</strong> = 'http://web-ngram.research.microsoft.com/Lookup.svc/mex?wsdl'</td></tr></table>
+</body></html>
