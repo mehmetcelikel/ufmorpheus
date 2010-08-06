@@ -18,20 +18,20 @@ __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' \
 				password='%(pwd)s'"
 __connect_params = {'server': "babylon.cise.ufl.edu", 'user' : "morpheus3",'pwd' : "crimson03.sql", 'db' : "Morpheus3DB"}
 __code_query = "SELECT code FROM qrm WHERE qrmid = %(id)s"
-id_test = 75
+id_test = 85
 ssq_test = """<ssq>
-
+		
         <realm>Automotive</realm>
         <query>What size tires should I get for a 1997 Toyota Camry V6?</query>
 
         <input_list>
-                <input type="when" dataclass="year">
+                <input type="what" dataclass="Year">
                	1997 
                 </input>
-                <input type="what" dataclass="make">
+                <input type="what" dataclass="Manufacturer">
                 Toyota
                 </input>
-                <input type="what" dataclass="model">
+                <input type="what" dataclass="Model">
                 Camry V6
                 </input>
         </input_list>
@@ -132,7 +132,13 @@ def run(ssq=ssq_test, id=id_test):
 
 #populate the value hash from a string
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
-	pdb.set_trace()
+
+	# TODO testing 
+	valueHash["2:0"] = "32608"
+	classHash["2:0"] = "Size"
+	contextHash["2:0"] = "What"
+	 
+
 	tree = etree.fromstring(xmlstring)
 	total = 0
 	#any highlights present need to be counted first
@@ -151,7 +157,7 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 	print classHash
 	print contextHash
 	print typeHash
-	pdb.set_trace()
+
 	if total == len(valueHash.keys()):
 		return True
 	
@@ -173,7 +179,7 @@ def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
 		#if we have found the appropriate key, then assign this ssq input's value 
 		#to the data hash at the current key
 		if cls.lower() == xml.get('dataclass').lower() and context.lower() == xml.get('type').lower():
-			valueHash[entry] = xml.text
+			valueHash[entry] = '' if not xml.text else xml.text.strip()
 			found+=1
 
 	return found

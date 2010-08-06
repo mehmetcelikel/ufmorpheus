@@ -137,10 +137,15 @@ class FormAction(ActionObject):
 				base_url = e.text.strip()	
 				break
 
+		# FIXME: Is XPath correct??
 		xpath = Loader.getFormXpath(base_url, int(self.xmlnode.get('number')))
 
 		#fix the links in the page
 		doc = fix_links(state, self.xmlnode.get('number'), etree.tostring(state.page), state.page.base_url)	
+
+		print etree.tostring(state.page);
+		print self.xmlnode.get('number');
+		print state.page.base_url
 
 		#TODO: Fix this so that it uses standard xpath
 		"""
@@ -155,11 +160,16 @@ class FormAction(ActionObject):
 		#need to fix the xpath before we use it
 		xpath = removeTBodies(xpath.lower())
 		
+		xpath = "//form" # XXX debugging; needs to be removed  
+		
 		#get form node
 		form_node = page.xpath(xpath)[0]
 	
 		#TODO:figure out what is up with the sessionids
 		index = form_node.get('action').find(";jsessionid")
+		
+		print etree.tostring(form_node)
+		
 		querystring = ''
 		if index >= 0:
 			querystring = form_node.get('action')[:index]
@@ -182,7 +192,7 @@ class FormAction(ActionObject):
 			#for each input get the value from the actiondata hash
 			if e.tag == 'param':
 				if first == False:
-					querystring += "&"
+					querystring += "&" # Better 
 	
 				v = state.kv_hash[ e.text ].strip()
 				state.kv_hash[e.text] = ''
