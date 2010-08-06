@@ -132,7 +132,7 @@ def run(ssq=ssq_test, id=id_test):
 
 #populate the value hash from a string
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
-
+	pdb.set_trace()
 	tree = etree.fromstring(xmlstring)
 	total = 0
 	#any highlights present need to be counted first
@@ -146,9 +146,16 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 			for input in e.getchildren():
 				total += loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash)	
 
+	print 'Compares total:%d and len(valueHash.keys()):%d' % (total,len(valueHash.keys()))
+	print valueHash
+	print classHash
+	print contextHash
+	print typeHash
+	pdb.set_trace()
 	if total == len(valueHash.keys()):
 		return True
 	
+	return True	
 	print('The given ssq does not match this qrm\'s ssq, aborting')
 	return False
 
