@@ -141,16 +141,20 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 	tree = etree.fromstring(xmlstring)
 	total = 0
+	class_context_dict = {}
+	
 	#any highlights present need to be counted first
+	#also create the class_context_dict
 	for k in valueHash.keys():
 		if valueHash[k] != '':total+=1
+		class_context_dict[(classHash[entry].lower(),contextHash[entry].lower())] = entry
 
 	#find the input list and load the values into the kv_hash
 	for e in tree.getchildren():
-
+		
 		if e.tag == 'input_list':
 			for input in e.getchildren():
-				total += loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash)	
+				total += loadValueIntoHash(input, valueHash, class_context_dict)
 
 	print 'Compares total:%d and len(valueHash.keys()):%d' % (total,len(valueHash.keys()))
 	print valueHash
@@ -168,21 +172,19 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 #parse the xml node and load its values into the appropriate spots
 #in the value hash
-def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
-
-	found = 0
-	#for the given xml node, we must find the matching key
-	for entry in valueHash.keys():
-		cls = classHash[entry]
-		context = contextHash[entry]
-	
-		#if we have found the appropriate key, then assign this ssq input's value 
-		#to the data hash at the current key
-		if cls.lower() == xml.get('dataclass').lower() and context.lower() == xml.get('type').lower():
-			valueHash[entry] = '' if not xml.text else xml.text.strip()
-			found+=1
-
-	return found
+def loadValueIntoHash(xml, valueHash, class_context_dict):
+	''' Sets the value for the keys in valueHash
+	'''
+	entry = class_context_dict[(xml.get('dataclass').lower(), #class
+								xml.get('type').lower())]	  #context
+	try:
+		valueHash[entry] = '' if not xml.text else xml.text.strip()
+		return 1
+	except KeyError:
+		#TODO: Handle this exception
+		#It will occur when there's a class/context that is not
+		#represented in the ssq?
+		return 0
 
 
 if __name__ == '__main__':
