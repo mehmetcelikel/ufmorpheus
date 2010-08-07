@@ -114,19 +114,17 @@ def run(ssq=ssq_test, id=id_test):
 
 	#parse the ssq to populate the value hashes with the user input	
 	txt = ssq
-	if read_ssq_text(txt,kv_hash,kclass_hash, kcontext_hash, kt_hash) == False:	
+	if read_ssq_text(txt,kv_hash,kclass_hash, kcontext_hash, kt_hash) is False:	
 		return
 	
 	state = ActionState.ActionState(action_list, kv_hash, kt_hash, kclass_hash, kcontext_hash, user_hash)
 	
 	state.run()
 
-	result = ' '
-	for k in state.kv_hash.keys():
-		if state.kv_hash[k] != '':
-			result += ' '
-			result += state.kv_hash[k] 
-
+	kv_hash_list = [v for v in state.kv_hash.values() if v != '']
+	
+	result = ' '.join(kv_hash_list)
+	
 	return result.strip()
 
 
@@ -178,7 +176,7 @@ def loadValueIntoHash(xml, valueHash, class_context_dict):
 	entry = class_context_dict[(xml.get('dataclass').lower(), #class
 								xml.get('type').lower())]	  #context
 	try:
-		valueHash[entry] = '' if not xml.text else xml.text.strip()
+		valueHash[entry] = '' if xml.text is None else xml.text.strip()
 		return 1
 	except KeyError:
 		#TODO: Handle this exception
@@ -206,12 +204,12 @@ if __name__ == '__main__':
 	parser.add_argument('--debug','-d',default=False, action='store_true')
 	args = parser.parse_args()
 
-	if args.debug == True:
+	if args.debug is True:
 		#pdb.set_trace()
 		print run(ssq_test,id_test)
-	elif (args.ssq != None or args.ssqf != None) and \
-				args.qrmid != None:
-			if args.ssqf == None:
+	elif (args.ssq is not None or args.ssqf is not None) and \
+				args.qrmid is not None:
+			if args.ssqf is None:
 				print run(args.ssq,args.qrmid)
 			else:
 				ssq_text = open(args.ssqf, 'r').read()
