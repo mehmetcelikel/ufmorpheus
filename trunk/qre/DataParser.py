@@ -14,25 +14,18 @@ def ActionDataParser(xmlnode):
 			It does this by parsing children of the form:
 				<info key="one" value="1" type="userinput" dataclass="classA" context="contextB"/>
 	"""
-	kv = {}
-	for entry in xmlnode:
-		assert(entry.tag == 'info') # sanity check
-		kv[entry.get('key')] = entry.get('value')
-	
-	kt = {}
-	for entry in xmlnode:
-		assert(entry.tag == 'info') # sanity check
-		kt[entry.get('key')] = entry.get('type')
+	kv = {}		# Value Hash
+	kt = {}		# TODO: What is this?
+	kcl = {}	# Class Hash
+	kco = {}	# Context Hash
 
-	kcl = {}	
 	for entry in xmlnode:
-		assert(entry.tag == 'info')
-		kcl[entry.get('key')] = entry.get('dataclass')
-	
-	kco = {}
-	for entry in xmlnode:
-		assert(entry.tag == 'info')
-		kco[entry.get('key')] = entry.get('context')
+		assert(entry.tag == 'info') # sanity check
+		key = entry.get('key')
+		kv[key] = entry.get('value')
+		kt[key] = entry.get('type')
+		kcl[key] = entry.get('dataclass')
+		kco[key] = entry.get('context')
 
 	return (kv,kt,kcl,kco) # return the quartet of elements
 
@@ -43,10 +36,7 @@ def UserDataParser(xmlnode):
 			Does this by parsing all the children who are of the form:
 			<info key="two" value="2" />
 	"""
-	hash = {}
-	for entry in xmlnode:
-		assert(entry.tag == 'info') # sanity check
-		hash[entry.get('key')] = entry.get('value')
+	assert(entry.tag =='info') #sanity check
+	hash = dict([(entry.get('key'),entry.get('value')) for entry in xmlnode])
 
 	return hash
-		
