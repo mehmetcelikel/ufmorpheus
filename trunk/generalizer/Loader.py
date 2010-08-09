@@ -27,6 +27,8 @@ def GetQRMFromDb(qrmid):
 	rowArray = retrieveRecordsFromQRM(qrmid)
 
 	return getqrm(rowArray, qrmid, True, rowArray[3][0])
+
+
 def getHiLiteXpath(id):
 
 	q = 'select meetpoint from highlight where timestamp = '+id
@@ -34,6 +36,7 @@ def getHiLiteXpath(id):
 	rows = executeQuery(q)[0][0]
 
 	return rows	
+
 
 def getFormXpath(url, snum):
 
@@ -51,6 +54,7 @@ def getFormXpath(url, snum):
 	rows = executeQuery(q)
 	
 	return rows[-1][0]
+
 
 #get the class and context information for the given input/highlight
 def getNeededScriptInfo(id, isInput):
@@ -87,6 +91,7 @@ def getNeededScriptInfo(id, isInput):
 		
 		#its already a list, just get first row
 		return results[0]
+
 
 #loads list of inputs for the given pagereference id
 def getPageInputs(pid, formNode):
@@ -136,6 +141,7 @@ def getPageInputs(pid, formNode):
 
         return inputList
 
+
 def getQueryText(q1, q2):
 
 	s = "SELECT querystring FROM query,qrm WHERE query.queryid = qrm.queryid AND qrm.qrmid = "
@@ -154,6 +160,7 @@ def getQueryText(q1, q2):
 		r2 = executeQuery(s2 + q2.id)[0]
 
 	return [r1,r2]			
+
 	
 #performs insertion of qrm db
 def insertQrm(realmid, code, queryid):
@@ -184,6 +191,7 @@ def insertQrm(realmid, code, queryid):
 
 	return results[0]
 
+
 #This function calls the retrieveRecords function and parses them into the proper format
 #that can be used by the other generalization code
 def GetQRMFromQuery (queryID):
@@ -191,6 +199,7 @@ def GetQRMFromQuery (queryID):
 	rowArray = retrieveRecordsFromQuery(queryID)
 
 	return getqrm(rowArray, queryID, False, rowArray[3][0])
+
 	
 #This function gets page references and page outputs and returns a query object	
 def getqrm(rowArray, qid, isQRMID, realmid):
@@ -270,6 +279,7 @@ def getqrm(rowArray, qid, isQRMID, realmid):
 
 	return qrm
 
+
 #get the class data into ssqelement objects and return a list of them
 def extractSsqElements(classes):
 
@@ -283,6 +293,7 @@ def extractSsqElements(classes):
 			
 	return elems
 
+
 def exciseRange(i,j,a):
 	
 	#Remove items from i to j-1 in the list 'a'
@@ -290,6 +301,7 @@ def exciseRange(i,j,a):
 		a.pop(i)
 	
 	return a
+
 	
 #Combine the pages, highlights and answers into a single list
 def getCondensedQrm(pps, outs):
@@ -334,6 +346,7 @@ def getCondensedQrm(pps, outs):
 
 	return qrm
 
+
 #forms a highlight object from the db row
 def getHighlight(row):
 	beginoffset = 1
@@ -357,6 +370,7 @@ def getHighlight(row):
 		row[classid])
 
 	return h
+
 
 #Forms a page object out of the 
 def getPageOrLink(row):
@@ -435,6 +449,7 @@ def getPageOrLink(row):
 	
 	return temp
 
+
 #gets the context and class information for the given highlight or ssq input
 def getContextAndClass(id, isSsqInput):
 	
@@ -468,6 +483,7 @@ def getContextAndClass(id, isSsqInput):
 	
 	return result	
 
+
 #parse the page and extract a form
 def parsePageForForm(inputList, url):
 
@@ -496,6 +512,7 @@ def parsePageForForm(inputList, url):
 							
 	return []
 
+
 def compareLists(inputList, compareHash):
 	
 	found = False
@@ -512,6 +529,7 @@ def compareLists(inputList, compareHash):
 	
 	return True
 
+
 #searches the given string and returns a list of indices of matches
 def findAll(str, pattern):
 	
@@ -524,6 +542,7 @@ def findAll(str, pattern):
 		index = str.find(pattern, index+len(pattern), len(str))
 		
 	return 	matches
+
 
 #scans in src looking for the given element, if immediate=true then it must be the next thing,
 #otherwise it just scans until it finds it 
@@ -563,6 +582,7 @@ def findElement(src, startIndex, elem, boundaryElem, forwardScan, immediate):
 
 	return -1
 
+
 #Converts the argument to lower case
 def lower(x):
 	clist = list()
@@ -579,6 +599,7 @@ def lower(x):
 	newx = newx.replace("#text","text()")
 	
 	return newx
+
 	
 #This takes two pages and combines them into a single page
 def combine(r, plist, nindex, plistIndex):
@@ -594,10 +615,10 @@ def combine(r, plist, nindex, plistIndex):
         plist.remove(r)
 
 	return plist
+
 	
 #Looks for a default value for the given tag, identified by the id. If no value is found then an empty string
 #is returned
-
 def getDefaultValue(src,id):
 	
 	#Get index of id
@@ -646,15 +667,17 @@ def getDefaultValue(src,id):
 	
 	return "".join(defaultValue)
 
-#This function performs the selection on the database to get the records
 
+#This function performs the selection on the database to get the records
 def retrieveRecordsFromQRM(qrmid):
 	
 	return get("qrmid",qrmid)
+
 	
 def retrieveRecordsFromQuery(qid):
 	
 	return get("queryid",str(qid))
+
 
 def get(field, value):
 
@@ -683,6 +706,7 @@ def get(field, value):
 	results = executeQuery(query)
 	
 	return [pageReferencesRows,outputHighlights,answerCount,results[0]]	
+
 
 def executeQuery(q):
 	#Database parameters
@@ -717,6 +741,7 @@ def executeQuery(q):
 		print(str(e))
 			
 	return result
-		
+
+	
 if __name__ == "main":
 	pass

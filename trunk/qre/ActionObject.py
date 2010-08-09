@@ -93,16 +93,17 @@ def fix_links(state, seq, html, url):
 
 def removeTBodies(xpath):
 
-	parts = xpath.split("/")
-	plist = list()
+	#parts = xpath.split("/")
+	#plist = list()
 
-	for p in parts:
-		if p.startswith("tbody"):
-			continue
+	#for p in parts:
+	#	if p.startswith("tbody"):
+	#		continue
 
-		plist.append(p)
+	#	plist.append(p)
 
-	return "/".join(plist)
+	#return "/".join(plist)
+	return '/'.join(['' if x.startswith("tbody") else x for x in xpath.split("/")])
 
 
 class HighlightAction(ActionObject):
@@ -137,8 +138,10 @@ class FormAction(ActionObject):
 				base_url = e.text.strip()	
 				break
 
-		# FIXME: Is XPath correct??
+		# FIXME: Is XPath correct? -- need to use the qre xpath
 		xpath = Loader.getFormXpath(base_url, int(self.xmlnode.get('number')))
+		#xpath = self.xmlnode.find('xpath'). <
+		#xpath = self.xmlnode.find('xpath').text
 
 		# Fix the links in the page
 		doc = fix_links(state, self.xmlnode.get('number'), etree.tostring(state.page), state.page.base_url)	
@@ -154,13 +157,16 @@ class FormAction(ActionObject):
 
 		page = fromstring(doc)
 		
-		# Need to fix the xpath before we use it. We assume nobody uses <tbodies>
+		# Need to fix the xpath before we use it. We assume nobody uses <tbody>
 		xpath = removeTBodies(xpath.lower())
 		
-		xpath = "//form" # XXX debugging; needs to be removed  
-		
-		#get form node
-		form_node = page.xpath(xpath)[0]
+		# Get form node
+		form_node = None
+		try:
+			form_node = page.xpath(xpath)[0]
+		except:
+			# Error with xpath, back off to general xpath
+			form_node = page.xpath('//form')[0]
 		
 		inputs = list()
 		request_data = {}
