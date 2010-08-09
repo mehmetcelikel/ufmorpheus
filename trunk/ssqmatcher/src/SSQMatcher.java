@@ -321,17 +321,17 @@ public class SSQMatcher {
 			for (QCTermMeasure qctm : qctms){
 				Collections.sort(qctm.MatchingTermsCD);
 				
-				sb.append("\"" + qctm.QualifiedCategory + "\": (");
+				sb.append("\"" + qctm.QualifiedCategory + "\": [");
 
 				for (SSQMatcher.TermMeasure itm : qctm.MatchingTermsCD){
-					sb.append("(\"" + itm.CandidateCategory);
+					sb.append("[\"" + itm.CandidateCategory);
 					sb.append("\", \"" + itm.CandidateTerm);
-					sb.append("\", " + itm.CategoryDivergence + "), ");
+					sb.append("\", " + itm.CategoryDivergence + "], ");
 				}
 				if(qctm.MatchingTermsCD.size() > 0)
 					sb.deleteCharAt(sb.lastIndexOf(", "));
 
-				sb.append("), ");
+				sb.append("], ");
 			}
 			if(qctms.size() > 0)
 				sb.deleteCharAt(sb.lastIndexOf(", "));
