@@ -3,6 +3,7 @@ import logging
 import sys
 import urllib
 
+import lxml, lxml.etree, lxml.html
 import psycopg2
 
 __connect_string = "dbname='%(db)s' user='%(user)s' host='%(server)s' \
@@ -158,6 +159,29 @@ def get_qrmid_ssqpair(queryid):
 
 	return (qrmid,ssq)
 
+def extract_ssq_term_map(queryid, divergence, class_map):
+	""" This method extracts the best terms or each class from the class_map
+			
+			What is returned is a dictionary with the key being the classes
+			and the value being the best terms.
+	"""
+	#term_map = {}	
+	#for (k,v) in class_map.iteritems():
+	#	term_map[k] = v[0][1]
+	return dict([(k,v[0][1]) for (k,v) in class_map.iteritems()])
+
+
+def make_query_ssq(qrm_ssq, term_map):
+	""" Replaces the ssq inputs with new terms, returns new SSQ """
+	root = lxml.etree.fromstring(qrm_ssq)
+	input_list = root.find('input_list')
+
+	for (the_class,the_term) in term_map.iteritems():
+		node = input_list.xpath("//input[@dataclass='%s']"%the_class)
+		node.text = the_term # Update the term for this class
+	
+	return lxml.etree.tostring(root)
+
 
 def run_qre(ssq, qrmid):
 	""" Runs the qre on the above arguments and returns the result """
@@ -166,23 +190,15 @@ def run_qre(ssq, qrmid):
 	return qre.qre.run(ssq,qrmid)
 
 
-if __name__ == '__main__':
-	import argparse
-	import json, pdb
+def run_morpheus(build=True, \
+				query='A 1997 Toyota Camry V6 needs what tire size?'):
+	""" This is the main method for running the morpheus program """
 
-	parser = argparse.ArgumentParser(description="This module runs morpheus",
-				add_help=True)
-	parser.add_argument('--query', 
-				default='A 1997 Toyota Camry V6 needs what tire size?')
-	parser.add_argument('--build','-b',default=False,action='store_false',
-				help='This is true if we should rebuild the java code')
-	args = parser.parse_args()
-
-	buildall(args.build) # Build all java code if necessary
+	buildall(build) # Build all java code if necessary
 	
 	print 
 	print '-'*40
-	nquery =  makenquery(args.query) # Make the nquery object
+	nquery =  makenquery(query) # Make the nquery object
 	
 	print 
 	print '-'*40
@@ -196,9 +212,10 @@ if __name__ == '__main__':
 	# This only runs previous querys
 	result_array = []
 	for entry in ssqm['queryids']:
-		queryid = entry[0]
-		qrmid,ssq = get_qrmid_ssqpair(queryid)
-		if None in (qrmid,ssq):
+		term_map = extract_ssq_term_map(*entry) # Breaks down the tuple into parts
+		qrmid,qrm_ssq = get_qrmid_ssqpair(entry[0]) # Pass in queryid, 
+		query_ssq = make_query_ssq(qrm_ssq, term_map)
+		if None in (qrmid,qrm_ssq):
 			continue
 		else:
 			z = run_qre(ssq, qrmid)
@@ -206,4 +223,21 @@ if __name__ == '__main__':
 	
 	print 
 	print '-'*40
-	print result_array		
+	return result_array		
+	
+
+
+if __name__ == '__main__':
+	import argparse
+	import json, pdb
+
+	parser = argparse.ArgumentParser(description="This module runs morpheus",
+				add_help=True)
+	parser.add_argument('--query', 
+				default='A 1997 Toyota Camry V6 needs what tire size?')
+	parser.add_argument('--build','-b',default=False,action='store_false',
+				help='This is true if we should rebuild the java code')
+	args = parser.parse_args()
+	# Run morpheus!
+	print run_morpheus(build=args.build, query=args.query)
+
