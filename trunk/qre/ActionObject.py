@@ -14,6 +14,8 @@ import sys
 sys.path.append("../generalizer")
 import Loader
 import Highlight
+
+
 class ActionObject:
 	"""Base Class of all actions"""
 
@@ -79,7 +81,6 @@ class LinkAction(ActionObject):
 
 		state.page = new_page
 
-		pass
 
 def fix_links(state, seq, html, url):
 
@@ -88,6 +89,7 @@ def fix_links(state, seq, html, url):
 		return make_links_absolute(html,url)
 	else:
 		return html
+
 
 def removeTBodies(xpath):
 
@@ -98,10 +100,11 @@ def removeTBodies(xpath):
 		if p.startswith("tbody"):
 			continue
 
-		plist.append(p)				
+		plist.append(p)
 
 	return "/".join(plist)
-	
+
+
 class HighlightAction(ActionObject):
 
 
@@ -118,8 +121,6 @@ class HighlightAction(ActionObject):
 		key = self.xmlnode.get('id')
 
 		state.kv_hash[key] = txt.strip()
-		
-		pass
 
 
 class FormAction(ActionObject):
@@ -128,10 +129,9 @@ class FormAction(ActionObject):
 		self.xmlnode = _xmlnode
 
 	def do(self, state):
-		
 		base_url = ""
 
-		#get the base url for this form
+		# Get the base url for this form
 		for e in self.xmlnode.getchildren():
 			if e.tag == 'url':
 				base_url = e.text.strip()	
@@ -140,12 +140,9 @@ class FormAction(ActionObject):
 		# FIXME: Is XPath correct??
 		xpath = Loader.getFormXpath(base_url, int(self.xmlnode.get('number')))
 
-		#fix the links in the page
+		# Fix the links in the page
 		doc = fix_links(state, self.xmlnode.get('number'), etree.tostring(state.page), state.page.base_url)	
 
-		print etree.tostring(state.page);
-		print self.xmlnode.get('number');
-		print state.page.base_url
 
 		#TODO: Fix this so that it uses standard xpath
 		"""
@@ -157,43 +154,27 @@ class FormAction(ActionObject):
 
 		page = fromstring(doc)
 		
-		#need to fix the xpath before we use it
+		# Need to fix the xpath before we use it. We assume nobody uses <tbodies>
 		xpath = removeTBodies(xpath.lower())
 		
 		xpath = "//form" # XXX debugging; needs to be removed  
 		
 		#get form node
 		form_node = page.xpath(xpath)[0]
-	
-		#TODO:figure out what is up with the sessionids
-		index = form_node.get('action').find(";jsessionid")
 		
-		print etree.tostring(form_node)
-		
-		querystring = ''
-		if index >= 0:
-			querystring = form_node.get('action')[:index]
-		else:
-			querystring = form_node.get('action')
-	
-		#start with the list of inputs for this form
 		inputs = list()
-		querystring += "?"
+		request_data = {}
 		first = False
 
 		#get the form node from the page
-		form = self.xmlnode						
+		form = self.xmlnode
 
-		#need to parse the page and get the dropdown values matching the names given below
-
-		#iterate through the list and find the input elements		
+		# Need to parse the page and get the dropdown values matching the names given below
+		# Iterate through the list and find the input elements		
 		for e in self.xmlnode.getchildren():
 
 			#for each input get the value from the actiondata hash
 			if e.tag == 'param':
-				if first == False:
-					querystring += "&" # Better 
-	
 				v = state.kv_hash[ e.text ].strip()
 				state.kv_hash[e.text] = ''
 				input_name = e.get('name').strip()
@@ -204,16 +185,37 @@ class FormAction(ActionObject):
 					option = node.xpath("//option[text()='"+v.upper()+"']")[0]
 					
 					#now that we've found the option, we need the value
-					v = option.get('value')				
+					v = option.get('value')
 
-				querystring += input_name + "=" + v
+				request_data[input_name] = v # Add the parameter to the form data
 		
 		#need to escape the url, but don't have a working method yet
-		#TODO FILL IN
-	
+
+		the_page = None
+		new_base = None
+
 		#submit form
-		page = parse(querystring).getroot()
+		method = form.find('method').get('type')
+		if method is None or method.lower().strip() == "get":
+			# We go where the action takes us
+			action_url = form_node.get('action')
+			url_values = urllib.urlencode(request_data)
+			full_url = action_url + '?' + url_values
+			response = urllib2.urlopen(full_url)
+			the_page = response.read()
+			new_base = response.geturl()
+		else:
+			# Do the POST submit
+			# We go where the action takes us
+			action_url = form_node.get('action')
+			pdata = urllib.urlencode(request_data)
+			req = urllib2.Request(action_url, pdata)
+			response = urllib2.urlopen(req)
+			the_page = response.read()
+			new_base = response.geturl()
+		
+		page = lxml.html.fromstring(the_page, base_url=new_base) # TODO -- Check this parses bad html
+		#page = parse(querystring).getroot()
 			
 		#now that we've submitted and gotten back the page, we should set it 
 		state.page = page
-		pass
