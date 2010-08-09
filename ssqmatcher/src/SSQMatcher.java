@@ -24,13 +24,23 @@ import com.hp.hpl.jena.sdb.Store;
 public class SSQMatcher {
 
 	private CategoryDivergence cd = null;
-	public ArrayList<TermMeasure> termsCD = new ArrayList<TermMeasure>();
 	public static String ONTOLOGY_NS = ""; 
 	public static String ONTOLOGY_CLASSES_NS = "";
 	public static String ONTOLOGY_DATAPROPERTY_NS = "";
 	public static String ONTOLOGY_PROPERTY_TREE_HEIGHT = "";
 	private static String QUALIFIED_SSQIDS = "";
 
+	public class QCTermMeasure {
+		public String QualifiedCategory = "";
+		public ArrayList<SSQMatcher.TermMeasure> MatchingTermsCD = new ArrayList<SSQMatcher.TermMeasure>();
+		
+		public QCTermMeasure(String qualifiedCategory) {
+			super();
+			QualifiedCategory = qualifiedCategory;
+		}
+	}
+	
+	
 	public class TermMeasure implements  Comparable<TermMeasure>{
 		public String CandidateTerm = "";
 		public String CandidateCategory = "";
@@ -81,11 +91,13 @@ public class SSQMatcher {
 	public class QRMSimilarityMeasure implements  Comparable<QRMSimilarityMeasure> {
 		public double QRMDivergence = 0.0;
 		public int queryID = 0;
+		public ArrayList<SSQMatcher.TermMeasure> termsCD = null;
 		
-		public QRMSimilarityMeasure(double qRMDivergence, int qRMID) {
+		public QRMSimilarityMeasure(double qRMDivergence, ArrayList<SSQMatcher.TermMeasure> termDivs, int qRMID) {
 			super();
 			QRMDivergence = qRMDivergence;
 			queryID = qRMID;
+			termsCD = termDivs;
 		}
 
 		@Override
@@ -184,6 +196,8 @@ public class SSQMatcher {
 			SSQClass qualified, 
 			SSQClass candidate){
 		
+		ArrayList<TermMeasure> termsCD = new ArrayList<TermMeasure>();
+		
 		if (candidate.getInputs().size() == 0)
 			return termsCD;
 		
@@ -261,24 +275,80 @@ public class SSQMatcher {
 		ArrayList<SSQMatcher.QRMSimilarityMeasure> qrmSim = m.findSSQRelevance(qSSQIds, candidate);
 
 		
-		
-		sb.append(" \"queryids\": [");
-		
-		for (SSQMatcher.QRMSimilarityMeasure qm : qrmSim){
-			sb.append("[" + qm.queryID + ", " + qm.QRMDivergence + "], ");
-		}
-		if(qrmSim.size() > 0){
-			sb.deleteCharAt(sb.lastIndexOf(","));
-		}
-		
-		
-		sb.append("], \"nqoutput\": {} } ");
+		sb.append(m.getQueryIdString(qrmSim));
+
+		sb.append("\"nqoutput\": {} } ");
 		
 		Utils.log("\nOUTPUT\n" + sb.toString());
 		
 		System.out.println(sb.toString());
 	}
 	
+	private String getQueryIdString(ArrayList<SSQMatcher.QRMSimilarityMeasure> qrmSim) {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append(" \"queryids\": [");
+		
+		for (SSQMatcher.QRMSimilarityMeasure qm : qrmSim){
+			
+			ArrayList<QCTermMeasure> qctms = new ArrayList<QCTermMeasure>();
+			
+			for (SSQMatcher.TermMeasure tm : qm.termsCD){
+
+				if(tm.QualifiedCategory.equalsIgnoreCase(""))
+					continue; 
+				
+				// If found add the term measure 
+				boolean found = false;  
+				for (QCTermMeasure qctm : qctms){
+					if (qctm.QualifiedCategory.equalsIgnoreCase(tm.QualifiedCategory)){
+						qctm.MatchingTermsCD.add(tm);
+						found = true;
+					}
+				}
+				
+				// else add a new qc measure 
+				if (!found){
+					QCTermMeasure qctm = new SSQMatcher.QCTermMeasure(tm.QualifiedCategory);
+					qctm.MatchingTermsCD.add(tm);
+					qctms.add(qctm);
+				}
+			}
+			
+			sb.append("[" + qm.queryID + ", " + qm.QRMDivergence + ", {");
+			
+			for (QCTermMeasure qctm : qctms){
+				Collections.sort(qctm.MatchingTermsCD);
+				
+				sb.append("\"" + qctm.QualifiedCategory + "\": (");
+
+				for (SSQMatcher.TermMeasure itm : qctm.MatchingTermsCD){
+					sb.append("(\"" + itm.CandidateCategory);
+					sb.append("\", \"" + itm.CandidateTerm);
+					sb.append("\", " + itm.CategoryDivergence + "), ");
+				}
+				if(qctm.MatchingTermsCD.size() > 0)
+					sb.deleteCharAt(sb.lastIndexOf(", "));
+
+				sb.append("), ");
+			}
+			if(qctms.size() > 0)
+				sb.deleteCharAt(sb.lastIndexOf(", "));
+			
+			sb.append("}], ");
+		}
+		
+		
+		if(qrmSim.size() > 0)
+			sb.deleteCharAt(sb.lastIndexOf(", "));
+		
+		
+		sb.append("], ");
+		
+		return sb.toString();
+	}
+
 	public ArrayList<SSQMatcher.QRMSimilarityMeasure> findSSQRelevance(String[] qSSQIds, SSQClass candidate){
 		
 		ArrayList<SSQMatcher.QRMSimilarityMeasure> qrmSim = new ArrayList<SSQMatcher.QRMSimilarityMeasure>();
@@ -338,7 +408,7 @@ public class SSQMatcher {
 			}
 			
 		
-			qrmSim.add(new QRMSimilarityMeasure((ssqSim / (double)termsDiv.size()), Integer.parseInt(qualifiedSSQId)));
+			qrmSim.add(new QRMSimilarityMeasure((ssqSim / (double)termsDiv.size()), termsDiv, Integer.parseInt(qualifiedSSQId)));
 			
 			Utils.log("\nTotal terms category divergence : " + ssqSim / (double)termsDiv.size()  + "\n");
 			
