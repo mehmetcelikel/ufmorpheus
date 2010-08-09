@@ -114,17 +114,19 @@ def run(ssq=ssq_test, id=id_test):
 
 	#parse the ssq to populate the value hashes with the user input	
 	txt = ssq
-	if read_ssq_text(txt,kv_hash,kclass_hash, kcontext_hash, kt_hash) is False:	
+	if read_ssq_text(txt,kv_hash,kclass_hash, kcontext_hash, kt_hash) == False:	
 		return
 	
 	state = ActionState.ActionState(action_list, kv_hash, kt_hash, kclass_hash, kcontext_hash, user_hash)
 	
 	state.run()
 
-	kv_hash_list = [v for v in state.kv_hash.values() if v != '']
-	
-	result = ' '.join(kv_hash_list)
-	
+	result = ' '
+	for k in state.kv_hash.keys():
+		if state.kv_hash[k] != '':
+			result += ' '
+			result += state.kv_hash[k] 
+
 	return result.strip()
 
 
@@ -139,20 +141,16 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 	tree = etree.fromstring(xmlstring)
 	total = 0
-	class_context_dict = {}
-	
 	#any highlights present need to be counted first
-	#also create the class_context_dict
 	for k in valueHash.keys():
 		if valueHash[k] != '':total+=1
-		class_context_dict[(classHash[entry].lower(),contextHash[entry].lower())] = entry
 
 	#find the input list and load the values into the kv_hash
 	for e in tree.getchildren():
-		
+
 		if e.tag == 'input_list':
 			for input in e.getchildren():
-				total += loadValueIntoHash(input, valueHash, class_context_dict)
+				total += loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash)	
 
 	print 'Compares total:%d and len(valueHash.keys()):%d' % (total,len(valueHash.keys()))
 	print valueHash
@@ -170,29 +168,24 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 #parse the xml node and load its values into the appropriate spots
 #in the value hash
-def loadValueIntoHash(xml, valueHash, class_context_dict):
-	''' Sets the value for the keys in valueHash
-	'''
-	entry = class_context_dict[(xml.get('dataclass').lower(), #class
-								xml.get('type').lower())]	  #context
-	try:
-		valueHash[entry] = '' if xml.text is None else xml.text.strip()
-		return 1
-	except KeyError:
-		#TODO: Handle this exception
-		#It will occur when there's a class/context that is not
-		#represented in the ssq?
-		return 0
+def loadValueIntoHash(xml, valueHash, classHash, contextHash, typeHash):
+
+	found = 0
+	#for the given xml node, we must find the matching key
+	for entry in valueHash.keys():
+		cls = classHash[entry]
+		context = contextHash[entry]
+	
+		#if we have found the appropriate key, then assign this ssq input's value 
+		#to the data hash at the current key
+		if cls.lower() == xml.get('dataclass').lower() and context.lower() == xml.get('type').lower():
+			valueHash[entry] = '' if not xml.text else xml.text.strip()
+			found+=1
+
+	return found
 
 
 if __name__ == '__main__':
-#	if len(sys.argv) == 3:	
-#		id = sys.argv[-1] # The last value (which should be a number) is the id of the code script	
-#		ssq = sys.argv[-2] #this is the ssq string
-#		run(ssq,id)
-#	else:#Run dummy values for testing
-#		run(ssq_test,id_test)
-#	pass
 	import argparse
 	parser = argparse.ArgumentParser(description=''' This module does 
 				the execution of the execution of QRMs as specified by its 
@@ -204,12 +197,12 @@ if __name__ == '__main__':
 	parser.add_argument('--debug','-d',default=False, action='store_true')
 	args = parser.parse_args()
 
-	if args.debug is True:
+	if args.debug == True:
 		#pdb.set_trace()
 		print run(ssq_test,id_test)
-	elif (args.ssq is not None or args.ssqf is not None) and \
-				args.qrmid is not None:
-			if args.ssqf is None:
+	elif (args.ssq != None or args.ssqf != None) and \
+				args.qrmid != None:
+			if args.ssqf == None:
 				print run(args.ssq,args.qrmid)
 			else:
 				ssq_text = open(args.ssqf, 'r').read()
