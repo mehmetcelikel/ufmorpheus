@@ -235,7 +235,7 @@ if __name__ == '__main__':
 				add_help=True)
 	parser.add_argument('--query', 
 				default='A 1997 Toyota Camry V6 needs what tire size?')
-	parser.add_argument('--build','-b',default=False,action='store_false',
+	parser.add_argument('--build','-b',default=False,action='store_true',
 				help='This is true if we should rebuild the java code')
 	args = parser.parse_args()
 	# Run morpheus!
