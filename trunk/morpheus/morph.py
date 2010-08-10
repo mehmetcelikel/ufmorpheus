@@ -171,8 +171,8 @@ def extract_ssq_term_map(queryid, divergence, class_map):
 	#	v.sort(key=lambda t: t[2], reverse=True)
 	#	term_map[k] = v[0][1]
 	#return term_map
-	return dict([(k,sorted(v, key=lambda t: t[2], reverse=True)[0][1]) 
-				for (k,v) in class_map.iteritems()]) 
+	return dict([(k,sorted(v, key=lambda t: t[2], reverse=False)[0][1]) 
+				for (k,v) in class_map.iteritems()]) # Smaller divergence better
 
 
 def make_query_ssq(qrm_ssq, term_map):
