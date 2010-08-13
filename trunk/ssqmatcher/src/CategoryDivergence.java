@@ -42,6 +42,48 @@ public class CategoryDivergence {
 		}
 	}
 
+	public class IsAncestorTuple{
+		public String ancestor = "";
+		public String descendant = "";
+		public boolean value = false;
+		public IsAncestorTuple(String ancestor, String descendant, boolean val) {
+			super();
+			this.ancestor = ancestor;
+			this.descendant = descendant;
+			this.value = val;
+		}
+	}
+	
+	public class LCAncestorTuple{
+		public String source = "";
+		public String target = "";
+		public String cmAncestor = "";
+		public LCAncestorTuple(String source, String target, String cmAncestor) {
+			super();
+			this.source = source;
+			this.target = target;
+			this.cmAncestor = cmAncestor;
+		}
+	}
+	
+	public class HDTuple{
+		public String ancestor = "";
+		public String descendant = "";
+		public long hierarchicalDistance = 0;
+		public HDTuple(String ancestor, String descendant,
+				long hierarchicalDistance) {
+			super();
+			this.ancestor = ancestor;
+			this.descendant = descendant;
+			this.hierarchicalDistance = hierarchicalDistance;
+		}
+	}
+
+	public static ArrayList<IsAncestorTuple> isAncestorTuples = new ArrayList<IsAncestorTuple>();  
+	public static ArrayList<LCAncestorTuple> LCAncestorTuples = new ArrayList<LCAncestorTuple>();  
+	public static ArrayList<HDTuple> HDTuples = new ArrayList<HDTuple>();  
+	
+	
 	/**
 	 * Variable declarations
 	 * 
@@ -56,7 +98,11 @@ public class CategoryDivergence {
 	/**
 	 * Constructor:
 	 * */
-	public CategoryDivergence(Store store, String classNS, String dataPropertyNS, String treeHeight) {
+	public CategoryDivergence(
+			Store store, 
+			String classNS, 
+			String dataPropertyNS, 
+			String treeHeight) {
 
 		// Sets the default store
 		this.store = store;
@@ -195,7 +241,12 @@ public class CategoryDivergence {
 	 * TODO make it shortest common ancestor
 	 */
 	private String findCommonAncestor(String source, String target) {
-
+		
+		for (LCAncestorTuple lca : LCAncestorTuples)
+			if (lca.source.equalsIgnoreCase(source) 
+					&& lca.target.equalsIgnoreCase(target))
+				return lca.cmAncestor;
+		
 		Queue<TNode> aQueue = new PriorityQueue<TNode>();
 		aQueue.add(new TNode(source, 0));
 		ArrayList<String> visitedC = new ArrayList<String>();
@@ -231,6 +282,8 @@ public class CategoryDivergence {
 			}
 		}
 
+		LCAncestorTuples.add(new LCAncestorTuple(source, target, ret));
+		
 		return ret;
 	}
 
@@ -240,6 +293,12 @@ public class CategoryDivergence {
 	 */
 	private long hierarchicDistance(String parent, String child) {
 
+		for (HDTuple iat : HDTuples)
+			if (iat.ancestor.equalsIgnoreCase(parent) 
+					&& iat.descendant.equalsIgnoreCase(child))
+				return iat.hierarchicalDistance;
+		
+		
 		Stack<TNode> ancStack = new Stack<TNode>();
 		TNode node = new TNode(child, 0);
 		ancStack.add(node);
@@ -275,6 +334,7 @@ public class CategoryDivergence {
 			}
 		}
 
+		HDTuples.add(new HDTuple(parent, child, hops));
 		return hops;
 	}
 
@@ -285,6 +345,12 @@ public class CategoryDivergence {
 	 * issues
 	 */
 	public boolean isAncestor(String ancestorClass, String descendantClass) {
+		
+		for (IsAncestorTuple iat : isAncestorTuples)
+			if (iat.ancestor.equalsIgnoreCase(ancestorClass) 
+					&& iat.descendant.equalsIgnoreCase(descendantClass))
+				return iat.value;
+		
 		Stack<String> ancStack = new Stack<String>();
 		ancStack.add(descendantClass);
 		ArrayList<String> visitedC = new ArrayList<String>();
@@ -299,15 +365,16 @@ public class CategoryDivergence {
 				visitedC.add(ancestor);
 
 			if (ancestorClass.equals(ancestor)) {
+				isAncestorTuples.add(new IsAncestorTuple(ancestorClass, descendantClass, true));				
 				return true;
 			} else {
-				ArrayList<String> anc = SDBHelper.getOWLSuperClasses(ancestor,
-						store);
+				ArrayList<String> anc = SDBHelper.getOWLSuperClasses(ancestor, store);
 				for (String anr : anc)
 					ancStack.add(anr);
 			}
 		}
 
+		isAncestorTuples.add(new IsAncestorTuple(ancestorClass, descendantClass, false));
 		return false;
 	}
 
@@ -318,7 +385,11 @@ public class CategoryDivergence {
 	 *            source category, target category (not including the name
 	 *            space)
 	 * 
-	 *            e.g. Bus Sedan http://zion.cise.ufl.edu/ontology/Vehicle/Class/ http://zion.cise.ufl.edu/ontology/Vehicle/DataProp/ treeHeight
+	 *            e.g. 
+	 *            Bus 
+	 *            Sedan 
+	 *            http://zion.cise.ufl.edu/ontology/Vehicle/Class/ 
+	 *            http://zion.cise.ufl.edu/ontology/Vehicle/DataProp/ treeHeight
 	 */
 	public static void main(String[] args) {
 

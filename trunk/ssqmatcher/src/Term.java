@@ -1,16 +1,11 @@
-
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 
 
 
 /**
- * Term class: It represents a term in a user query and its characteristics 
+ * This class represents a term in a user query and its characteristics 
  * 
  * @author Clint P. George
  *
@@ -72,72 +67,13 @@ public class Term {
 
 	private void assignCategories(String term) {
 
-		float numTermInstance = 0;
-		float totalTermInstance = 0;
-
-		// Assign categories & probabilities to the term
-		try {
-
-			String selectSQL = "SELECT * FROM grams WHERE gram LIKE '"
-					+ term.trim() + "'";
-			ResultSet rs = NLPDBAccess.executeSelect(selectSQL);
-			boolean exits = false;
-			while (rs.next()) {
-				numTermInstance = rs.getInt("count");
-				exits = true;
-				break;
-			}
-			if (!exits) {
-				Utils.log("The " + term + " is not in the corpus!", true);
-				this.categories.add(new Category("UNKNOWN", 1));
-				return;
-			}
-
-			selectSQL = "SELECT SUM(count) FROM categories ";
-			rs = NLPDBAccess.executeSelect(selectSQL);
-			while (rs.next())
-				totalTermInstance = rs.getInt("sum");
-
-			selectSQL = "SELECT * FROM categorygrams WHERE gram LIKE '"
-					+ term.trim() + "'";
-			rs = NLPDBAccess.executeSelect(selectSQL);
-			while (rs.next()) {
-
-				String category = rs.getString("category");
-				float categoryTermInstances = rs.getInt("count");
-				float categoryInstances = getCategoryInstances(category);
-
-				float prob_category = categoryInstances / totalTermInstance;
-				float prob_term = numTermInstance / totalTermInstance;
-				float prob_term_given_category = categoryTermInstances
-						/ categoryInstances;
-
-				float prob_category_given_term = prob_term_given_category
-						* prob_category * prob_term;
-
-				this.addCategory(category, prob_category_given_term);
-			}
-
-			Collections.sort(this.categories);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		//TermProbabilitiesStore.loadClasses();
+		
+		// Gets the term probabilities from the Store 
+		this.categories = TermProbabilitiesStore.getTermProbabilitiesFromNLPDB(term, this.Type);
+		
 	}
 	
-	
-	
-	private int getCategoryInstances(String category) throws SQLException {
-
-		int num = 0;
-		ResultSet rs = NLPDBAccess.executeSelect(
-				"SELECT * FROM category WHERE category LIKE '" + category
-						+ "'");
-		while (rs.next()) {
-			num = rs.getInt("count");
-			break;
-		}
-		return num;
-	}
 
 	/**
 	 * Assigns the term to the Term object and classify its gram 
@@ -152,12 +88,16 @@ public class Term {
 		switch(strAry.length){
 		case 1: 
 			this.Type = Constants.TermType.ONE_GRAM;
+			break;
 		case 2: 
-			this.Type = Constants.TermType.ONE_GRAM;
+			this.Type = Constants.TermType.TWO_GRAM;
+			break;
 		case 3: 
-			this.Type = Constants.TermType.ONE_GRAM;
+			this.Type = Constants.TermType.THREE_GRAM;
+			break;
 		default: 
 			this.Type = Constants.TermType.N_GRAM;
+			break;
 		}
 		
 		this.term = term.trim(); 		

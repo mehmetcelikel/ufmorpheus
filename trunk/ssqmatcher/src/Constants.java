@@ -36,6 +36,7 @@ public final class Constants {
 	public static final String TEST_DB_PWD = "sombrero";
 	public static final String TEST_SDB_URL = "jdbc:postgresql://localhost:5432/sdb";
 	public static final String TEST_JDB_URL = "jdbc:postgresql://localhost:5432/jenatest";
+	public static final String TEST_DB_URL = "jdbc:postgresql://localhost:5432/postgres";
 	
 	
 	public static final String NS_RDFS = "http://www.w3.org/2000/01/rdf-schema#";
