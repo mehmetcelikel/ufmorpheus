@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -23,7 +24,7 @@ import com.hp.hpl.jena.sdb.Store;
 
 public class SSQMatcher {
 
-	private CategoryDivergence cd = null;
+	private ClassDivergenceStore cdStore = null;
 	public static String ONTOLOGY_NS = ""; 
 	public static String ONTOLOGY_CLASSES_NS = "";
 	public static String ONTOLOGY_DATAPROPERTY_NS = "";
@@ -88,37 +89,40 @@ public class SSQMatcher {
 	}
 
 	
-	public class QRMSimilarityMeasure implements  Comparable<QRMSimilarityMeasure> {
-		public double QRMDivergence = 0.0;
-		public int queryID = 0;
-		public ArrayList<SSQMatcher.TermMeasure> termsCD = null;
+	public class SSQSimilarityMeasure implements  Comparable<SSQSimilarityMeasure> {
+		public double SSQDivergence = 0.0;
+		public int QueryID = 0;
+		public ArrayList<SSQMatcher.TermMeasure> TermsClassDivergence = null;
 		
-		public QRMSimilarityMeasure(double qRMDivergence, ArrayList<SSQMatcher.TermMeasure> termDivs, int qRMID) {
+		public SSQSimilarityMeasure(
+				double ssqDivergence, 
+				ArrayList<SSQMatcher.TermMeasure> termCDs, 
+				int queryId) {
 			super();
-			QRMDivergence = qRMDivergence;
-			queryID = qRMID;
-			termsCD = termDivs;
+			SSQDivergence = ssqDivergence;
+			QueryID = queryId;
+			TermsClassDivergence = termCDs;
 		}
 
 		@Override
-		public int compareTo(QRMSimilarityMeasure o) {
-			return (this.QRMDivergence == o.QRMDivergence) ? 0
-					: ((this.QRMDivergence > o.QRMDivergence) ? -1 : 1);  
+		public int compareTo(SSQSimilarityMeasure o) {
+			return (this.SSQDivergence == o.SSQDivergence) ? 0
+					: ((this.SSQDivergence > o.SSQDivergence) ? -1 : 1);  
 		}
 		
 		public String toString(){			
 			StringBuilder sb = new StringBuilder();
-			sb.append("QRM: ");
-			sb.append(queryID);
-			sb.append(", QRM Divergence: ");
-			sb.append(QRMDivergence + "\n");
+			sb.append("Query ID: ");
+			sb.append(QueryID);
+			sb.append(", SSQ Divergence: ");
+			sb.append(SSQDivergence + "\n");
 			return sb.toString();			
 		}
 	}
 	
 	
 	public SSQMatcher(Store store){
-		this.cd = new CategoryDivergence(
+		this.cdStore = new ClassDivergenceStore(
 				store, 
 				ONTOLOGY_CLASSES_NS, 
 				ONTOLOGY_DATAPROPERTY_NS, 
@@ -165,7 +169,7 @@ public class SSQMatcher {
 				
 				Category qualifiedCategory = tq.getMostProbableCategory();
 				
-				double cdM = cd.findOWLClassDivergence(
+				double cdM = cdStore.getClassDivergence(
 						qualifiedCategory.category, 
 						candidateCategory.category);
 				
@@ -215,7 +219,7 @@ public class SSQMatcher {
 				// For the time being we only consider  
 				// the most probable category of a candidate term;   
 				Category qc = tq.getMostProbableCategory();
-				double cdM = cd.findOWLClassDivergence(qc.category, cc.category);
+				double cdM = cdStore.getClassDivergence(qc.category, cc.category);
 				termsCD.add(new TermMeasure(tc.term, cc.category, cc.probability, tq.term, qc.category, cdM));
 			}
 
@@ -272,7 +276,7 @@ public class SSQMatcher {
 		Store sdbStore = SDBHelper.getStore();
 		SSQMatcher m = new SSQMatcher(sdbStore);
 		
-		ArrayList<SSQMatcher.QRMSimilarityMeasure> qrmSim = m.findSSQRelevance(qSSQIds, candidate);
+		ArrayList<SSQMatcher.SSQSimilarityMeasure> qrmSim = m.findSSQRelevance(qSSQIds, candidate);
 
 		
 		sb.append(m.getQueryIdString(qrmSim));
@@ -284,17 +288,17 @@ public class SSQMatcher {
 		System.out.println(sb.toString());
 	}
 	
-	private String getQueryIdString(ArrayList<SSQMatcher.QRMSimilarityMeasure> qrmSim) {
+	private String getQueryIdString(ArrayList<SSQMatcher.SSQSimilarityMeasure> qrmSim) {
 		
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append(" \"queryids\": [");
 		
-		for (SSQMatcher.QRMSimilarityMeasure qm : qrmSim){
+		for (SSQMatcher.SSQSimilarityMeasure qm : qrmSim){
 			
 			ArrayList<QCTermMeasure> qctms = new ArrayList<QCTermMeasure>();
 			
-			for (SSQMatcher.TermMeasure tm : qm.termsCD){
+			for (SSQMatcher.TermMeasure tm : qm.TermsClassDivergence){
 
 				if(tm.QualifiedCategory.equalsIgnoreCase(""))
 					continue; 
@@ -316,7 +320,7 @@ public class SSQMatcher {
 				}
 			}
 			
-			sb.append("[" + qm.queryID + ", " + qm.QRMDivergence + ", {");
+			sb.append("[" + qm.QueryID + ", " + qm.SSQDivergence + ", {");
 			
 			for (QCTermMeasure qctm : qctms){
 				Collections.sort(qctm.MatchingTermsCD);
@@ -349,26 +353,42 @@ public class SSQMatcher {
 		return sb.toString();
 	}
 
-	public ArrayList<SSQMatcher.QRMSimilarityMeasure> findSSQRelevance(String[] qSSQIds, SSQClass candidate){
+	/**
+	 * This function calculates similarity values with all 
+	 * the qualified SSQs in the data base for a given 
+	 * candidate SSQ
+	 * 
+	 */
+	
+	public ArrayList<SSQMatcher.SSQSimilarityMeasure> findSSQRelevance(
+			String[] qSSQIds, 
+			SSQClass candidate){
 		
-		ArrayList<SSQMatcher.QRMSimilarityMeasure> qrmSim = new ArrayList<SSQMatcher.QRMSimilarityMeasure>();
+		ArrayList<SSQMatcher.SSQSimilarityMeasure> ssqSimilarities = new ArrayList<SSQMatcher.SSQSimilarityMeasure>();
+		
+		long start = 0; 
 		
 		for (String qualifiedSSQId : qSSQIds){
 		
 
-			Utils.log("------------------------------------------------------------------------------------");
+			Utils.log("\n------------------------------------------------------------------------------------\n");
 			
+			start = (new Date()).getTime();
+			
+			// Loads the qualified SSQ as a SSQClass object from db 
 			SSQClass qualified = null;
 			try {
+				
 				Utils.log("Building qualified SSQ - " + qualifiedSSQId + "...");
 				qualified = new SSQClass(Integer.parseInt(qualifiedSSQId));
 				Utils.log(qualified.toString());
+				
 			} catch (SQLException e) {
-				e.printStackTrace();
+				Utils.log("Exception in loading the qualified SSQ [" 
+						+ qualifiedSSQId + "] : " + e.getMessage());
+				continue; 
 			}
-			
-			ArrayList<SSQMatcher.TermMeasure> termsDiv = this.calcSSQTermsSimilarity(qualified, candidate);
-			
+
 			double N = qualified.getInputs().size();
 			double ssqSim = 0.0;
 	
@@ -376,6 +396,8 @@ public class SSQMatcher {
 				Utils.log("The SSQ " + qualified.getSsqId() + "is skipped", true);
 				continue;
 			}
+			
+			ArrayList<SSQMatcher.TermMeasure> termsDiv = this.calcSSQTermsSimilarity(qualified, candidate);
 			
 			/*
 			
@@ -408,17 +430,19 @@ public class SSQMatcher {
 			}
 			
 		
-			qrmSim.add(new QRMSimilarityMeasure((ssqSim / (double)termsDiv.size()), termsDiv, Integer.parseInt(qualifiedSSQId)));
+			ssqSimilarities.add(new SSQSimilarityMeasure((ssqSim / (double)termsDiv.size()), termsDiv, Integer.parseInt(qualifiedSSQId)));
 			
 			Utils.log("\nTotal terms category divergence : " + ssqSim / (double)termsDiv.size()  + "\n");
 			
+			
+			Utils.log("Execution time : " + ((new Date()).getTime() - start) + "ms\n");
 			Utils.log("------------------------------------------------------------------------------------");
 
 		}
 
-		Collections.sort(qrmSim);
+		Collections.sort(ssqSimilarities);
 		
-		return qrmSim;
+		return ssqSimilarities;
 	}
 
 	private static SSQClass buildCandidateQuery(String candidateQInfo) {

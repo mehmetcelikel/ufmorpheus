@@ -51,7 +51,16 @@ public class SSQClass {
 	private String query = "";
 	private ArrayList<Term> inputs = new ArrayList<Term>();
 	private ArrayList<Term> outputs = new ArrayList<Term>();
+	public static ArrayList<String> stopWords = new ArrayList<String>();
 
+	
+	public static void loadStopWords(){
+		stopWords.add("a");
+		stopWords.add("an");
+		stopWords.add("the");
+		stopWords.add("for");
+	}
+	
 	/**
 	 * Constructors
 	 */
@@ -84,24 +93,87 @@ public class SSQClass {
 		this.type = Constants.SSQType.CANDIDATE;
 	}
 
+	/*
 	public void addInputs(int order, String term, String category) {
 		this.inputs.add(new Term(order, term, category));
 	}
 
 	public void addInputs(String term, String category) {
 		this.inputs.add(new Term(term, category));
-	}
+	}*/
 
+	/**
+	 * Trims the preceding unwanted terms 
+	 */
+	
+	public static String trimPrec(String term){
+		String []arry = term.trim().split(" ");
+		String trimmedTerm = "";
+		boolean flag = false; 
+	
+		
+		for (String t : arry){
+			if (!isStopWord(t.trim())){
+				flag = true; 
+				trimmedTerm += t + " ";					
+			}
+			else if (flag)
+				trimmedTerm += t + " ";						
+		}
+		
+		return trimmedTerm.trim();
+	}
+	
+	
 	public void addInputs(String term) {
-		this.inputs.add(new Term(term));
+		
+		// TODO: This processing should be done 
+		// at the NLP end  
+		
+		String trimmedTerm = trimPrec(term);
+		
+		if (trimmedTerm.length() > 0 
+				&& !isExists(this.inputs, trimmedTerm))
+			this.inputs.add(new Term(trimmedTerm));
+		
 	}
+	
+	public static boolean isExists(ArrayList<Term> terms, String term){
+		for (Term t : terms)
+			if (t.term.equalsIgnoreCase(term))
+				return true;
+		
+		return false; 
+	}
+	
+	public static boolean isStopWord(String w){
+		
+		if (stopWords.size() == 0)
+			loadStopWords();	
 
+		for (String sw : stopWords)
+			if (sw.equalsIgnoreCase(w.trim()))
+				return true;
+		
+		return false; 
+	}
+	
+	
+	
+	
+	
+	/*
 	public void addOutputs(String term, String category) {
 		this.inputs.add(new Term(term, category));
-	}
+	}*/
 
 	public void addOutputs(String term) {
-		this.outputs.add(new Term(term));
+
+		String trimmedTerm = trimPrec(term);
+		
+		if (trimmedTerm.length() > 0 
+				&& !isExists(this.outputs, trimmedTerm))
+			this.outputs.add(new Term(trimmedTerm));
 	}
 
 	public int countInputs() {
@@ -211,17 +283,6 @@ public class SSQClass {
 		sb.append("] }, ");
 
 		return sb.toString();
-	}
-
-	public static void main(String[] args) throws SQLException {
-		SSQClass ssq = new SSQClass(
-				"a 1997 Toyota Camry V6 needs what size tires?");
-
-		ssq.addInputs("Toyota", "Manufacturer");
-		ssq.addInputs("Camry V6", "Model");
-		ssq.addInputs("1997", "Year");
-
-		System.out.println(ssq.toString());
 	}
 
 }
