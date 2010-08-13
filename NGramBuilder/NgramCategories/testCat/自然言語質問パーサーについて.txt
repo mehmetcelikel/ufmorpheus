@@ -1,0 +1,24 @@
+2010年05月28日
+英語:
+
+NLQ Parser and Information Extractor
+
+Currently a combination of simple regex word extraction, NLTK's POS tagger/RegexpParser, and a subject/object inference engine
+
+Process:
+Given a Natural Language Query (NLQ), we attempt to extract noun phrases (NPs) that are of use in understanding what information
+is being asked for in the query.
+
+Example: What types of transmissions are available on the new Toyota Camry?
+Answer: [6-speed EB62 manual, 6-speed U760E automatic, P311 CVT Hybrid (U Transmission family)]
+
+As English speakers, we are easily able to identify that we want to know the transmission options on the 2011 Toyota Camry. But
+what are the steps we subconsciously take in order to arrive at that conclusion?
+
+Part 1: Wh subject detection
+What are we asking for in a question? We are asking for information that satisfies the question. This information is the subject of
+our query. In the example sentence, what is available on the new Toyota Camry? (different) types of transmissions are available. 
+This example is rather simple, as clues for what information we want is attached to our Wh-word. We want the EB62 manual, U760E automatic, 
+and P311 CVT as an answer, as these are the transmissions available for the 2011 Toyota Camry.
+
+But what if 
