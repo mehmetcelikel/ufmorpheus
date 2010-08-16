@@ -62,13 +62,19 @@ def buildall(recompile=True):
 
 def compile_ssqmatcher():
 	""" Compiles the ssqmatcher code into a jarfile called ssqmatcher.jar """
-	import subprocess
+	import os,subprocess
 
 	cmd1 = ['ant','-buildfile', 'build_files.xml']
 	cmd2 = ['ant','-buildfile', 'build_jar.xml']
 
-	exit_status1 = subprocess.Popen(cmd1, cwd='../ssqmatcher/').wait()
-	exit_status2 = subprocess.Popen(cmd2, cwd='../ssqmatcher/').wait()
+	# Make the current working directory
+	cwd_path = os.getcwd().split('/')
+	cwd_path.pop()
+	cwd_path.append('ssqmatcher')
+	cwd_path = '/'.join(cwd_path) + '/'
+
+	exit_status2 = subprocess.Popen(cmd1, cwd=cwd_path).wait()
+	exit_status2 = subprocess.Popen(cmd2, cwd=cwd_path).wait()
 
 	return exit_status1 + exit_status2
 	
