@@ -111,13 +111,13 @@ public class TermProbabilitiesStore {
 					categories.add(new Category("Year", 1.0));
 					break;
 				case TWO_GRAM:
-					categories.add(new Category("Year", 0.8));
+					categories.add(new Category("UNKNOWN", 0.8));
 					break;
 				case THREE_GRAM:
-					categories.add(new Category("Year", 0.6));
+					categories.add(new Category("UNKNOWN", 0.6));
 					break;
 				default:
-					categories.add(new Category("Year", 0.4));
+					categories.add(new Category("UNKNOWN", 0.4));
 					break;
 			}
 			termProbabilities.add(new TermProbability(term, categories));
