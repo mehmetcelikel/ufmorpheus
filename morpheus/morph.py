@@ -177,8 +177,16 @@ def extract_ssq_term_map(queryid, divergence, class_map):
 	#	v.sort(key=lambda t: t[2], reverse=True)
 	#	term_map[k] = v[0][1]
 	#return term_map
-	return dict([(k,sorted(v, key=lambda t: t[2], reverse=False)[0][1]) 
-				for (k,v) in class_map.iteritems()]) # Smaller divergence better
+	def cmpare(x,y):
+		# The smaller divergence is better
+		# If they are equal, the longer word if better
+		z = cmp(x[2],y[2]) if cmp(x[2],y[2]) else -cmp(len(x[1]),len(y[1]))
+		print '[[[',x,y,']]]',z
+		return cmp(x[2],y[2]) if cmp(x[2],y[2]) else -cmp(len(x[1]),len(y[1]))
+
+	return dict([(k, sorted(v,
+				key=lambda t: t,  cmp=cmpare)[0][1])
+				for (k,v) in class_map.iteritems()])
 
 
 def make_query_ssq(qrm_ssq, term_map):
@@ -216,7 +224,8 @@ def run_morpheus(build=True, \
 	
 	#ssqm = eval("""{u'ssq': {u'inputs': [{u'A': [[u'UNKNOWN', 1.0]]}, {u'A 1997': [[u'Coupe', 9.6672095242084088e-13]]}, {u'A 1997 Toyota': [[u'UNKNOWN', 1.0]]}, {u'1997': [[u'Sedan', 2.3908945934181247e-08], [u'Coupe', 1.6824809989657297e-08], [u'Bus', 4.4275823007922099e-09], [u'Minivan', 4.2799959132366894e-09], [u'Time', 1.0331024924425947e-09], [u'Tire', 2.2137910948849537e-10]]}, {u'1997 Toyota': [[u'UNKNOWN', 1.0]]}, {u'1997 Toyota Camry': [[u'UNKNOWN', 1.0]]}, {u'Toyota': [[u'Sedan', 1.4059399688903795e-07], [u'Coupe', 6.8383577911390603e-08], [u'Minivan', 3.8268186841605711e-08], [u'Bus', 5.9898033200056489e-09], [u'Engine', 2.6621349569211361e-09], [u'Vehicle', 6.6553373923028403e-10], [u'Manual_Transmission', 6.655336837191328e-10], [u'Tire', 4.991502766671374e-10]]}, {u'Toyota Camry': [[u'Sedan', 4.312649681814662e-10], [u'Coupe', 1.4114126534181537e-10]]}, {u'Toyota Camry V6': [[u'UNKNOWN', 1.0]]}, {u'Camry': [[u'Sedan', 8.9576372985789021e-09], [u'Coupe', 5.3904360974854626e-09], [u'Minivan', 1.585422348959753e-10], [u'Engine', 1.1890669004976928e-10]]}, {u'Camry V6': [[u'UNKNOWN', 1.0]]}, {u'V6': [[u'Sedan', 2.9226018227745953e-07], [u'Coupe', 2.0518845644801331e-07], [u'Minivan', 5.0205688495452705e-08]]}, {u'tire': [[u'UNKNOWN', 1.0]]}], u'outputs': [{u'tire': [[u'UNKNOWN', 1.0]]}]}, u'query': u'A 1997 Toyota Camry V6 needs what tire size?', u'queryids': [[600, 0.35675694594594609, {u'Sedan': [[u'Sedan', u'1997', 0.0], [u'Sedan', u'Toyota', 0.0], [u'Sedan', u'Toyota Camry', 0.0], [u'Sedan', u'Camry', 0.0], [u'Sedan', u'V6', 0.0], [u'Coupe', u'A 1997', 0.40000000000000002]], u'Engine': [[u'Coupe', u'A 1997', 0.53333333333333333], [u'Sedan', u'1997', 0.53333333333333333], [u'Sedan', u'Toyota', 0.53333333333333333], [u'Sedan', u'Toyota Camry', 0.53333333333333333], [u'Sedan', u'Camry', 0.53333333333333333], [u'Sedan', u'V6', 0.53333333333333333]], u'Model': [[u'Coupe', u'A 1997', 0.40000000000000002], [u'Sedan', u'1997', 0.40000000000000002], [u'Sedan', u'Toyota', 0.40000000000000002], [u'Sedan', u'Toyota Camry', 0.40000000000000002], [u'Sedan', u'Camry', 0.40000000000000002], [u'Sedan', u'V6', 0.40000000000000002]], u'Year': [[u'Coupe', u'A 1997', 0.80000000000000004], [u'Sedan', u'1997', 0.80000000000000004], [u'Sedan', u'Toyota', 0.80000000000000004], [u'Sedan', u'Toyota Camry', 0.80000000000000004], [u'Sedan', u'Camry', 0.80000000000000004], [u'Sedan', u'V6', 0.80000000000000004]], u'Manufacturer': [[u'Coupe', u'A 1997', 0.40000000000000002], [u'Sedan', u'1997', 0.40000000000000002], [u'Sedan', u'Toyota', 0.40000000000000002], [u'Sedan', u'Toyota Camry', 0.40000000000000002], [u'Sedan', u'Camry', 0.40000000000000002], [u'Sedan', u'V6', 0.40000000000000002]]}]], u'realm': u'', u'nqoutput': {}}""")
 
-	print ssqm
+	import pprint
+	pprint.pprint(ssqm)
 	print 
 	print '-'*40
 
