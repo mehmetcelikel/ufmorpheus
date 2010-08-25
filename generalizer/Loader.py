@@ -165,7 +165,7 @@ def getQueryText(q1, q2):
 #performs insertion of qrm db
 def insertQrm(realmid, code, queryid):
 
-        #insert new qrm into database	
+	#insert new qrm into database	
 
 	import urllib
 	
@@ -181,7 +181,7 @@ def insertQrm(realmid, code, queryid):
 	else:
 		print('Qrm insertion succeeded')
 
-	query = "SELECT MAX(qrmid) from qrm"
+	query = "SELECT MAX(qrmid) from qrm" # FIXME - this inserts to the last qrm
 
 	results = executeQuery(query)
 
