@@ -3,9 +3,11 @@
 
 \subsection{Question Answering Systems} 
 
-The earliest question answering systems such as BASEBALL \cite{Green1961} and Lunar \cite{woods1973} had \emph{closed domains} and \emph{closed corpora}, that is, they supported finitely many questions on copora containing a fixed set of documents. Morpheus uses the web as its dynamic, open corpus and examines deep web sources to answer questions.
+The earliest question answering systems such as BASEBALL \cite{Green1961} and Lunar \cite{woods1973} had \emph{closed domains} and \emph{closed corpora}, that is, they support a finite amount of questions on copora containing a fixed set of documents. Morpheus uses the web as its dynamic, open corpus and examines deep web sources to answer questions.  This process is federated question answering.
 
-Several community QA systems have been developed, such as Yahoo! Answers \cite{yahooanswers2008}. These sites enlist a community of users to answer questions posed by other users.  This idea has led to socially integrated QA systems such as Aardvark \cite{vark2010}. In addition to having questions answered by users, Aardvark can contact potential question answerers through media beyond web pages (e.g. instant messages, mobile phones).  This allows for faster responses to questions.  Morpheus relies on its user interface and referencing previously answered questions.
+%Several community QA systems have been developed, such as Yahoo! Answers \cite{yahooanswers2008}. These sites enlist a community of users to answer questions posed by other users.  This idea has led to socially integrated QA systems such as Aardvark \cite{vark2010}. In addition to having questions answered by users, Aardvark can contact potential question answerers through media beyond web pages (e.g. instant messages, mobile phones).  This allows for faster responses to questions.  Morpheus relies on its user interface and referencing previously answered questions.
+
+Several other QA systems that use the web as a resource have been developed. Most famously, START\footnote{start.csail.mit.edu}, and most recently these include Swingly\footnote{swingly.com}.  These systems and those as Ephyra \cite{Schlaefer06apattern} use web pages from searches to find answer.  Morpheus differs in that it only seeks out relevant deep web sources, and instead of using a web search engine it uses only the pages referenced in a previously answered question.  We expect this approach to add a greater degree precision to user answers.
 
 \subsection{Ontology generators} 
 \label{sec:ontology_generators}
