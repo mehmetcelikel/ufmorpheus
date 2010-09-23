@@ -75,7 +75,8 @@ We found the top class of the terms in the candidate SSQ and determined the clas
 
 In this paper, we propose a novel question answering system that uses the deep web and previously answered user queries to answer similar questions. The system uses a path finder to annotate answer paths so path followers can discover answers to similar questions.  Each (\emph{question, answer path}) pair is assigned a realm, and new questions are matched to existing (\emph{question, answer path}) pairs. Classification of new question terms into classes is based on term frequency distributions in our realm specific corpora of web documents.  These terms are the input to existing answer paths and we re-execute these paths with the new input to produce results.
 
-Manually forming a corpus of Wikipedia pages associated with a class is a cumbersome task. Topic modeling provides a promising approach to identifying pages relevant to a given class in a more automated manner \cite{Blei2003latentdirichlet}. We believe a mix between our web form entry annotation methods and form label extraction \cite{1453931} can yield promising results. Combining this with the method of Elmeleegy et al. \cite{1687749} may completely remove the user from the answer path generation process.
+%Manually forming a corpus of Wikipedia pages associated with a class is a cumbersome task. 
+Topic modeling provides a promising approach to identifying pages relevant to a given class in a more automated manner. We believe a mix between our web form entry annotation methods and form label extraction \cite{1453931} can yield promising results. Combining this with the method of Elmeleegy et al. \cite{1687749} may completely remove the user from the answer path generation process.
 
 Additionally, we are investigating methods of merging QRMs to answer compound questions.  We will also chain QRMs using the principles of transform composition \cite{transformscout}.
 
