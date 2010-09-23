@@ -8,7 +8,7 @@ This section presents ontology and corpora, query processing, ranking queries, a
 \label{sec:ontology_corpora}
 
 Morpheus uses an ontology that contains classes of a particular realm of interest. Each leaf node in the ontology is associated with a corpus of words belonging to a class.  For example, we have constructed a vehicular ontology containing classes relevant to the vehicular realm. This ontology provides a structure for reference in the following sections.
-
+Proceedings
 %% Need ontology paragraph
 
 
@@ -21,12 +21,11 @@ To build a corpus for each of the leaf nodes in the ontology, we extract \emph{t
 P (class | term) = \frac{P(term | class) P(class)}{P(term)}
 \end{equation}    
 
-In addition, we evaluate Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model that represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all  terms in the corpus.  For example, the latent topics reflect the thematic structure of Wikipedia pages. Thus, LDA can discover relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Given a text document, we tag related documents by matching their similarity over the estimated topic proportions, assisting in ontology and corpora construction.  Due to its fully generative semantics, this usage of LDA could address drawbacks of frequency based approaches (e.g. TF-IDF, LSI, and pLSI) such as dimensionality and failure to find the discriminative set of words for a document. %of frequency based approaches.% such as TF-IDF, LSI, and pLSI.
+In addition, we employ Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model that represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all terms in the corpus.  For example, the latent topics reflect the thematic structure of Wikipedia pages. Thus, LDA discovers relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Given a text document, we tag related documents by matching their similarity over the estimated topic proportions, assisting in ontology and corpora construction. We use LDA as a dimensionality reduction tool. LDA's topic mixture are represented as feature vectors for each document. We are evaluating SVN as a classifier over the documents-topic proportions.  Due to its fully generative semantics, this usage of LDA could address drawbacks of frequency based approaches (e.g. TF-IDF, LSI, and pLSI) such as dimensionality and failure to find the discriminative set of words for a document. 
 
 
 \subsection{Recording}
 \label{sec:query_processing}
-
 
 The \emph{Query Resolution Recorder} (QRR) is an instrumented web browser that records the interactions of a path finder answering a question. The path finder also uses the tool to identify ontological classes associated with search terms. Morpheus stores the query, its terms, and its classes as an SSQ.  Table \ref{tab:ssq_example} is an example showing the SSQ model of the query: \emph{ A 1997 Toyota Camry V6 needs what size tires?} The SSQ in Table \ref{tab:ssq_example} is said to be \emph{qualified} because the classes associated with its terms have been identified. Using the QRR, the path finder is also able to identify where answers can be found within traversed pages.
 
