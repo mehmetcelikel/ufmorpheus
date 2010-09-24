@@ -1,4 +1,4 @@
-\section{System Architecure}
+\section{System Architecture}
 \label{sec:systemarch}
 
 % This was corrected in my version... (Joir-dan performing diff 2010-06-30)
@@ -79,8 +79,9 @@ We match QRMs that belong to the same realm of the candidate SSQ. The relevance 
 %\subsubsection{Catgeory Divergence}
 %\label{sec:ctd}
 
-We employ a quasi-metric, \textit{class divergence (cd)}, between a source class and a target class using the \textit{topological structure} of the classes in an ontology. We write $S \prec T$ for the reflexive transitive closure of the superclass relation. Let $d(P,Q)$ represent the hop distance in the directed ontology inheritance graph from $P$ to $Q$. The divergence between a source and target class ranges from zero (for identical classes) to one (for type incompatible classes). Let $S$ be the source class, $T$ be the target class, and $C$ be a least common ancestor class of $S$ and $T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The class divergence between $S$ and $T$ is defined given by:
+We define \textit{class divergence} (Eq. \ref{eq:cd}), a quasi-metric, between a source class and a target class using the \textit{topological structure} of the classes in an ontology. We write $S \prec T$ for the reflexive transitive closure of the superclass relation. Let $d(P,Q)$ represent the hop distance in the directed ontology inheritance graph from $P$ to $Q$. The class divergence $cd$, between a source and target class ranges from zero (for identical classes) to one (for type incompatible classes). Let $S$ be the source class, $T$ be the target class, and $C$ be a least common ancestor class of $S$ and $T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The class divergence between $S$ and $T$ is defined given by:
 \begin{equation}
+\label{eq:cd}
 cd(S, T) = \begin{cases}
 0 & S.{Uri} \equiv T.{Uri}\\
 d(S, T)/(3h) & S \prec T\\
