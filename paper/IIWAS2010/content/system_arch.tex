@@ -8,20 +8,20 @@ This section presents ontology and corpora, query processing, ranking queries, a
 \label{sec:ontology_corpora}
 
 Morpheus uses an ontology that contains classes of a particular realm of interest. Each leaf node in the ontology is associated with a corpus of words belonging to a class.  For example, we have constructed a vehicular ontology containing classes relevant to the vehicular realm. This ontology provides a structure for reference in the following sections.
-Proceedings
+
 %% Need ontology paragraph
 
 
-Morpheus references the DBpedia categories, Wikipedia pages, and the WordNet synset heterarchy to find class-relevant web pages. First a realm is mapped to a DBpedia category \cite{Bizer2009}. Using the DBpedia ontology properties \emph{broader} and \emph{narrower}, a \emph{Markov Blanket} \cite{PRIS} is created covers all neighboring categories.
+Morpheus references the DBpedia categories, Wikipedia pages, and the WordNet synset heterarchy to find class-relevant web pages. First a realm is mapped to a DBpedia category \cite{Bizer2009}. Using the DBpedia ontology properties \emph{broader} and \emph{narrower}, a \emph{Markov Blanket} \cite{PRIS} is created covering all neighboring categories.
 
 
-To build a corpus for each of the leaf nodes in the ontology, we extract \emph{terms} from the Wikipedia pages associated with the DBpedia categories found in its blanket. From this term corpus, we can find the likelihood of a term belonging to a particular class. This assists in classifying terms in a \emph{path follower} query. The likelihood is determined by the probability of a class given a term using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can easily obtain the term-class and term-corpus probabilities as relative frequencies. 
+To build a corpus for each of the leaf nodes in the ontology, we extract \emph{terms} from the Wikipedia pages associated with the DBpedia categories found in its blanket. From this term corpus, we can find the likelihood of a term belonging to a particular class. This assists in classifying terms in a path follower query. The likelihood is determined by the probability of a class given a term using \textit{Bayes Rule} (Eq. \ref{eq:bayesrule}), since we can easily obtain the term-class and term-corpus probabilities as relative frequencies. 
 \begin{equation}
 \label{eq:bayesrule}
 P (class | term) = \frac{P(term | class) P(class)}{P(term)}
 \end{equation}    
 
-In addition, we employ Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model that represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all terms in the corpus.  For example, the latent topics reflect the thematic structure of Wikipedia pages. Thus, LDA discovers relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Given a text document, we tag related documents by matching their similarity over the estimated topic proportions, assisting in ontology and corpora construction. We use LDA as a dimensionality reduction tool. LDA's topic mixture are represented as feature vectors for each document. We are evaluating SVN as a classifier over the documents-topic proportions.  Due to its fully generative semantics, this usage of LDA could address drawbacks of frequency based approaches (e.g. TF-IDF, LSI, and pLSI) such as dimensionality and failure to find the discriminative set of words for a document. 
+In addition, we employ Latent Dirichlet Allocation (LDA) to identify latent topics of the documents in a corpus \cite{Blei2003latentdirichlet}.  LDA is Bayesian model that represents a document in the corpus by distributions over topics, and a topic itself is a distribution over all terms in the corpus.  For example, the latent topics reflect the thematic structure of Wikipedia pages. Thus, LDA discovers relevant topic proportions in a document using posterior inference \cite{Blei2003latentdirichlet}. Given a text document, we tag related documents by matching their similarity over the estimated topic proportions, assisting in ontology and corpora construction. We use LDA as a dimensionality reduction tool. LDA's topic mixture are represented as feature vectors for each document. We are evaluating support vector machines as a classifier over the documents-topic proportions.  Due to its fully generative semantics, this usage of LDA could address drawbacks of frequency based approaches (e.g. TF-IDF, LSI, and pLSI) such as dimensionality and failure to find the discriminative set of words for a document. 
 
 
 \subsection{Recording}
@@ -63,7 +63,7 @@ The \emph{Query Resolution Method} (QRM) is a data structure that models the que
 % NLP arch. 
 % This may need to be moved somewhere... but not sure where.... Joir-dan Gumbs (2010-06-29)
 
-Queries inserted by path followers take a different approach. The Morpheus search process parses and tags queries in order to record important terms. The system assigns the most probable realm given the terms in the query as calculated from realm-specific copora. Once the realm is assigned, an ontology search is performed to assign classes to the terms. An SSQ is constructed and the system attempts to match this new SSQ to existing QRM SSQs. Rather than matching exact query terms, the system matches input and output classes, because a QRM can potentially answer many similar queries.
+When a path follower submits a query the Morpheus search process parses and tags queries in order to record important terms. The system assigns the most probable realm given the terms in the query as calculated from realm-specific copora. Once the realm is assigned, an ontology search is performed to assign classes to the terms. An SSQ is constructed and the system attempts to match this new SSQ to existing QRM SSQs. Rather than matching exact query terms, the system matches input and output classes, because a QRM can potentially answer many similar queries.
 
 
 \subsection{Ranking} 
@@ -79,7 +79,7 @@ We match QRMs that belong to the same realm of the candidate SSQ. The relevance 
 %\subsubsection{Catgeory Divergence}
 %\label{sec:ctd}
 
-We define \textit{class divergence} (Eq. \ref{eq:cd}), a quasi-metric, between a source class and a target class using the \textit{topological structure} of the classes in an ontology. We write $S \prec T$ for the reflexive transitive closure of the superclass relation. Let $d(P,Q)$ represent the hop distance in the directed ontology inheritance graph from $P$ to $Q$. The class divergence $cd$, between a source and target class ranges from zero (for identical classes) to one (for type incompatible classes). Let $S$ be the source class, $T$ be the target class, and $C$ be a least common ancestor class of $S$ and $T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The class divergence between $S$ and $T$ is defined given by:
+We define \textit{class divergence} (Eq. \ref{eq:cd}), a quasi-metric, between a source class and a target class using the \textit{topological structure} of the classes in an ontology. We write $S \prec T$ for the reflexive transitive closure of the superclass relation. Let $d(P,Q)$ represent the hop distance in the directed ontology inheritance graph from $P$ to $Q$. The class divergence $cd$, between a source and target class ranges from zero (for identical classes) to one (for type incompatible classes). Let $S$ be the source class, $T$ be the target class, and $C$ be a least common ancestor class of $S$ and $T$ i.e., one that minimizes $d(S,C) + d(T,C)$. The class divergence between $S$ and $T$ is defined by:
 \begin{equation}
 \label{eq:cd}
 cd(S, T) = \begin{cases}
