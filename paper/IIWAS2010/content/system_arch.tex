@@ -91,11 +91,11 @@ d(S, T)/(3h) & S \prec T\\
 \end{equation}
 where $h$ is the longest path in the ontology class heterarchy.
 
-Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) < cd(S,Q)$, that is, the divergence of a source class to a target ancestor class is smaller than the divergence of a source class to any class that is not an ancestor. This is an important property in determining the compatibility of classes for answering queries.  If an SSQ answers queries concerning an ancestor class, it is more relevant than an SSQ that answers queries from any non-ancestral class.
+Note, if $S \prec T$ and $S \not\prec Q$ then $cd(S,T) < cd(S,Q)$, that is, the divergence of a source class to a target ancestor class is smaller than the divergence of a source class to any class that is not an ancestor. This is an important property in determining the compatibility of classes for answering queries.  If an SSQ answers queries concerning an ancestor class, it is more relevant than an SSQ that anwers queries from any non-ancestral class.
 
-Suppose we want to find the class divergence between \emph{Bus} and \emph{Sedan} from the ontology shown in Figure \ref{fig:vehicular_ontology}. \emph{Sedan} is a subclass of \emph{Automobile} which is a subclass of \emph{Land\_Vehicle}.  \emph{Bus} is a subclass of \emph{Land\_Vehicle}, which is their least common ancestor $C$.  
+Suppose we want to find the class divergence between \emph{Bus} and \emph{Sedan} from the ontology shown in Figure \ref{fig:vehicular_ontology}. \emph{Land\_Vehicle} is their least common ancestor because \emph{Sedan} is a subclass of \emph{Automobile}, which is a subclass of \emph{Land\_Vehicle}, and \emph{Bus} is a subclass of \emph{Land\_Vehicle}.
 
-The longest path to the tree root is $h = 4$. Therefore, the normalized divergence $cd(Bus, Sedan) = 6/12$. The value is calculated from $d(Bus, Root) = 3$, $d(Bus, Land\_Vehicle) = 1$, and $d(Sedan, Land\_Vehicle) = 2$.
+The longest path from \emph{Bus} and \emph{sedan} to the tree root is four ($h = 4$). By formula \ref{eq:cd}, $cd(Bus, Sedan)$ = $( d(Bus, Root)$ + $d(Bus, Land\_Vehicle)$ + $d(Sedan, Land\_Vehicle)) / (3h)$ thus $(3 + 1 + 2) / (3 * 4) = 6/12$.
 
 \begin{figure}[t]
 	\centering
@@ -106,6 +106,6 @@ The longest path to the tree root is $h = 4$. Therefore, the normalized divergen
 
 \subsection{Executing} 
 
-Once we have ranked the QRMs for a given user query, we can produce answers by re-running the pathways stored in the QRMs. The Morpheus \emph{Query Executor} (QE) evaluates a script of the query resolving process.  It simulates a human clicking buttons to follow links, submitting forms, and highlighting of data to form a textual answer.  The QE assumes that because of the auto generated nature of deep web pages, the location of answers are the same irrespective of page changes.  It uses the relative XPath location to the answer node on HTML pages as described in \cite{Badica06}.
+Once we have ranked the QRMs for a given user query, we can produce answers by re-visiting the pathways stored in the QRMs. The Morpheus \emph{Query Executor} (QE) evaluates a script of the query resolving process.  It simulates a human clicking buttons to follow links, submit forms, and highlight data, forming a textual answer.  The QE assumes that because of the auto generated nature of deep web pages, the location of answers are the same irrespective of page changes.  It uses the relative XPath location to the answer node on HTML pages as described in \cite{Badica06}.
 
 
