@@ -7,7 +7,7 @@ The earliest question answering systems such as BASEBALL \cite{Green1961} and Lu
 
 %Several community QA systems have been developed, such as Yahoo! Answers \cite{yahooanswers2008}. These sites enlist a community of users to answer questions posed by other users.  This idea has led to socially integrated QA systems such as Aardvark \cite{vark2010}. In addition to having questions answered by users, Aardvark can contact potential question answerers through media beyond web pages (e.g. instant messages, mobile phones).  This allows for faster responses to questions.  Morpheus relies on its user interface and referencing previously answered questions.
 
-Several other QA systems that use the web as a resource have been developed. Most famously, START\footnote{start.csail.mit.edu}, and most recently these include Swingly\footnote{swingly.com}.  These systems and those as Ephyra \cite{Schlaefer06apattern} use web pages from searches to find answer.  Morpheus differs in that it only seeks out relevant deep web sources, and instead of using a web search engine it uses only the pages referenced in a previously answered question.  We expect this approach to add a greater degree precision to user answers.
+Several other QA systems that use the web as a resource have been developed. Example systems are START\footnote{start.csail.mit.edu} and Swingly\footnote{swingly.com}.  These systems use web pages from searches web crawlers or search engines to find answers.  Morpheus differs in that it seeks out relevant deep web sources, and instead of using a web search engine, it uses only the pages referenced in a previously answered question.
 
 \subsection{Ontology generators} 
 \label{sec:ontology_generators}
@@ -21,7 +21,7 @@ Several other QA systems that use the web as a resource have been developed. Mos
 
 %% use dbpedia instead of wikipedia here
 
-The DBpedia\footnote{http://dbpedia.org} project is a community of contributors extracting semantic information from Wikipedia and makes this information available on the Web. Wikipedia semantics includes info-box templates, categorization information,  images, geo-coordinates, links to external web pages, disambiguation pages, and redirects to pages in Wiki markup form \cite{Bizer2009}.  DBpedia does not define any new relations between the Wikipedia categories.  
+The DBpedia\footnote{http://dbpedia.org} project is a community of contributors extracting semantic information from Wikipedia and making this information available on the Web. Wikipedia semantics includes disambiguation pages, geo-coordinates, categorization information, images, info-box templates, links to external web pages,  and redirects to pages in Wiki markup form \cite{Bizer2009}.  DBpedia does not define any new relations between the Wikipedia categories.  
 
 %Morpheus uses the DBpedia categories and its semantics to construct its ontology.
 %  DBpedia represents the Wikipedia categories using skos:concepts and category relations using skos:broader \cite{Bizer2009}. In fact,  DBpedia does not define any new relations between the Wikipedia categories.  The Wikipedia categories are extracted directly from Wikipedia pages, and there  is no quality check on the resultant ontology. Similarly, additional ontological relations in DBpedia are generated from the info-box attributes and their values.
