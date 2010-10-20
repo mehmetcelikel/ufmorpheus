@@ -30,11 +30,24 @@ public class SSQClass {
 	}
 
 	public ArrayList<Term> getInputs() {
-		return inputs;
+		
+		ArrayList<Term> terms = new ArrayList<Term>();
+		for (Term tc : inputs)
+			if (tc.valid)
+				terms.add(tc);
+		
+		return terms;
 	}
 
 	public ArrayList<Term> getOutputs() {
-		return outputs;
+		
+		ArrayList<Term> terms = new ArrayList<Term>();
+		for (Term tc : outputs)
+			if (tc.valid)
+				terms.add(tc);
+		
+		
+		return terms;
 	}
 
 	public String getQuery() {
@@ -227,14 +240,14 @@ public class SSQClass {
 
 		sb.append("inputs: \n");
 		for (Term t : this.inputs) {
-			sb.append("\t" + t.term + ": \n");
+			sb.append("\t" + t.term + "(" + (t.valid?"valid":"invalid") + "): \n");
 			for (Category c : t.getCategories())
 				sb.append("\t\t" + c.category + " - " + c.probability + " \n");
 		}
 
 		sb.append("outputs: \n");
 		for (Term t : this.outputs) {
-			sb.append("\t" + t.term + ": \n");
+			sb.append("\t" + t.term + "(" + (t.valid?"valid":"invalid") + "): \n");
 			for (Category c : t.getCategories())
 				sb.append("\t\t" + c.category + " - " + c.probability + " \n");
 		}

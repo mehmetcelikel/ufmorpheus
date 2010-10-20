@@ -15,6 +15,8 @@ import java.util.ArrayList;
 public class Term {
 	public int order = 0; // Assume that order may make difference in future
 	public String term = "";
+	public boolean processed = false;
+	public boolean valid = true; 
 	public Constants.TermType Type = Constants.TermType.ONE_GRAM; // default is one - gram
 	private ArrayList<Category> categories = new ArrayList<Category>();
 
@@ -70,7 +72,7 @@ public class Term {
 		//TermProbabilitiesStore.loadClasses();
 		
 		// Gets the term probabilities from the Store 
-		this.categories = TermProbabilitiesStore.getTermProbabilitiesFromNLPDB(term, this.Type);
+		this.categories = TermProbabilitiesStore.getTermProbabilitiesFromNLPDB(term, this.Type, true);
 		
 	}
 	

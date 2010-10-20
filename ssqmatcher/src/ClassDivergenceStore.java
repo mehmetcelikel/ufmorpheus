@@ -88,10 +88,16 @@ public class ClassDivergenceStore {
 		
 		double classDiv = 1.0;
 		
+		if(sourceClass.equalsIgnoreCase("TireSize") && targetClass.equalsIgnoreCase("Size"))
+		{
+			System.out.println("Hi");
+		}
+		
 		// Case 1: when the strings match
 		if (sourceClass.equalsIgnoreCase(targetClass)) 
 			return 0.0;	
 		
+		// Case 2: checks in the cache 
 		for (ClassDivergenceValues cdv : cdAL)			
 			if (cdv.getSourceClass().equalsIgnoreCase(sourceClass)
 					&& cdv.getTargetClass().equalsIgnoreCase(targetClass))
@@ -99,11 +105,8 @@ public class ClassDivergenceStore {
 		
 
 		
-		// Checks whether we already 
-		// calculated the CD value 
-		classDiv = getClassDivergenceFromDB(
-				sourceClass, 
-				targetClass);
+		// Checks whether we stored the CD value in db  
+		classDiv = getClassDivergenceFromDB(sourceClass, targetClass);
 		
 		if (classDiv < 0){
 
@@ -118,9 +121,8 @@ public class ClassDivergenceStore {
 					targetClass, 
 					classDiv);			
 		}
-		
 
-		
+		// Adds to the program memory  
 		cdAL.add(new ClassDivergenceValues(sourceClass, targetClass, classDiv));
 		
 		return classDiv;

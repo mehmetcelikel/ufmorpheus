@@ -55,7 +55,10 @@ public final class Constants {
 	 * */
 	public static enum TermType{ONE_GRAM, TWO_GRAM, THREE_GRAM, N_GRAM}
 	
-	
+	/**
+	 * Different SSQ term class type  
+	 * */
+	public static enum TermClassType{INPUT, OUTPUT}
 
 	/**
 	 * Different matching levels
