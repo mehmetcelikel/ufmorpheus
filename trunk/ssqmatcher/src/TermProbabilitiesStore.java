@@ -88,7 +88,7 @@ public class TermProbabilitiesStore {
 	 * @return
 	 */
 	
-	public static ArrayList<Category> getTermProbabilitiesFromNLPDB(String term, Constants.TermType type){
+	public static ArrayList<Category> getTermProbabilitiesFromNLPDB(String term, Constants.TermType type, boolean useManuallyEntered){
 
 
 		float numTermInstance = 0;
@@ -111,36 +111,44 @@ public class TermProbabilitiesStore {
 					categories.add(new Category("Year", 1.0));
 					break;
 				case TWO_GRAM:
-					categories.add(new Category("UNKNOWN", 0.8));
+					// If the ngram has an year should find another 
+					// better way of class assignment
+					categories.add(new Category("UNKNOWN", 1.0));
 					break;
 				case THREE_GRAM:
-					categories.add(new Category("UNKNOWN", 0.6));
+					categories.add(new Category("UNKNOWN", 1.0));
 					break;
 				default:
-					categories.add(new Category("UNKNOWN", 0.4));
+					categories.add(new Category("UNKNOWN", 1.0));
 					break;
 			}
 			termProbabilities.add(new TermProbability(term, categories));
 			return categories;
 		}
 
-		// Case 3: Gets the probabilities from the termcategories table 
+		// Case 3: Gets the probabilities from the term-categories table 
 		// TODO: Currently, we manually enter these values. We're expecting 
 		// some other automatic mechanism to do so  
-		String selectSQL = "SELECT * FROM termcategories WHERE term LIKE '" + term.trim() + "'";
+		String selectSQL = "";
 		ResultSet rs;
-		try {
-			rs = NLPDBAccess.executeSelect(selectSQL);
-			while (rs.next()) 
-				categories.add(new Category(rs.getString("category"), rs.getDouble("cp"))); 
-			Collections.sort(categories);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		// Stores to memory 
-		if (categories.size() > 0){
-			termProbabilities.add(new TermProbability(term, categories));
-			return categories; 
+		
+		if (useManuallyEntered){
+		
+			selectSQL = "SELECT * FROM termcategories WHERE term LIKE '" + term.trim() + "'";
+			try {
+				rs = NLPDBAccess.executeSelect(selectSQL);
+				while (rs.next()) 
+					categories.add(new Category(rs.getString("category"), rs.getDouble("cp"))); 
+				Collections.sort(categories);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			// Stores to memory 
+			if (categories.size() > 0){
+				termProbabilities.add(new TermProbability(term, categories));
+				return categories; 
+			}
+
 		}
 
 		// Case 4: Using frequency dist.  

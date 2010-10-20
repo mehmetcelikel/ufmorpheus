@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
@@ -30,6 +32,12 @@ public class SSQMatcher {
 	public static String ONTOLOGY_DATAPROPERTY_NS = "";
 	public static String ONTOLOGY_PROPERTY_TREE_HEIGHT = "";
 	private static String QUALIFIED_SSQIDS = "";
+	public static double INPUT_TERMS_WEIGHT = 0.5;
+	public static double OUTPUT_TERMS_WEIGHT = 0.5;
+	
+	public ArrayList<TermMeasureSet> termSI = new ArrayList<TermMeasureSet>();
+	public ArrayList<TermMeasureSet> termSO = new ArrayList<TermMeasureSet>();
+	
 
 	public class QCTermMeasure {
 		public String QualifiedCategory = "";
@@ -38,6 +46,17 @@ public class SSQMatcher {
 		public QCTermMeasure(String qualifiedCategory) {
 			super();
 			QualifiedCategory = qualifiedCategory;
+		}
+	}
+	
+	public class TermMeasureSet{
+		public ArrayList<TermMeasure> TermMeasures = new ArrayList<TermMeasure>();
+		public int SetID = 0;
+		public TermMeasureSet(ArrayList<TermMeasure> termMeasures, int setID) {
+			super();
+			TermMeasures = termMeasures;
+			Collections.sort(TermMeasures);
+			SetID = setID;
 		}
 	}
 	
@@ -52,18 +71,25 @@ public class SSQMatcher {
 		
 		public double CategoryDivergence = 0.0;
 		public boolean selected = false; 
-		
+		public Constants.TermClassType TermType; 
+		public int Number = 0;
 
 		public TermMeasure(String candidateTerm, String candidateCategory,
 				double candidateCategoryProb, String qualifiedTerm,
-				String qualifiedCategory, double categoryDivergence) {
+				String qualifiedCategory, double categoryDivergence, 
+				Constants.TermClassType termClassType, int sn) {
 			super();
+
 			CandidateTerm = candidateTerm;
 			CandidateCategory = candidateCategory;
 			CandidateCategoryProb = candidateCategoryProb;
 			QualifiedTerm = qualifiedTerm;
 			QualifiedCategory = qualifiedCategory;
 			CategoryDivergence = categoryDivergence;
+			
+			TermType = termClassType;
+			Number = sn; 
+			
 		}
 
 		
@@ -200,18 +226,43 @@ public class SSQMatcher {
 			SSQClass qualified, 
 			SSQClass candidate){
 		
+	
 		ArrayList<TermMeasure> termsCD = new ArrayList<TermMeasure>();
+		termSI.clear();
+		termSO.clear();
 		
 		if (candidate.getInputs().size() == 0)
 			return termsCD;
 		
+		// Process the input terms and classes 
 		// Assumes that the order of the SSQ terms is not important 
+		int count = 1;
+		int setId = 1;
 		for (Term tc : candidate.getInputs()){
 
 			Category cc = tc.getMostProbableCategory();
-			
+
+			ArrayList<TermMeasure> tms = new ArrayList<TermMeasure>();
+			count = 1;
 			if (cc.category.equalsIgnoreCase("UNKNOWN")){
-				termsCD.add(new TermMeasure(tc.term, cc.category, 1.0, "", "", Constants.DEFAULT_CLASS_DIV));
+				/*
+				 * 
+				 * * Skip the candidate term that is not assigned to a class  
+				termsCD.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						1.0, "UNKNOWN", "UNKNOWN", 
+						Constants.DISSIMILARITY,
+						Constants.TermClassType.INPUT,
+						count));
+				tms.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						1.0, "UNKNOWN", "UNKNOWN", 
+						Constants.DISSIMILARITY,
+						Constants.TermClassType.INPUT,
+						count));
+				*/
 				continue;
 			}
 			
@@ -219,10 +270,272 @@ public class SSQMatcher {
 				// For the time being we only consider  
 				// the most probable category of a candidate term;   
 				Category qc = tq.getMostProbableCategory();
-				double cdM = cdStore.getClassDivergence(qc.category, cc.category);
-				termsCD.add(new TermMeasure(tc.term, cc.category, cc.probability, tq.term, qc.category, cdM));
+				
+				// multiplies w/ confidence value 
+				double cdM = cdStore.getClassDivergence(qc.category, cc.category) * cc.probability;
+				
+				termsCD.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.INPUT, 
+						count));
+				tms.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.INPUT, 
+						count));
+				count++;
 			}
 
+			
+			termSI.add(new TermMeasureSet(tms, setId));
+			
+			setId++;
+		}
+		
+		
+		// Process outputs  
+		setId = 1;
+		for (Term tc : candidate.getOutputs()){
+
+			Category cc = tc.getMostProbableCategory();
+			count = 1;
+			ArrayList<TermMeasure> tms = new ArrayList<TermMeasure>();
+			
+			if (cc.category.equalsIgnoreCase("UNKNOWN")){
+				
+				/*
+				 * 
+				 * * Skip the candidate term that is not assigned to a class 
+				
+				termsCD.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						1.0, "UNKNOWN", "UNKNOWN", 
+						Constants.DISSIMILARITY,
+						Constants.TermClassType.OUTPUT,
+						count));
+				
+				tms.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						1.0, "UNKNOWN", "UNKNOWN", 
+						Constants.DISSIMILARITY,
+						Constants.TermClassType.OUTPUT,
+						count));
+				*/
+				continue;
+			}
+			
+			for (Term tq : qualified.getOutputs()){
+				// For the time being we only consider  
+				// the most probable category of a candidate term;   
+				Category qc = tq.getMostProbableCategory();
+				
+				// multiplies w/ confidence value 
+				double cdM = cdStore.getClassDivergence(qc.category, cc.category) * cc.probability;
+				
+				termsCD.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.OUTPUT,
+						count));
+				tms.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.OUTPUT,
+						count));
+				count++;
+			}
+
+			termSO.add(new TermMeasureSet(tms, setId));
+			
+			setId++;
+		}
+		
+		Collections.sort(termsCD);
+		
+		return termsCD;
+	}
+	
+	
+	/**
+	 * This is a crude way of finding similarity between  
+	 * the candidate SSQ and qualified SSQ (2nd approach)
+	 * @param qualified A qualified SSQ from the QRM data store 
+	 * @param candidate candidate SSQ 
+	 * @return
+	 */
+	
+	public ArrayList<TermMeasure> calcSSQTermsSimilarity2(
+			SSQClass qualified, 
+			SSQClass candidate){
+		
+	
+		ArrayList<TermMeasure> termsCD = new ArrayList<TermMeasure>();
+		termSI.clear();
+		termSO.clear();
+		
+		if (candidate.getInputs().size() == 0)
+			return termsCD;
+		
+		// Process the input terms and classes 
+		// Assumes that the order of the SSQ terms is not important 
+		int count = 1;
+		int setId = 1;
+		for (Term tq : qualified.getInputs()){
+
+			Category qc = tq.getMostProbableCategory();
+
+			ArrayList<TermMeasure> tms = new ArrayList<TermMeasure>();
+			count = 1;
+
+			
+			for (Term tc : candidate.getInputs()){
+				// For the time being we only consider  
+				// the most probable category of a candidate term;   
+				Category cc = tc.getMostProbableCategory();
+				
+				
+				if (qc.category.equalsIgnoreCase("UNKNOWN")){
+					/*
+					 * 
+					 * * Skip the candidate term that is not assigned to a class  
+					termsCD.add(new TermMeasure(
+							tc.term, 
+							cc.category, 
+							1.0, "UNKNOWN", "UNKNOWN", 
+							Constants.DISSIMILARITY,
+							Constants.TermClassType.INPUT,
+							count));
+					tms.add(new TermMeasure(
+							tc.term, 
+							cc.category, 
+							1.0, "UNKNOWN", "UNKNOWN", 
+							Constants.DISSIMILARITY,
+							Constants.TermClassType.INPUT,
+							count));
+					*/
+					continue;
+				}
+				
+				
+				// multiplies w/ confidence value 
+				double cdM = cdStore.getClassDivergence(qc.category, cc.category) * cc.probability;
+				
+				termsCD.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.INPUT, 
+						count));
+				tms.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.INPUT, 
+						count));
+				count++;
+			}
+
+			
+			termSI.add(new TermMeasureSet(tms, setId));
+			
+			setId++;
+		}
+		
+		
+		// Process outputs  
+		setId = 1;
+		for (Term tq : qualified.getOutputs()){
+			// For the time being we only consider  
+			// the most probable category of a candidate term;   
+			Category qc = tq.getMostProbableCategory();
+
+			count = 1;
+			ArrayList<TermMeasure> tms = new ArrayList<TermMeasure>();
+
+			for (Term tc : candidate.getOutputs()){
+
+				Category cc = tc.getMostProbableCategory();				
+				
+				if (cc.category.equalsIgnoreCase("UNKNOWN")){
+					
+					/*
+					 * 
+					 * * Skip the candidate term that is not assigned to a class 
+					
+					termsCD.add(new TermMeasure(
+							tc.term, 
+							cc.category, 
+							1.0, "UNKNOWN", "UNKNOWN", 
+							Constants.DISSIMILARITY,
+							Constants.TermClassType.OUTPUT,
+							count));
+					
+					tms.add(new TermMeasure(
+							tc.term, 
+							cc.category, 
+							1.0, "UNKNOWN", "UNKNOWN", 
+							Constants.DISSIMILARITY,
+							Constants.TermClassType.OUTPUT,
+							count));
+					*/
+					continue;
+				}
+				
+				
+				
+				
+				// multiplies w/ confidence value 
+				double cdM = cdStore.getClassDivergence(qc.category, cc.category) * cc.probability;
+				
+				termsCD.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.OUTPUT,
+						count));
+				tms.add(new TermMeasure(
+						tc.term, 
+						cc.category, 
+						cc.probability, 
+						tq.term, 
+						qc.category, 
+						cdM,
+						Constants.TermClassType.OUTPUT,
+						count));
+				count++;
+			}
+
+			termSO.add(new TermMeasureSet(tms, setId));
+			
+			setId++;
 		}
 		
 		Collections.sort(termsCD);
@@ -233,60 +546,14 @@ public class SSQMatcher {
 	
 	
 	
-	
 	/**
-	 * "Q:a 1997 Toyota Camry V6 needs what size tires?; AF:size tires; DI:1997 Toyota Camry V6; NGDI:1997,1997 Toyota,1997 Toyota Camry,Toyota,Toyota Camry,Toyota Camry V6,Camry,Camry V6,V6,; WH:what;"
-	 * @param args
-	 * @throws IOException 
+	 * Creates query IDs and its similarity values in a JSON format 
+	 * to send the output 
 	 * 
+	 * @param qrmSim
+	 * @return
 	 */
 	
-	
-	public static void main(String[] args) throws IOException {
-		
-		String candidateQInfo = "";
-		
-		if (args.length < 1){
-			System.out.println("Invalid input. EXIT!");
-			System.exit(1);
-		}
-		
-		// Load configurations  
-		readConfig();
-		
-		candidateQInfo = args[0]; 
-		String[] qSSQIds = QUALIFIED_SSQIDS.trim().split(",");
-		
-		Utils.log("Candidate SSQ: " + candidateQInfo);
-		Utils.log("Qualified SSQs: " + QUALIFIED_SSQIDS);
-		Utils.log("Building candidate SSQ...");
-
-
-		StringBuilder sb = new StringBuilder();  
-
-		SSQClass candidate = buildCandidateQuery(candidateQInfo);
-
-		sb.append(" { ");
-		
-		sb.append(candidate.toSend());
-		
-		Utils.log(candidate.toString());
-
-		// Gets the SDB data store instance 
-		Store sdbStore = SDBHelper.getStore();
-		SSQMatcher m = new SSQMatcher(sdbStore);
-		
-		ArrayList<SSQMatcher.SSQSimilarityMeasure> qrmSim = m.findSSQRelevance(qSSQIds, candidate);
-
-		
-		sb.append(m.getQueryIdString(qrmSim));
-
-		sb.append("\"nqoutput\": {} } ");
-		
-		Utils.log("\nOUTPUT\n" + sb.toString());
-		
-		System.out.println(sb.toString());
-	}
 	
 	private String getQueryIdString(ArrayList<SSQMatcher.SSQSimilarityMeasure> qrmSim) {
 		
@@ -360,19 +627,19 @@ public class SSQMatcher {
 	 * 
 	 */
 	
-	public ArrayList<SSQMatcher.SSQSimilarityMeasure> findSSQRelevance(
+	public ArrayList<SSQMatcher.SSQSimilarityMeasure> findSSQDivergences(
 			String[] qSSQIds, 
-			SSQClass candidate){
+			SSQClass candidate,
+			boolean discardUnKownTerms){
 		
 		ArrayList<SSQMatcher.SSQSimilarityMeasure> ssqSimilarities = new ArrayList<SSQMatcher.SSQSimilarityMeasure>();
-		
 		long start = 0; 
 		
 		for (String qualifiedSSQId : qSSQIds){
 		
 
 			Utils.log("\n------------------------------------------------------------------------------------\n");
-			
+	
 			start = (new Date()).getTime();
 			
 			// Loads the qualified SSQ as a SSQClass object from db 
@@ -390,14 +657,18 @@ public class SSQMatcher {
 			}
 
 			double N = qualified.getInputs().size();
-			double ssqSim = 0.0;
+			double ssqInputsDSim = 0.0;
+			double ssqOutputsDSim = 0.0;
+			double knownInputTerms = 0;
+			double knownOutputTerms = 0;
 	
 			if (N <= 0){
 				Utils.log("The SSQ " + qualified.getSsqId() + "is skipped", true);
 				continue;
 			}
 			
-			ArrayList<SSQMatcher.TermMeasure> termsDiv = this.calcSSQTermsSimilarity(qualified, candidate);
+			ArrayList<SSQMatcher.TermMeasure> termsDiv 
+				= this.calcSSQTermsSimilarity2(qualified, candidate);
 			
 			/*
 			
@@ -422,17 +693,109 @@ public class SSQMatcher {
 			Utils.log("\nSSQ relevance using selected terms : " + (1.0 - ssqSim) + "\n");
 
 			*/
-			
-			ssqSim = 0.0;
-			for (SSQMatcher.TermMeasure tm : termsDiv){
-				Utils.log(tm.toString());
-				ssqSim += tm.CategoryDivergence;
+			boolean flag = false; 
+			Set<String> candidateTerms = new HashSet<String>();
+			Set<String> qualifiedTerms = new HashSet<String>();
+			for (TermMeasureSet tms : termSI){
+				flag = false;
+				for (TermMeasure tm : tms.TermMeasures){
+					if (!(candidateTerms.contains(tm.CandidateCategory) 
+							|| qualifiedTerms.contains(tm.QualifiedCategory))){
+						
+						Utils.log("Input set id: " 
+								+ tms.SetID + ", candidate class : " 
+								+ tm.CandidateCategory + ", qualified class : " 
+								+ tm.QualifiedCategory + ", cd : " 
+								+ tm.CategoryDivergence);
+						candidateTerms.add(tm.CandidateCategory);
+						qualifiedTerms.add(tm.QualifiedCategory);
+						ssqInputsDSim += tm.CategoryDivergence;
+						flag = true;
+						break;
+					}
+				}
+				
+				// Adds dissimilarity 
+				if (!flag)
+					ssqInputsDSim += 1.0;
+				knownInputTerms++;
+				
+				Utils.log("\n");
 			}
 			
-		
-			ssqSimilarities.add(new SSQSimilarityMeasure((ssqSim / (double)termsDiv.size()), termsDiv, Integer.parseInt(qualifiedSSQId)));
+			candidateTerms.clear();
+			qualifiedTerms.clear();
+
+			for (TermMeasureSet tms : termSO){
+				flag = false;
+				for (TermMeasure tm : tms.TermMeasures){
+					if (!(candidateTerms.contains(tm.CandidateCategory) 
+							|| qualifiedTerms.contains(tm.QualifiedCategory))){
+						
+						Utils.log("Output set id: " 
+								+ tms.SetID + ", candidate class : " 
+								+ tm.CandidateCategory + ", qualified class : " 
+								+ tm.QualifiedCategory + ", cd : " 
+								+ tm.CategoryDivergence);
+						candidateTerms.add(tm.CandidateCategory);
+						qualifiedTerms.add(tm.QualifiedCategory);
+						ssqOutputsDSim += tm.CategoryDivergence;
+						flag = true;
+						break;
+					}
+				}
+				
+				// Adds dissimilarity 
+				// e.g. when a qualified SSQ has two output classes 
+				// and the candidate SSQ has only one output class
+				if (!flag)
+					ssqOutputsDSim += 1.0;
+				knownOutputTerms++;	
+				Utils.log("\n");
+			}
 			
-			Utils.log("\nTotal terms category divergence : " + ssqSim / (double)termsDiv.size()  + "\n");
+			double ssqDSimMetricNew = ((knownInputTerms > 0) ? (ssqInputsDSim / (double)knownInputTerms) : 1.0) * INPUT_TERMS_WEIGHT
+			+ ((knownOutputTerms > 0) ? (ssqOutputsDSim / (double)knownOutputTerms) : 1.0) * OUTPUT_TERMS_WEIGHT;
+			
+			Utils.log("\nTotal terms category divergence using new method : " + ssqDSimMetricNew  + "\n");
+			
+			ssqInputsDSim = 0.0;
+			ssqOutputsDSim = 0.0;
+			knownInputTerms = 0;
+			knownOutputTerms = 0;
+			
+			for (SSQMatcher.TermMeasure tm : termsDiv){
+				Utils.log(tm.toString());
+				
+				// Code to discard the unknown n-grams in the corpus 
+				if (discardUnKownTerms 
+						&& tm.CandidateCategory.equalsIgnoreCase("UNKNOWN")){
+					Utils.log("Skipped the term " + tm.CandidateTerm + "\n");
+					continue; 
+				}
+				
+				// Considers both input terms and output terms 
+				if (tm.TermType == Constants.TermClassType.INPUT){
+					ssqInputsDSim += tm.CategoryDivergence;
+					knownInputTerms++;
+				}
+				else {
+					ssqOutputsDSim += tm.CategoryDivergence;
+					knownOutputTerms++;					
+				}
+			}
+			
+			
+			double ssqDSimMetric = ((knownInputTerms > 0) ? (ssqInputsDSim / (double)knownInputTerms) : 1.0) * INPUT_TERMS_WEIGHT
+					+ ((knownOutputTerms > 0) ? (ssqOutputsDSim / (double)knownOutputTerms) : 1.0) * OUTPUT_TERMS_WEIGHT;
+		
+			ssqSimilarities.add(
+					new SSQSimilarityMeasure(
+							ssqDSimMetric, 
+							termsDiv, 
+							Integer.parseInt(qualifiedSSQId)));
+			
+			Utils.log("\nTotal terms category divergence : " + ssqDSimMetric  + "\n");
 			
 			
 			Utils.log("Execution time : " + ((new Date()).getTime() - start) + "ms\n");
@@ -497,6 +860,8 @@ public class SSQMatcher {
 
 				// System.out.println(entry.getKey() + " => " + entry.getValue());
 			}
+			
+			disableInvalidTerms(candidate);
 
 		} catch (ParseException pe) {
 
@@ -508,6 +873,53 @@ public class SSQMatcher {
 	}
 	
 	
+	private static void disableInvalidTerms(SSQClass candidate) {
+		
+		ArrayList<Term> inputTerms = candidate.getInputs();
+		int N = 3; // right now we're using up to TRI-GRAMS 
+		int highest = 0;
+		double highestValue = 0.0;
+		
+		for (int i = 0; i < inputTerms.size(); i++){
+
+			Term tc = inputTerms.get(i);
+			
+			if (!tc.processed){
+				
+				ArrayList<Integer> idx = new ArrayList<Integer>();
+				idx.add(i);
+				highest = i;
+				highestValue = tc.getMostProbableCategory().category.equalsIgnoreCase("UNKNOWN")
+					? 0.0 : tc.getMostProbableCategory().probability;
+				
+				for (int j = i+1; (j < i+N) && (j < inputTerms.size()) ; j++){
+					Term t = inputTerms.get(j);
+					
+					if (t.term.contains(tc.term)){
+						idx.add(j);
+						if ((t.getMostProbableCategory().probability > highestValue)
+								&& !t.getMostProbableCategory().category.equalsIgnoreCase("UNKNOWN")){
+							highest = j;
+							highestValue = t.getMostProbableCategory().probability;
+						}
+					}
+					else 
+						// we assume that the next gram is different 
+						break; 
+				}
+				
+				for (int k : idx){
+					Term tk = inputTerms.get(k);
+					if (k != highest)
+						tk.valid = false;					
+					tk.processed = true;
+				}
+				
+			}
+		}
+		
+	}
+
 	public static void readConfig() {
 
 		try {
@@ -533,7 +945,12 @@ public class SSQMatcher {
 				
 				else if (la[0].equalsIgnoreCase("QUALIFIED_SSQIDS"))
 					QUALIFIED_SSQIDS = la[1];
+
+				else if (la[0].equalsIgnoreCase("INPUT_TERMS_WEIGHT"))
+					INPUT_TERMS_WEIGHT = Double.parseDouble(la[1]);
 				
+				else if (la[0].equalsIgnoreCase("OUTPUT_TERMS_WEIGHT"))
+					OUTPUT_TERMS_WEIGHT = Double.parseDouble(la[1]);				
 				
 			}
 
@@ -545,4 +962,67 @@ public class SSQMatcher {
 
 	}
 	
+	
+	
+	/**
+	 * Main 
+	 * 
+	 * 
+	 * "Q:a 1997 Toyota Camry V6 needs what size tires?; 
+	 * AF:size tires; DI:1997 Toyota Camry V6; NGDI:1997,
+	 * 1997 Toyota,1997 Toyota Camry,Toyota,Toyota Camry,
+	 * Toyota Camry V6,Camry,Camry V6,V6,; WH:what;"
+	 * 
+	 * @param args
+	 * @throws IOException 
+	 * 
+	 */
+	
+	
+	public static void main(String[] args) throws IOException {
+		
+		if (args.length < 1){
+			System.out.println("Invalid input. EXIT!");
+			System.exit(1);
+		}
+		
+		
+		String candidateQInfo = "";
+		String[] qSSQIds = null;
+		ArrayList<SSQMatcher.SSQSimilarityMeasure> qrmSim = null;
+		StringBuilder sb = new StringBuilder();  
+		SSQClass candidate = null;
+		
+		// Load configurations  
+		readConfig();
+		
+		candidateQInfo = args[0]; 
+		qSSQIds = QUALIFIED_SSQIDS.trim().split(",");
+		
+		Utils.log("Candidate SSQ: " + candidateQInfo);
+		Utils.log("Qualified SSQs: " + QUALIFIED_SSQIDS);
+		Utils.log("Building candidate SSQ...");
+
+		candidate = buildCandidateQuery(candidateQInfo);
+		Utils.log(candidate.toString());
+
+		sb.append(" { ");
+		sb.append(candidate.toSend());
+		
+		// Gets the SDB data store instance 
+		Store sdbStore = SDBHelper.getStore();
+		SSQMatcher m = new SSQMatcher(sdbStore);
+		
+		// Finds SSQ divergence values 
+		qrmSim = m.findSSQDivergences(qSSQIds, candidate, true);
+
+		
+		sb.append(m.getQueryIdString(qrmSim));
+		sb.append("\"nqoutput\": {} } ");
+
+		Utils.log("\nOUTPUT\n" + sb.toString());
+		System.out.println(sb.toString());
+	}
+	
+
 }
