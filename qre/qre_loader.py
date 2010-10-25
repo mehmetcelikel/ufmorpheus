@@ -15,7 +15,7 @@ def load_qre(qrmid, code, realmid=82):
 	
 	code = urllib.quote(code) # Unquote code
 	
-	q = "UPDATE qre \
+	q = "UPDATE qrm \
 				SET qrmid=%(qrmid)d, code='%(code)s', realmid=%(realmid)d \
 				WHERE qrmid=%(qrmid)d;"% {'qrmid':qrmid,'code':code, 'realmid':realmid}
 	
@@ -33,4 +33,3 @@ if __name__ == '__main__':
 
 	code = open(args.qrefile,'r').read()
 	load_qre(args.qrmid,code,args.realmid)
-	print q
