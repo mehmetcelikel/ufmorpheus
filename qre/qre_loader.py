@@ -26,10 +26,11 @@ def load_qre(qrmid, code, realmid=82):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description="A loader for the qre",
 				add_help=True)
-	parser.add_argument("--qrefile", "-qf")
-	parser.add_argument("--qrmid", type=int)
-	parser.add_argument("--realmid", type=int)
+	parser.add_argument("--qrefile", "-qf", required=True)
+	parser.add_argument("--qrmid", required=True, type=int)
+	parser.add_argument("--realmid", required=True, type=int)
 	args = parser.parse_args()
 
 	code = open(args.qrefile,'r').read()
 	load_qre(args.qrmid,code,args.realmid)
+	print q
