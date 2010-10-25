@@ -39,12 +39,25 @@ element qre {
 				text
 			}
 			|
+			element api {
+				attribute number { xsd:integer },
+				element url { text },
+				element method {
+					attribute type { string "get" | string "post" }
+				},
+				element param {
+					attribute name { text },
+					text
+				} +
+			}
+			|
 			element form {
 				attribute number { xsd:integer },
 				element xpath { text },
 				element url { text },
 				element method {
-					attribute type { string "get" | string "post" }
+					attribute type { string "get" | string "post" },
+					attribute response{ string "xml" | string "json" | string "html" }
 				},
 				element param {
 					attribute name { text },
