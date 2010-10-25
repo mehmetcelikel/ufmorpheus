@@ -138,9 +138,9 @@ def run(ssq=ssq_test, id=id_test):
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 	# TODO -- include user profile into the execution environment 
-	valueHash["2:0"] = "32608"
-	classHash["2:0"] = "Size"
-	contextHash["2:0"] = "What"
+	#valueHash["2:0"] = "32608"
+	#classHash["2:0"] = "Size"
+	#contextHash["2:0"] = "What"
 	 
 
 	tree = etree.fromstring(xmlstring)
