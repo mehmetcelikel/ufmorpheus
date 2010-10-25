@@ -4,6 +4,7 @@
 
 __authors__ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
+import json
 import lxml
 from lxml.html import parse, make_links_absolute, fromstring
 from lxml import etree
@@ -124,6 +125,62 @@ class HighlightAction(ActionObject):
 		state.kv_hash[key] = txt.strip()
 
 
+class APIAction(ActionObject):
+
+	def __init__(self, _xmlnode):
+		self.xmlnode = _xmlnode
+
+	def do(self, state):
+		base_url = ""
+		for e in self.xmlnode.getchildren():
+			if e.tag == 'url':
+				base_url = e.text.strip()
+				break
+		
+		request_data = {} # API params.
+		
+		for e in self.xmlnode.getchildren():
+			if e.tag == 'param':
+				v = state.kv_hash[ e.text ].strip() # Get the value key.
+				state.kv_hash[e.text] = '' # FIXME why are we clearing this value??
+				input_name = e.get('name').strip()
+				request_data[input_name] = v # Add the parameter to the form data
+		
+		# TODO add verification functionality
+		
+		the_page = None
+		new_base = None
+		
+		method = self.xmlnode.find('method').get('type')
+		if method is None or method.lower().strip() == "get":
+			action_url = form_node.get('action')
+			url_values = urllib.urlencode(request_data)
+			full_url = action_url + '?' + url_values
+			response = urllib2.urlopen(full_url)
+			the_page = response.read()
+			new_base = response.geturl()
+		else:
+			# Do the POST submit
+			# We go where the action takes us
+			action_url = form_node.get('action')
+			pdata = urllib.urlencode(request_data)
+			req = urllib2.Request(action_url, pdata)
+			response = urllib2.urlopen(req)
+			the_page = response.read()
+			new_base = response.geturl()
+		
+		# Next parse the new page
+		page = None
+		if self.xmlnode.find('method').get('response') == 'json':
+			# TODO think of a way to process json responses
+			pass
+		elif self.xmlnode.find('method').get('response') in ('xml','html'):
+			page = lxml.html.fromstring(the_page, base_url=new_base)
+		
+		state.page = page
+
+
+
 class FormAction(ActionObject):
 
 	def __init__(self, _xmlnode):
@@ -182,7 +239,7 @@ class FormAction(ActionObject):
 			#for each input get the value from the actiondata hash
 			if e.tag == 'param':
 				v = state.kv_hash[ e.text ].strip()
-				state.kv_hash[e.text] = ''
+				state.kv_hash[e.text] = '' # FIXME why are we clearing this??
 				input_name = e.get('name').strip()
 
 				if e.get('type') == 'select':

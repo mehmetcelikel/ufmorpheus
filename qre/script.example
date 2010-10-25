@@ -14,10 +14,16 @@
 		<highlight id="saeas" number="3"> xpath/here </highlight> 
 		<form number="4"> 
 			<xpath> xpath/here </xpath> 
-			<url> base.url </url> 
-			<method type="POST"/> 
+			<url> http://base.url </url> 
+			<method type="post"/> 
 			<param name="q" type="textbox"> value </param> 
-		</form> 
+		</form>
+		<api number="5">
+			<url> http://base.url </url>
+			<method type="get" response="xml"/>
+			<param name="q">value1</param>
+			<param name="arg">value2</param>
+		</api>
 	</sequence> 
 
 </qre> 

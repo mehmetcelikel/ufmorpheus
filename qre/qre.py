@@ -86,8 +86,9 @@ def run(ssq=ssq_test, id=id_test):
 	kclass_hash = {}
 	kcontext_hash = {}
 	user_hash = {}
-
+	
 	# Traversal of code script
+	# TODO before building script add a preprocessing step to add profile data.
 	for child in root:
 		if child.tag == 'actiondata':
 			kv_hash, kt_hash, kclass_hash, kcontext_hash = DataParser.ActionDataParser(child)
@@ -111,6 +112,9 @@ def run(ssq=ssq_test, id=id_test):
 
 				elif ao.tag == 'form':
 					action_list.append(ActionObject.FormAction(ao))
+				
+				elif ao.tag == 'api':
+					action_list.append(ActionObject.APIAction(ao))
 
 	#parse the ssq to populate the value hashes with the user input	
 	txt = ssq
@@ -133,7 +137,7 @@ def run(ssq=ssq_test, id=id_test):
 #populate the value hash from a string
 def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
-	# TODO testing 
+	# TODO -- include user profile into the execution environment 
 	valueHash["2:0"] = "32608"
 	classHash["2:0"] = "Size"
 	contextHash["2:0"] = "What"
@@ -150,7 +154,7 @@ def read_ssq_text(xmlstring, valueHash, classHash, contextHash, typeHash):
 
 		if e.tag == 'input_list':
 			for input in e.getchildren():
-				total += loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash)	
+				total += loadValueIntoHash(input, valueHash, classHash, contextHash, typeHash)
 
 	print 'Compares total:%d and len(valueHash.keys()):%d' % (total,len(valueHash.keys()))
 	print valueHash
