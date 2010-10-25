@@ -16,7 +16,7 @@ def load_qre(qrmid, code, realmid=82):
 	code = urllib.quote(code) # Unquote code
 	
 	q = "UPDATE qre \
-				SET qrmid=%(qrmid)d, code=%(code)s, realmid=%(realmid)d \
+				SET qrmid=%(qrmid)d, code='%(code)s', realmid=%(realmid)d \
 				WHERE qrmid=%(qrmid)d;"% {'qrmid':qrmid,'code':code, 'realmid':realmid}
 	
 	cursor = connection.cursor()
