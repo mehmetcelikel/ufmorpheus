@@ -93,17 +93,6 @@ def fix_links(state, seq, html, url):
 
 
 def removeTBodies(xpath):
-
-	#parts = xpath.split("/")
-	#plist = list()
-
-	#for p in parts:
-	#	if p.startswith("tbody"):
-	#		continue
-
-	#	plist.append(p)
-
-	#return "/".join(plist)
 	return '/'.join(['' if x.startswith("tbody") else x for x in xpath.split("/")])
 
 
@@ -153,7 +142,7 @@ class APIAction(ActionObject):
 		
 		method = self.xmlnode.find('method').get('type')
 		if method is None or method.lower().strip() == "get":
-			action_url = form_node.get('action')
+			action_url = base_url
 			url_values = urllib.urlencode(request_data)
 			full_url = action_url + '?' + url_values
 			response = urllib2.urlopen(full_url)
@@ -162,7 +151,7 @@ class APIAction(ActionObject):
 		else:
 			# Do the POST submit
 			# We go where the action takes us
-			action_url = form_node.get('action')
+			action_url = base_url
 			pdata = urllib.urlencode(request_data)
 			req = urllib2.Request(action_url, pdata)
 			response = urllib2.urlopen(req)
