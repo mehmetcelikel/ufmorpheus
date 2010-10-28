@@ -112,29 +112,23 @@ class ExtractionPath(object):
 		#import lxml.etree
 		from lxml.html.ElementSoup import parse
 		import urllib2
-		if url_or_html.startswith("http://") or url_or_html.startswith("www"):
-			#root = lxml.html.parse(url_or_html).getroot()
-			#node = root.xpath(path)
-			#_page = urllib2.urlopen(url_or_html)
-			#root = parse(_page).getroottree()
+
+		if url_or_html.startswith("http://") or url_or_html.startswith("www")
+				or url_or_html.lower().startswith("c:"): 
 			root = lxml.html.parse(url_or_html).getroot()
 			node = root.xpath(path)
 		else:
 			root = lxml.html.fromstring(url_or_html)
 			node = root.xpath(path)
-		#print lxml.etree.tostring(node[0],pretty_print=True)
 		
 		height = 0
 		if node == []:
 			runner = None
 		else:
-			#runner = copy.deepcopy(node[0])
 			runner = node[0]
 		
-		#pdb.set_trace()
 		while height < self.H and runner != None:
 			v = "" # just let the object exist
-			#pdb.set_trace()
 			while (hasattr(runner,'is_text') or hasattr(runner,'is_tail')) and (runner.is_text or runner.is_tail):
 				tmp = copy.deepcopy(runner.getparent())
 				del runner
