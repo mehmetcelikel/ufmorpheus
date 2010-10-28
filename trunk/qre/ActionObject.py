@@ -6,6 +6,7 @@ __authors__ = ['"Christan Earl Grant" <cgrant@cise.ufl.edu>']
 
 import json
 import lxml
+import lxml.html
 from lxml.html import parse, make_links_absolute, fromstring
 from lxml import etree
 import re
@@ -15,7 +16,6 @@ import sys
 sys.path.append("../generalizer")
 import Loader
 import Highlight
-
 
 class ActionObject:
 	"""Base Class of all actions"""
@@ -36,20 +36,9 @@ class URLAction(ActionObject):
 	def do(self, state):
 		"""Does URLAction and returns the state"""
 
-		url = self.xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
+		url = self.xmlnode.text.strip() # Extracts url from <starturl>URL</starturl>
 		state.page = parse(url).getroot()
 
-		"""
-		url = self.xmlnode.text.strip() # Extract the url from <starturl>URL</starturl>
-		request = urllib2.Request(url)
-		response = urllib2.urlopen(request)
-		# state.cookie = CookieJar() -- initialized in state
-		state.cookie.extract_cookies(response,request)
-		cookie_handler = urllib2.HTTPCookieProcessor( state.cookie )
-		redirect_handler = urllib2.HTTPRedirectHandler()
-		opener = urllib2.build_opener(redirect_handler,cookie_handler)
-		state.page = opener.open(request)
-		"""
 
 class LinkAction(ActionObject):
 
@@ -59,7 +48,7 @@ class LinkAction(ActionObject):
 
 	def do(self, state):
 		"""Does LinkAction and returns the state"""
-                xpath = self.xmlnode.text.strip()
+		xpath = self.xmlnode.text.strip()
 	
 		#for some reason, tbody tags annoy lxml, must remove them
 		xpath = removeTBodies(xpath)
@@ -146,8 +135,6 @@ class APIAction(ActionObject):
 			url_values = urllib.urlencode(request_data)
 			full_url = action_url + '?' + url_values
 			response = urllib2.urlopen(full_url)
-			the_page = response.read()
-			new_base = response.geturl()
 		else:
 			# Do the POST submit
 			# We go where the action takes us
@@ -155,8 +142,9 @@ class APIAction(ActionObject):
 			pdata = urllib.urlencode(request_data)
 			req = urllib2.Request(action_url, pdata)
 			response = urllib2.urlopen(req)
-			the_page = response.read()
-			new_base = response.geturl()
+
+		the_page = response.read()
+		new_base = response.geturl()
 		
 		# Next parse the new page
 		page = None
@@ -165,6 +153,14 @@ class APIAction(ActionObject):
 			pass
 		elif self.xmlnode.find('method').get('response') in ('xml','html'):
 			page = lxml.html.fromstring(the_page, base_url=new_base)
+			xp = self.xmlnode.find('method').text
+			xp = xp.lower().strip()
+			xp_results = str([ e.text for e in page.xpath(xp)])
+		
+		# Place the result in the proper location
+		resultid = self.xmlnode.find('method').get('result')
+		# TODO how should we process api calls, do we can the first
+		state.kv_hash[resultid] = str(xp_results)
 		
 		state.page = page
 

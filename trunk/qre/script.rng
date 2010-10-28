@@ -43,7 +43,10 @@ element qre {
 				attribute number { xsd:integer },
 				element url { text },
 				element method {
-					attribute type { string "get" | string "post" }
+					attribute type { string "get" | string "post" },
+					attribute response { string "xml" | string "json" },
+					attribute result { text },
+					text
 				},
 				element param {
 					attribute name { text },
