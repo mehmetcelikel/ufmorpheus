@@ -12,7 +12,7 @@ from Qrm import Qrm
 import lxml
 import lxml.html    
 sys.path.append('../qre')
-from main import main
+#from main import main
 sys.path.append('../badica')
 from ExtractionPath import ExtractionPath
 from Badica import Badica
@@ -344,7 +344,6 @@ def getFormMethod(page):
 	
 
 if __name__ == '__main__':
-    
     if len(sys.argv) == 3:
         GeneralizeQueries(sys.argv[1],sys.argv[2])
     elif len(sys.argv) == 2:
