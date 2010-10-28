@@ -155,16 +155,34 @@ class APIAction(ActionObject):
 			page = lxml.html.fromstring(the_page, base_url=new_base)
 			xp = self.xmlnode.find('method').text
 			xp = xp.lower().strip()
-			xp_results = str([ e.text for e in page.xpath(xp)])
-		
+			xp_results = [ e.text for e in page.xpath(xp)]
+	
+		res = xp_results
+		if self.xmlnode.find('method').get('operation'):
+			res = doOperation(self.xmlnode.find('method').get('operation'),xp_results)
+	
 		# Place the result in the proper location
 		resultid = self.xmlnode.find('method').get('result')
 		# TODO how should we process api calls, do we can the first
-		state.kv_hash[resultid] = str(xp_results)
+		state.kv_hash[resultid] = str(res)
 		
 		state.page = page
 
 
+def doOperation(op, list):
+	""" Perform operation on the list """
+	if op == 'max':
+		return max(list)
+	elif op == 'min':
+		return min(list)
+	elif op == 'sort asc':
+		return sorted(list)
+	elif op == 'sort desc':
+		return sorted(list, reverse=True)
+	else:
+		print 'Error: Bad input operation in doOpertion'
+		return list
+		
 
 class FormAction(ActionObject):
 

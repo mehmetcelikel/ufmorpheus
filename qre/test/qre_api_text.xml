@@ -24,7 +24,7 @@
 		<constantlink number="1">http://www.hotwire.com</constantlink>
 		<api number="2">
 			<url>http://api.hotwire.com/v1/search/hotel</url>
-			<method type="get" response="xml" result="9">//Hotwire/Result/HotelResult/SubTotal</method>
+			<method type="get" response="xml" operation="min" result="9">//Hotwire/Result/HotelResult/SubTotal</method>
 			<param name="dest" type="What">3</param> 
 			<param name="startdate" type="What">7</param> 
 			<param name="enddate" type="What">8</param> 
