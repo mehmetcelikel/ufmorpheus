@@ -82,7 +82,7 @@ def fix_links(state, seq, html, url):
 
 
 def removeTBodies(xpath):
-	return xpath.replace('/tbody', '')
+	return xpath.replace('tbody', '')
 
 
 class HighlightAction(ActionObject):
