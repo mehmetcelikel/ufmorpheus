@@ -1,0 +1,17 @@
+<ssq>
+  <realm>Travel</realm>
+  <query>What is the price of a hotel for a one person room in Paris, France from the 10th of November 2010 to the 11th of November 2010</query>
+  <input_list>
+	<input dataclass="Person" type="What">1</input>
+    <input dataclass="Size" type="What">1</input>
+    <input dataclass="Part" type="What">10th</input>
+    <input dataclass="Date" type="What">10/11/2010</input>
+    <input dataclass="Root" type="What">11th</input>
+    <input dataclass="Time" type="What">November 2010</input>
+    <input dataclass="Location" type="What">Paris, France</input>
+  </input_list>
+  <output_list>
+    <output dataclass="Measurement" type="What">price</output>
+  </output_list>
+  
+</ssq>

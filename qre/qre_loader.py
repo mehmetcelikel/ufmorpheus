@@ -13,6 +13,8 @@ def load_qre(qrmid, code, realmid=82):
 		print ("error connecting to the db")
 		return None
 	
+	realmid = 82 if realmid is None else realmid	
+
 	code = urllib.quote(code) # Unquote code
 	
 	q = "UPDATE qrm \
@@ -28,7 +30,7 @@ if __name__ == '__main__':
 				add_help=True)
 	parser.add_argument("--qrefile", "-qf", required=True)
 	parser.add_argument("--qrmid", required=True, type=int)
-	parser.add_argument("--realmid", required=True, type=int)
+	parser.add_argument("--realmid", type=int)
 	args = parser.parse_args()
 
 	code = open(args.qrefile,'r').read()

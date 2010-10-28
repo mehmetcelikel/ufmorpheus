@@ -1,0 +1,38 @@
+<qre> 
+	<actiondata> 
+		<info key="one" value="1" type="userinput" context="wherein" dataclass="Event"/>
+		<info key="0" value="1" type="userinput" context="What" dataclass="Size"/>
+		<info key="1" value="1" type="userinput" context="What" dataclass="Room"/>
+		<info key="2" value="November 2010" type="userinput" context="What" dataclass="Time"/>
+		<info key="3" value="Paris, France" type="userinput" context="What" dataclass="Location"/>
+		<info key="4" value="rtjzbds22he4cvnca868vep2" type="constant" context="What" dataclass="apikey"/>
+		<info key="5" value="1" type="userinput" context="What" dataclass="Person"/>
+		<info key="6" value="0" type="constant" context="What" dataclass="Children"/>
+		
+		<info key="7" value="11/11/2010" type="constant" context="What" dataclass="startdate"/>
+		<info key="8" value="11/13/2010" type="constant" context="What" dataclass="enddate"/>
+		<info key="9" value="" type="highlight" context="What" dataclass="answer"/>
+		
+	</actiondata> 
+	<userdata> 
+		<info key="two" value="2" /> 
+	</userdata> 
+	
+	<starturl>http://www.hotwire.com</starturl> 
+	
+	<sequence> 
+		<constantlink number="1">http://www.hotwire.com</constantlink>
+		<api number="2">
+			<url>http://api.hotwire.com/v1/search/hotel</url>
+			<method type="get" response="xml" result="9">//Hotwire/Result/HotelResult/SubTotal</method>
+			<param name="dest" type="What">3</param> 
+			<param name="startdate" type="What">7</param> 
+			<param name="enddate" type="What">8</param> 
+			<param name="rooms" type="What">1</param> 
+			<param name="adults" type="What">5</param> 
+			<param name="children" type="What">6</param> 
+			<param name="apikey" type="What">4</param> 
+		</api> 
+	</sequence> 
+
+</qre>
