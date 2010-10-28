@@ -113,7 +113,7 @@ class ExtractionPath(object):
 		from lxml.html.ElementSoup import parse
 		import urllib2
 
-		if url_or_html.startswith("http://") or url_or_html.startswith("www")
+		if url_or_html.startswith("http://") or url_or_html.startswith("www")\
 				or url_or_html.lower().startswith("c:"): 
 			root = lxml.html.parse(url_or_html).getroot()
 			node = root.xpath(path)
@@ -184,7 +184,6 @@ class ExtractionPath(object):
 
 
 if __name__ == '__main__':
-	pdb.set_trace()
 	ep = ExtractionPath(2,1,1,'http://www.ticketstub.com/search.php?q=marlins',"//*[local-name()='li']/*[not (following-sibling::*)]")
 	#ep = ExtractionPath(3,7,7,'http://www.gatorzone.com/story.php?id=16113','//body/div[3]/div/div/b')
 	#ep = ExtractionPath(3,7,7,"http://www.gatorzone.com/story.php?id=16113","//body/div[3]")
