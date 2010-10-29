@@ -628,6 +628,23 @@ function AddListeners(doc){
 	var forms = doc.getElementsByTagName('form');
 	for (var i = 0; i < forms.length; i++) {
 		forms[i].addEventListener("submit", SaveData, false);
+		// http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/events.html#Events-MutationEvent
+		forms[i].addEventListener('DOMNodeInserted', function(e) { 
+			MCR_Log("New node inserted!!!");
+			MCR_Log("prevValue: "+e.prevValue+"\nnewValue: "+e.newValue+"\nrelatedNode: "+e.relatedNode);
+			MCR_Log(e.relatedNode.tagName);
+			try{
+				MCR_Log(".id: "+e.relatedNode.id);
+				MCR_Log("id.innerText: " + e.relatedNode.id.innerText);
+	
+			}catch(e){
+				alert("error: " + e);
+				MCR_Log("error: " + e);
+			}
+			//MCR_Log(e.relatedNode.innerHTML);
+			//MCR_Log(e.relatedNode.innerText);
+		}, false);
+
 	}
 	MCR_Log("Added form listeners");
 	
@@ -637,6 +654,15 @@ function AddListeners(doc){
 		a[i].addEventListener('click', SaveData, false);
 	}
 	MCR_Log("Added link listeners");
+	
+	// Adding a listener for when the DOM changes
+	//document.addEventListener('DOMNodeInserted', function(e) { 
+	//document.addEventListener('DOMSubtreeModified', function(e) { 
+	//		MCR_Log("New node inserted!!!");
+	//	},
+	//false);
+	MCR_Log("Added DOM listener to detect change");
+
 	
 	try{
 		// save the default values for all form elements so we know what changes
@@ -656,6 +682,7 @@ function AddListeners(doc){
 			form_defaults.push(temp);
 		}
 		MCR_Log("Saved form defaults");
+
 	}catch(e) {
 		alert("Error form_defaults(): " + e.lineNumber+':' + e.message + '(' +e.fileName +')');
 	}
