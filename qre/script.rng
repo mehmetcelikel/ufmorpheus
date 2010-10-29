@@ -46,6 +46,7 @@ element qre {
 					attribute type { string "get" | string "post" },
 					attribute response { string "xml" | string "json" },
 					attribute operation { string "min" | string "max" | string "sort asc" | string "sort desc" },
+					attribute var { string "integer" | string "string" | string "decimal" },
 					attribute result { text },
 					text
 				},
