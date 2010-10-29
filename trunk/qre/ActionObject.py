@@ -159,7 +159,8 @@ class APIAction(ActionObject):
 	
 		res = xp_results
 		if self.xmlnode.find('method').get('operation'):
-			res = doOperation(self.xmlnode.find('method').get('operation'),xp_results)
+			var = self.xmlnode.find('method').get('var')
+			res = doOperation(self.xmlnode.find('method').get('operation'),xp_results,var)
 	
 		# Place the result in the proper location
 		resultid = self.xmlnode.find('method').get('result')
@@ -169,20 +170,32 @@ class APIAction(ActionObject):
 		state.page = page
 
 
-def doOperation(op, list):
+def doOperation(op, list, var):
 	""" Perform operation on the list """
+
+	def make_sort_func(x):
+		""" Function to do sort """
+		if x == 'integer':
+			return int
+		elif x == 'decimal':
+			return float
+		else:
+			return str
+
 	if op == 'max':
 		return max(list)
 	elif op == 'min':
 		return min(list)
 	elif op == 'sort asc':
-		return sorted(list)
+		func = make_sort_func(var)
+		return sorted(list, key=func)
 	elif op == 'sort desc':
-		return sorted(list, reverse=True)
+		func = make_sort_func(var)
+		return sorted(list, key=func, reverse=True)
 	else:
 		print 'Error: Bad input operation in doOpertion'
 		return list
-		
+
 
 class FormAction(ActionObject):
 
