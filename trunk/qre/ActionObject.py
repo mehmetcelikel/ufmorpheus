@@ -181,16 +181,16 @@ def doOperation(op, list, var):
 			return float
 		else:
 			return str
-
+	
+	func = make_sort_func(var)
+	
 	if op == 'max':
-		return max(list)
+		return max(list, key=func)
 	elif op == 'min':
-		return min(list)
+		return min(list, key=func)
 	elif op == 'sort asc':
-		func = make_sort_func(var)
 		return sorted(list, key=func)
 	elif op == 'sort desc':
-		func = make_sort_func(var)
 		return sorted(list, key=func, reverse=True)
 	else:
 		print 'Error: Bad input operation in doOpertion'
