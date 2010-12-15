@@ -1,0 +1,48 @@
+<qre> 
+	<actiondata> 
+		
+		<info key="0" value="Ford" type="userinput" context="What" dataclass="make"/>
+		<info key="1" value="Focus" type="userinput" context="What" dataclass="model"/>
+		<info key="2" value="2009" type="userinput" context="What" dataclass="year_from"/>
+		
+		
+		<info key="3" value="dbecc62f3c007bdf7c34198e168d00ef" type="constant" context="What" dataclass="apikey"/>
+		<info key="4" value="price" type="constant" context="What" dataclass="sortby"/>
+		
+		<info key="5" value="2010" type="userinput" context="What" dataclass="year_to"/>
+		<info key="6" value="DESC" type="constant" context="What" dataclass="sortdir"/>
+		
+		<info key="9" value="" type="highlight" context="What" dataclass="answer"/>
+		
+	</actiondata> 
+	<userdata> 
+		<info key="two" value="2" /> 
+	</userdata> 
+	
+	<starturl>http://lemonfree.com</starturl> 
+	
+	<sequence> 
+		<constantlink number="1">http://lemonfree.com</constantlink>
+		<api number="2">
+			<url>http://api.lemonfree.com/listings</url>
+			
+			<method type="get" response="xml" result="9" operation = "sort asc" var = "decimal">
+				<dataKey name = "Price">//response/result/item/attr[@name="price"]</dataKey>
+				<dataElement name = "link">//response/result/item/attr[@name="link"]</dataElement>
+				<dataElement name = "year">//response/result/item/attr[@name="year"]</dataElement>
+				<dataElement name = "make">//response/result/item/attr[@name="make"]</dataElement>
+				<dataElement name = "model">//response/result/item/attr[@name="model"]</dataElement>
+				
+			</method>
+			
+			<param name="make" type="What">0</param> 
+			<param name="model" type="What">1</param> 
+			<param name="year_from" type="What">2</param> 
+			<param name="year_to" type="What">5</param> 
+			<param name="key" type="What">3</param> 
+			
+			
+		</api> 
+	</sequence> 
+
+</qre>
