@@ -16,6 +16,7 @@ import sys
 sys.path.append("../generalizer")
 import Loader
 import Highlight
+from operator import itemgetter
 
 class ActionObject:
 	"""Base Class of all actions"""
@@ -120,7 +121,7 @@ class APIAction(ActionObject):
 		for e in self.xmlnode.getchildren():
 			if e.tag == 'param':
 				v = state.kv_hash[ e.text ].strip() # Get the value key.
-				state.kv_hash[e.text] = '' # FIXME why are we clearing this value??
+				#state.kv_hash[e.text] = '' # FIXME why are we clearing this value??
 				input_name = e.get('name').strip()
 				request_data[input_name] = v # Add the parameter to the form data
 		
@@ -146,6 +147,8 @@ class APIAction(ActionObject):
 		the_page = response.read()
 		new_base = response.geturl()
 		
+		print the_page
+		
 		# Next parse the new page
 		page = None
 		if self.xmlnode.find('method').get('response') == 'json':
@@ -153,15 +156,63 @@ class APIAction(ActionObject):
 			pass
 		elif self.xmlnode.find('method').get('response') in ('xml','html'):
 			page = lxml.html.fromstring(the_page, base_url=new_base)
-			xp = self.xmlnode.find('method').text
+			xp = self.xmlnode.find('method').find('dataKey').text
 			xp = xp.lower().strip()
-			xp_results = [ e.text for e in page.xpath(xp)]
-	
+			
+			dataElements = []
+			# get the dataElement paths
+			for e in self.xmlnode.find('method').getchildren():
+				if e.tag == 'dataElement':
+					dataElements.append(e.text.lower().strip())
+					
+					
+					
+			
+			
+			
+			# The Caster Function
+			def caster(x,type):
+				"casts according to what is in type"
+				if type == 'integer':
+					return int (x)
+				elif type == 'decimal':
+					return float(x)
+				else:
+					return x
+					
+			xp_results = [ ]
+			
+			# Getting the Key Element here and putting it in xp_results
+			
+			
+			for e in page.xpath(xp):
+				x = {}
+				x[self.xmlnode.find('method').find('dataKey').get('name')]= caster(e.text,self.xmlnode.find('method').get('var'))
+				
+				xp_results.append( x)
+			
+			
+			
+				
+			for e in self.xmlnode.find('method').getchildren():
+				if e.tag == 'dataElement':
+					dataElement= e.text.lower().strip()
+					for xp_result, f in zip(xp_results,page.xpath(dataElement)):
+						print e.get('name')
+						print f.text
+						xp_result[e.get('name')] = f.text
+				
+			#for e in page.xpath(xp), g in page.xpath(dataElement for dataElement in dataElements):
+			for e in xp_results:
+				print e
+		
 		res = xp_results
 		if self.xmlnode.find('method').get('operation'):
 			var = self.xmlnode.find('method').get('var')
-			res = doOperation(self.xmlnode.find('method').get('operation'),xp_results,var)
+			res = doOperation(self.xmlnode.find('method').get('operation'),xp_results,var,self.xmlnode.find('method').find('dataKey').get('name'))
 	
+		
+		
 		# Place the result in the proper location
 		resultid = self.xmlnode.find('method').get('result')
 		# TODO how should we process api calls, do we can the first
@@ -170,19 +221,11 @@ class APIAction(ActionObject):
 		state.page = page
 
 
-def doOperation(op, list, var):
+def doOperation(op, list, var, sortkey):
 	""" Perform operation on the list """
 
-	def make_sort_func(x):
-		""" Function to do sort """
-		if x == 'integer':
-			return int
-		elif x == 'decimal':
-			return float
-		else:
-			return str
 	
-	func = make_sort_func(var)
+	func = itemgetter(sortkey)
 	
 	if op == 'max':
 		return max(list, key=func)

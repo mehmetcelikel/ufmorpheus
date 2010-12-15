@@ -48,7 +48,14 @@ element qre {
 					attribute operation { string "min" | string "max" | string "sort asc" | string "sort desc" },
 					attribute var { string "integer" | string "string" | string "decimal" },
 					attribute result { text },
-					text
+					element dataKey {
+						attribute name { text },
+						text
+					} 
+					element dataElement {
+						attribute name { text },
+						text
+					} +
 				},
 				element param {
 					attribute name { text },
