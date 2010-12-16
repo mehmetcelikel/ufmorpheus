@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:mozilla:install-manifest"
+                   em:id="gcordero@ufl.edu"
+                   em:name="Morpheus Clickstream Recorder"
+                   em:version="0.01"
+                   em:creator="Guillermo Cordero"
+                   em:description="Clickstream recorder for the Morpheus project"
+                   em:homepageURL="http://zion.cise.ufl.edu/wiki/">
+    <em:contributor>Christan Grant</em:contributor>
+    <em:contributor>Jeff Yuan </em:contributor>
+    <em:targetApplication RDF:resource="rdf:#$wLz7q"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$wLz7q"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:minVersion="1.*"
+                   em:maxVersion="3.*" />
+</RDF:RDF>
