@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Start"
+	onload="initiate();"
+	buttons="accept,cancel"
+    buttonlabelcancel="Cancel"
+    buttonlabelaccept="Start Recording"
+			ondialogaccept="return saveQuery();">
+<!--
+	<script type="application/x-javascript" src="jquery.js"></script>
+	-->
+	<script type="application/x-javascript" 
+		src="chrome://mcr/content/toolbar.js" />
+	<script type="application/x-javascript" 
+		src="chrome://mcr/content/start.js" />
+	
+	<dialogheader description="Please input the following information to start the recording process                                     "/>
+	<groupbox align="center" >
+	<label value= "Query"/>
+	<textbox id="query" size="100" />
+	<label value= "Realm"/>
+	<textbox id="realm" size="20" />
+	</groupbox>	
+
+</dialog>
