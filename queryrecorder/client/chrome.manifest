@@ -1,0 +1,3 @@
+content mcr chrome/content/
+overlay chrome://browser/content/browser.xul chrome://mcr/content/toolbar.xul
+skin mcr classic/1.0 chrome/skin/
