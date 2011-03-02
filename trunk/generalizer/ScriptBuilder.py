@@ -169,8 +169,8 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 			#so now we need to parse the querystring for the current page
 			value = parseQueryString(action.querystring, i.name)
 		else:
-			value = formElemList[0].inputs[i.name].value
-			input = formElemList[0].inputs[i.name]
+			value = i.value
+			input = i
 
 		if foundIt == True and input.type == 'button':
 			continue
