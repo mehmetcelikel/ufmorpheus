@@ -49,14 +49,17 @@ class ExtractionPath(object):
 		Returns the value of the greatest value of the left of the extraction 
 		nodes in the level array
 		"""
-		return reduce(lambda x, y: max(x.left(), y.left()), self.level)
+		#return reduce(lambda x, y: max(x.left(), y.left()), self.level)
+		return max([node.left() for node in self.level])
+
 
 	def right(self):
 		"""
 		Returns the value of the greatest value of the right of the extraction
 		nodes in the level array
 		"""
-		return reduce(lambda x, y: max(x.right(), y.right()), self.level)
+		#return reduce(lambda x, y: max(x.right(), y.right()), self.level)
+		return max([node.right() for node in self.level])
 
 	def level(self, i=0):
 		return self.level[i] # of type Level
