@@ -85,7 +85,8 @@ def writeActionData(xmlNode, actionHash):
 
 		helem = actionHash[k]
 		
-		info.set('value',helem.value)
+		if helem.value is not None:			#bugfix - value not always set
+			info.set('value',helem.value)
 		info.set('type',helem.type)
 
 		if helem.context != None:
@@ -172,8 +173,9 @@ def writeFormAction(xmlNode, action, sequenceNumber,actionHash):
 			value = i.value
 			input = i
 
-		if foundIt == True and input.type == 'button':
-			continue
+		if hasattr(input, 'type'): #bugfix - selectElement does not have an attribute type
+			if foundIt == True and input.type == 'button': 
+				continue
 
 		param = etree.SubElement(form, 'param')
 		param.set("name",i.name)
