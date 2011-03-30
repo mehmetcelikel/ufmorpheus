@@ -15,6 +15,7 @@ class Badica(object):
 	def Learn(self, pn):
 		"""
 		pn is an Array of extraction paths
+		Returns an extraction path
 		"""
 		p = pn[0]
 		for i in range(1,len(pn)):
@@ -49,7 +50,7 @@ class Badica(object):
 		l = min(t1.left(),t2.left())
 		r = min(t1.right(),t2.right())
 		t = Level.Level() # initial index is at 0 so first insert must be
-					 # extraction node
+					      # extraction node
 		for i in range(0,r):
 			lev = self.GenVertex( t1.getRight(i), t2.getRight(i) )
 			t.addRight(lev)

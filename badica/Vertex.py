@@ -13,6 +13,7 @@ class Vertex(object):
 	Vertex in a  Extraction Path tree
 	"""
 	def __init__(self,tag=None):
+		#inflexible tag adding, can only give a node one tag at inst
 		self.label = set()
 		if tag != None:
 			self.label.add(tag)
@@ -23,6 +24,8 @@ class Vertex(object):
 		i.e. "['f','l','a']
 		"""
 		self.label = set()
+		#Eval statements are slow and are exploitable
+		#Reconsider the usefulness of this function
 		v = eval(vertex_string)
 		
 		if v is 0:
@@ -54,8 +57,10 @@ class Vertex(object):
 		Returns the tag which is not 'l' of 'f'
 		This only assumes there is only one tag besides 'l' or 'f'
 		"""
+		#Round about way of doing it
+		#Proposed change in getTag2?
 		return self.label.difference('l','f').copy().pop()
- 
+
 	def intersect(self, v1=None, v2=None):
 		"""
 		This sets itself to the intersection of the two parameters

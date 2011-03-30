@@ -50,7 +50,7 @@ class Level:
 		"""
 		self.vertex.append(item)
 		if(len(self.vertex) == 1):
-			self.index = 0
+			self.index = 0 #why?
 
 	def getRight(self, rindex):
 		return self.vertex[self.index+rindex]
@@ -79,7 +79,7 @@ class Level:
 if __name__ == '__main__':
 	#v = Vertex.Vertex('div')
 	l = Level()
-	l = Level(Vertex.Vertex('div'))
+	#l = Level(Vertex.Vertex('div'))
 	l.addRight(Vertex.Vertex('a'))
 	l.addRight(Vertex.Vertex('a'))
 	l.addRight(Vertex.Vertex('l'))
